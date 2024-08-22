@@ -1,14 +1,13 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 
 import { styles } from './styles';
+import { ButtonTask } from '../../components/ButtonTask';
 
 export function Home() {
   return (
     <View style={styles.container}>
-        <TouchableOpacity style={styles.buttonCreateTask}>
-            <Text style={styles.textCreateTask}>+</Text>
-        </TouchableOpacity>
+      <ButtonTask/>
     </View>
   );
 }
