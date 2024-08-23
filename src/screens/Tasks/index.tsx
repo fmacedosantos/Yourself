@@ -1,17 +1,27 @@
-import React from 'react';
-import { Image, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert, Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './styles';
-import { ViewOffensiveExperienceStats } from '../../components/ViewOffensiveExperienceStats';
 
 import icon from '../../../assets/pictures/icon.png'
-import { ViewOffensiveExperienceStats } from '../../components/ViewOffensiveExperienceStats';
+import { ViewSummaryStats } from '../../components/ViewSummaryStats';
+import { ButtonTask } from '../../components/ButtonTask';
+import { ViewCreateTask } from '../../components/ViewCreateTask';
 
 export function Tasks() {
+  const [isCreatingTask, setIsCreatingTask] = useState(false);
+
   return (
     <View style={styles.container}>
-        <ViewOffensiveExperienceStats/>
-        <Image source={icon}/>
+        <ViewSummaryStats/>
+        <Text style={styles.textTitle}>CONCENTRAÇÃO</Text>
+        <Text style={styles.textTimer}>00:00</Text>
+        <Image source={icon} style={styles.icon}/>
+        <ButtonTask onPress={() => {
+          setIsCreatingTask(true);
+        }}/>
+
+        {isCreatingTask && <ViewCreateTask />}
     </View>
   );
 }
