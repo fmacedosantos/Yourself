@@ -3,12 +3,12 @@ import { View } from 'react-native';
 
 import { styles } from './styles';
 import { ButtonTask } from '../../components/ButtonTask';
-import { ViewOffensiveExperienceStats } from '../../components/ViewOffensiveExperienceStats';
+import { ViewSummaryStats } from '../../components/ViewSummaryStats';
 
 export function Home() {
   return (
     <View style={styles.container}>
-      <ViewOffensiveExperienceStats/>
+      <ViewSummaryStats/>
       <ButtonTask/>
     </View>
   );
