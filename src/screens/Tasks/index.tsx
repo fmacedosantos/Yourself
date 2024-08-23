@@ -11,6 +11,10 @@ import { ViewCreateTask } from '../../components/ViewCreateTask';
 export function Tasks() {
   const [isCreatingTask, setIsCreatingTask] = useState(false);
 
+  const handleCloseCreateTask = () => {
+    setIsCreatingTask(false);
+  };
+
   return (
     <View style={styles.container}>
         <ViewSummaryStats/>
@@ -21,7 +25,7 @@ export function Tasks() {
           setIsCreatingTask(true);
         }}/>
 
-        {isCreatingTask && <ViewCreateTask />}
+        {isCreatingTask && (<ViewCreateTask onClose={handleCloseCreateTask}/>)}
     </View>
   );
 }
