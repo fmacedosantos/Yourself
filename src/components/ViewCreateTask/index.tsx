@@ -7,10 +7,11 @@ import { COLORS } from '../../constants/colors';
 import { TextInputPaper } from '../TextInputPaper';
 import { SelectDifficulty } from '../SelectDifficulty';
 
-export function ViewCreateTask() {
+export function ViewCreateTask({onClose}: any) {
 
   return (
     <View style={styles.container}>
+      <Text onPress={onClose}>Sair</Text>
         <Image source={icon} style={styles.icon}/>
         <TextInputPaper label='Título' placeholder='Titule sua tarefa'/>
 
