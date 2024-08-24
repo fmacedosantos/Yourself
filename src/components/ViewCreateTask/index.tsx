@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './styles';
 import icon from '../../../assets/pictures/icon.png'
@@ -12,7 +12,7 @@ export function ViewCreateTask({onClose}: any) {
   return (
     <View style={styles.container}>
       <Text onPress={onClose} style={styles.closeView}>Sair</Text>
-        <Image source={icon} style={styles.icon}/>
+        <Text style={styles.title}>INICIANDO TAREFA</Text>
         <TextInputPaper label='Título' placeholder='Titule sua tarefa'/>
 
         <TextInputPaper label='Descrição' placeholder='Descreva sua tarefa' 

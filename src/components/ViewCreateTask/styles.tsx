@@ -12,7 +12,8 @@ export const styles = StyleSheet.create({
   },
   closeView: {
     position: 'absolute',
-    top: 20,
+    textAlign: 'center',
+    top: 30,
     left: 20,
     padding: 5,
     borderWidth: 2,
@@ -21,9 +22,11 @@ export const styles = StyleSheet.create({
     color: COLORS.WHITE,
     backgroundColor: COLORS.WINTER.ICON.RED,
   },
-  icon: {
-    resizeMode: 'center',
-    height: 200,
+  title: {
+    fontSize: 35,
+    color: COLORS.WINTER.ICON.RED,
+    fontWeight: '900',
+    marginBottom: 30,
   },
   label: {
     fontSize: 17,
