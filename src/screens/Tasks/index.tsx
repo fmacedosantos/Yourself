@@ -3,10 +3,10 @@ import { Alert, Image, Text, TextInput, TouchableOpacity, View } from 'react-nat
 
 import { styles } from './styles';
 
-import icon from '../../../assets/pictures/icon.png'
 import { ViewSummaryStats } from '../../components/ViewSummaryStats';
-import { ButtonTask } from '../../components/ButtonTask';
+import { RoundedButtonCreateTask } from '../../components/RoundedButtonCreateTask';
 import { ViewCreateTask } from '../../components/ViewCreateTask';
+import { ButtonCreateTask } from '../../components/ButtonCreateTask';
 
 export function Tasks() {
   const [isCreatingTask, setIsCreatingTask] = useState(false);
@@ -18,11 +18,9 @@ export function Tasks() {
   return (
     <View style={styles.container}>
         <ViewSummaryStats/>
-        <Text style={styles.textTitle}>CONCENTRAÇÃO</Text>
-        <Text style={styles.textTimer}>00:00</Text>
-        <Image source={icon} style={styles.icon}/>
-        <ButtonTask onPress={() => {
-          setIsCreatingTask(true);
+        
+        <ButtonCreateTask onPress={() => {
+          setIsCreatingTask(true)
         }}/>
 
         {isCreatingTask && (<ViewCreateTask onClose={handleCloseCreateTask}/>)}
