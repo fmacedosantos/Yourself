@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
     buttonDifficulty: {
         borderWidth: 3,
         borderColor: COLORS.BLACK,
+        backgroundColor: COLORS.WHITE,
         borderRadius: 10,
         paddingVertical: 20,
         width: '23%',
