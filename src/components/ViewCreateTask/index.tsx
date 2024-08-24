@@ -11,14 +11,14 @@ export function ViewCreateTask({onClose}: any) {
 
   return (
     <View style={styles.container}>
-      <Text onPress={onClose}>Sair</Text>
+      <Text onPress={onClose} style={styles.closeView}>Sair</Text>
         <Image source={icon} style={styles.icon}/>
         <TextInputPaper label='Título' placeholder='Titule sua tarefa'/>
 
         <TextInputPaper label='Descrição' placeholder='Descreva sua tarefa' 
         isMultilene={true} numberLines={5}/>
         
-        <Text style={styles.label}>Nível de DIficuldade</Text>
+        <Text style={styles.label}>Nível de Dificuldade</Text>
         <SelectDifficulty/>
     </View>
   );
