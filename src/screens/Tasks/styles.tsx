@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.WINTER.BACKGROUND,
   },
   icon: {
-    height: 400, 
+    height: '40%', 
     width: '100%', 
     resizeMode: 'center',
   },
