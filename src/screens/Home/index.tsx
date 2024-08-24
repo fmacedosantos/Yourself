@@ -1,15 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 
 import { styles } from './styles';
-import { ButtonTask } from '../../components/ButtonTask';
+import { RoundedButtonCreateTask } from '../../components/RoundedButtonCreateTask';
 import { ViewSummaryStats } from '../../components/ViewSummaryStats';
+import { ViewCreateTask } from '../../components/ViewCreateTask';
 
 export function Home() {
+  const [isCreatingTask, setIsCreatingTask] = useState(false);
+
+  const handleCloseCreateTask = () => {
+    setIsCreatingTask(false);
+  };
   return (
     <View style={styles.container}>
       <ViewSummaryStats/>
-      <ButtonTask/>
+      <RoundedButtonCreateTask onPress={() => {
+          setIsCreatingTask(true)
+        }}/>
+
+        {isCreatingTask && (<ViewCreateTask onClose={handleCloseCreateTask}/>)}
     </View>
   );
 }
