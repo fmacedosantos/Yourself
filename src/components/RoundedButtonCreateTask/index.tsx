@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './styles';
 
-export function ButtonTask({onPress}: any) {
+export function RoundedButtonCreateTask({onPress}: any) {
   return (
     <TouchableOpacity style={styles.buttonCreateTask}
     onPress={onPress}>
