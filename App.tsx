@@ -6,7 +6,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Routes/>
-      <StatusBar style="light" />
+      <StatusBar style="light" backgroundColor='black'/>
     </View>
   );
 }

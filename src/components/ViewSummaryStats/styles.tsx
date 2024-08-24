@@ -9,8 +9,8 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around',
         width: '100%',
-        paddingTop: 20,
-        paddingBottom: 10,
+        paddingTop: 35,
+        paddingBottom: 15,
         backgroundColor: COLORS.WHITE
       },
       statItem: {
