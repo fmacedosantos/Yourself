@@ -21,6 +21,7 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.BLACK,
     color: COLORS.WHITE,
     backgroundColor: COLORS.WINTER.ICON.RED,
+    elevation: 10,
   },
   title: {
     fontSize: 35,

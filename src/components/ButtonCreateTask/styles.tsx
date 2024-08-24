@@ -6,7 +6,8 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 25,
         paddingVertical: 15,
         borderRadius: 10,
-        backgroundColor: COLORS.WINTER.ICON.RED
+        backgroundColor: COLORS.WINTER.ICON.RED,
+        elevation: 10,
     },
       textCreateTask: {
         color: COLORS.WHITE,
