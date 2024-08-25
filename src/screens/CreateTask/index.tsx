@@ -6,17 +6,15 @@ import { SelectDifficulty } from '../../components/views/SelectDifficulty';
 import { SummaryStats } from '../../components/views/SummaryStats';
 import { ListCategories } from '../../components/ListCategories';
 import { RectangularBrowser } from '../../components/buttons/RectangularBrowser';
+import { BackScreen } from '../../components/buttons/BackScreen';
 
-export function CreateTask({ navigation }: any) {
-
-  const goBack = () => {
-    navigation.goBack()
-  }
+export function CreateTask({navigation}: any) {
 
   return (
     <View style={styles.container}>
       <SummaryStats/>
-      <Text onPress={goBack} style={styles.closeView}>Sair</Text>
+        <BackScreen navigation={navigation}/>
+      
         <Text style={styles.title}>TAREFA</Text>
         <TextInputPaper label='Título' placeholder='Titule sua tarefa'/>
 
