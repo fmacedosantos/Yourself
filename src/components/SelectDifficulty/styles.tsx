@@ -7,9 +7,7 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '80%',
         justifyContent: 'space-between',
-    },
-    containerSelect: {
-        flexDirection: 'column',
+        marginBottom: 20, 
     },
     buttonDifficulty: {
         borderWidth: 3,
