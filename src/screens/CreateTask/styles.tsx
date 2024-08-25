@@ -35,15 +35,4 @@ export const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginLeft: '10%'
   },
-  listaContainer:{
-    width: '80%',
-  },
-  lista: {
-    borderWidth: 3,
-    borderColor: COLORS.BLACK,
-  },
-  listaItem: {
-    backgroundColor: COLORS.WHITE,
-    borderBottomWidth: 2,
-  }
 });
