@@ -2,16 +2,16 @@ import { View } from 'react-native';
 
 import { styles } from './styles';
 
-import { ViewSummaryStats } from '../../components/ViewSummaryStats';
-import { ButtonCreateTask } from '../../components/ButtonCreateTask';
+import { SummaryStats } from '../../components/views/SummaryStats';
+import { RectangularBrowser } from '../../components/buttons/RectangularBrowser';
 
 export function Tasks({navigation}: any) {
 
   return (
     <View style={styles.container}>
-        <ViewSummaryStats/>
+        <SummaryStats/>
         
-        <ButtonCreateTask text='INICIAR TAREFA' onPress={() => {
+        <RectangularBrowser text='INICIAR TAREFA' onPress={() => {
           navigation.navigate('CreateTask')
         }}/>
 

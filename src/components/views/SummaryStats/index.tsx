@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 import { styles } from './styles';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
-export function ViewSummaryStats() {
+export function SummaryStats() {
   return (
     <View style={styles.container}>
         <View style={styles.statItem}>

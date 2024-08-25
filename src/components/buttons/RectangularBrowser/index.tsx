@@ -8,7 +8,7 @@ interface ButtonCreateTaskProps{
   onPress?: ((event: GestureResponderEvent) => void) | undefined
 }
 
-export function ButtonCreateTask({text, onPress}: ButtonCreateTaskProps) {
+export function RectangularBrowser({text, onPress}: ButtonCreateTaskProps) {
   return (
     <TouchableOpacity style={styles.buttonCreateTask}
         onPress={onPress}>

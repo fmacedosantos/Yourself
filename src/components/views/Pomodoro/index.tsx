@@ -4,7 +4,7 @@ import { Image, Text, View } from 'react-native';
 import { styles } from './styles';
 import icon from '../../../assets/pictures/icon.png'
 
-export function ViewPomodoro({onClose}: any) {
+export function Pomodoro({onClose}: any) {
   return (
     <View style={styles.container}>
         <Text style={styles.textTitle}>CONCENTRAÇÃO</Text>

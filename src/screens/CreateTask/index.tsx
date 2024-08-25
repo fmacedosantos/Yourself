@@ -2,10 +2,10 @@ import {  Text, View } from 'react-native';
 
 import { styles } from './styles';
 import { TextInputPaper } from '../../components/TextInputPaper';
-import { SelectDifficulty } from '../../components/SelectDifficulty';
-import { ViewSummaryStats } from '../../components/ViewSummaryStats';
+import { SelectDifficulty } from '../../components/views/SelectDifficulty';
+import { SummaryStats } from '../../components/views/SummaryStats';
 import { ListCategories } from '../../components/ListCategories';
-import { ButtonCreateTask } from '../../components/ButtonCreateTask';
+import { RectangularBrowser } from '../../components/buttons/RectangularBrowser';
 
 export function CreateTask({ navigation }: any) {
 
@@ -15,7 +15,7 @@ export function CreateTask({ navigation }: any) {
 
   return (
     <View style={styles.container}>
-      <ViewSummaryStats/>
+      <SummaryStats/>
       <Text onPress={goBack} style={styles.closeView}>Sair</Text>
         <Text style={styles.title}>TAREFA</Text>
         <TextInputPaper label='Título' placeholder='Titule sua tarefa'/>
@@ -28,7 +28,7 @@ export function CreateTask({ navigation }: any) {
         <Text style={styles.label}>Categoria</Text>
         <ListCategories/>
 
-        <ButtonCreateTask text='INICIAR'/>
+        <RectangularBrowser text='INICIAR'/>
     </View>
 
   );
