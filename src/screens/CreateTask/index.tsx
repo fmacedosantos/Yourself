@@ -5,6 +5,7 @@ import { TextInputPaper } from '../../components/TextInputPaper';
 import { SelectDifficulty } from '../../components/SelectDifficulty';
 import { ViewSummaryStats } from '../../components/ViewSummaryStats';
 import { ListCategories } from '../../components/ListCategories';
+import { ButtonCreateTask } from '../../components/ButtonCreateTask';
 
 export function CreateTask({ navigation }: any) {
 
@@ -26,6 +27,8 @@ export function CreateTask({ navigation }: any) {
 
         <Text style={styles.label}>Categoria</Text>
         <ListCategories/>
+
+        <ButtonCreateTask text='INICIAR'/>
     </View>
 
   );

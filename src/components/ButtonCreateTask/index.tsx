@@ -1,13 +1,18 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { GestureResponderEvent, Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './styles';
 
-export function ButtonCreateTask({onPress}: any) {
+interface ButtonCreateTaskProps{
+  text: string
+  onPress?: ((event: GestureResponderEvent) => void) | undefined
+}
+
+export function ButtonCreateTask({text, onPress}: ButtonCreateTaskProps) {
   return (
     <TouchableOpacity style={styles.buttonCreateTask}
         onPress={onPress}>
-    <Text style={styles.textCreateTask}>CRIAR TAREFA</Text>
+    <Text style={styles.textCreateTask}>{text}</Text>
     </TouchableOpacity>
   );
 }

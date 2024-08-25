@@ -11,7 +11,7 @@ export function Tasks({navigation}: any) {
     <View style={styles.container}>
         <ViewSummaryStats/>
         
-        <ButtonCreateTask onPress={() => {
+        <ButtonCreateTask text='INICIAR TAREFA' onPress={() => {
           navigation.navigate('CreateTask')
         }}/>
 
