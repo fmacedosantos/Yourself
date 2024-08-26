@@ -3,7 +3,6 @@ import { COLORS } from '../../constants/colors';
 
 export const styles = StyleSheet.create({
     listaContainer:{
-        width: '80%',
         marginBottom: 20,
     },
     lista: {
@@ -12,6 +11,6 @@ export const styles = StyleSheet.create({
     },
     listaItem: {
     backgroundColor: COLORS.WHITE,
-    borderBottomWidth: 2,
+    borderTopWidth: 2,
     },
 });
