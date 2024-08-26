@@ -3,23 +3,29 @@ import { COLORS } from '../../constants/colors';
 
 export const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    height: '100%',
+    flex: 1,
     backgroundColor: COLORS.WINTER.BACKGROUND,
+  },
+  containerScroll: {
+    marginTop: '19%',
+  },
+  containerContentScroll: {
+    paddingHorizontal: '10%', 
+    paddingVertical: '10%'
+  },
+  containerHeader: {
+    flexDirection: 'row', 
+    marginBottom: 30, 
+    alignItems: 'center'
   },
   title: {
     fontSize: 35,
+    paddingHorizontal: '17%',
     color: COLORS.WINTER.ICON.RED,
     fontWeight: '900',
-    marginBottom: 30,
   },
   label: {
     fontSize: 17,
     fontWeight: 'bold',
-    alignSelf: 'flex-start',
-    marginLeft: '10%'
-  },
+  }
 });

@@ -1,4 +1,4 @@
-import {  Text, View } from 'react-native';
+import {  Dimensions, ScrollView, Text, View } from 'react-native';
 
 import { styles } from './styles';
 import { TextInputPaper } from '../../components/TextInputPaper';
@@ -11,23 +11,32 @@ import { BackScreen } from '../../components/buttons/BackScreen';
 export function CreateTask({navigation}: any) {
 
   return (
-    <View style={styles.container}>
-      <SummaryStats/>
-        <BackScreen navigation={navigation}/>
-      
-        <Text style={styles.title}>TAREFA</Text>
-        <TextInputPaper label='Título' placeholder='Titule sua tarefa'/>
+      <View style={styles.container}>
+        <SummaryStats />
 
-        <TextInputPaper label='Descrição' placeholder='Descreva sua tarefa' isMultilene={true} numberLines={5}/>
-        
-        <Text style={styles.label}>Nível de Dificuldade</Text>
-        <SelectDifficulty/>
+        <ScrollView 
+        style={styles.containerScroll}
+        showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.containerContentScroll}>
+            <View style={styles.containerHeader}>
+              <BackScreen navigation={navigation} />
+              <Text style={styles.title}>TAREFA</Text>
+            </View>
+            <TextInputPaper label="Título" placeholder="Titule sua tarefa" />
 
-        <Text style={styles.label}>Categoria</Text>
-        <ListCategories/>
+            <TextInputPaper label="Descrição" placeholder="Descreva sua tarefa" 
+            isMultilene={true} numberLines={5}/>
 
-        <RectangularBrowser text='INICIAR'/>
-    </View>
+            <Text style={styles.label}>Nível de Dificuldade</Text>
+            <SelectDifficulty />
 
+            <Text style={styles.label}>Categoria</Text>
+            
+            <ListCategories />
+            <RectangularBrowser text="INICIAR"/>
+          </View>
+        </ScrollView>
+      </View>
   );
 }
