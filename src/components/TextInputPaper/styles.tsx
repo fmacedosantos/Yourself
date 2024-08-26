@@ -4,7 +4,6 @@ import { COLORS } from '../../constants/colors';
 export const styles = StyleSheet.create({
   input: {
     backgroundColor: COLORS.WHITE,
-    width: '80%',
     borderWidth: 3,
     borderColor: COLORS.BLACK,
     borderRadius: 10,
