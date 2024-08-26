@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
         elevation: 10,
     },
       textCreateTask: {
+        textAlign: 'center',
         color: COLORS.WHITE,
         fontSize: 18,
     }
