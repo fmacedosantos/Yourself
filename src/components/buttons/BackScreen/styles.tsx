@@ -3,10 +3,9 @@ import { COLORS } from '../../../constants/colors';
 
 export const styles = StyleSheet.create({
     closeView: {
-        position: 'absolute',
         textAlign: 'center',
-        top: 100,
-        left: 20,
+        width: 40,
+        height: 30,
         padding: 5,
         borderWidth: 2,
         borderRadius: 10,
