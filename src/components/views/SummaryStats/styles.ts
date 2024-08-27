@@ -9,8 +9,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around',
         width: '100%',
-        paddingTop: '6%',
-        paddingBottom: '6%',
+        paddingVertical: 20,
         backgroundColor: COLORS.WHITE
       },
       statItem: {
@@ -19,5 +18,5 @@ export const styles = StyleSheet.create({
       },
       statValue: {
         marginLeft: 5,
-      }
+      },
 });
