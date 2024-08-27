@@ -1,12 +1,12 @@
 import {  Dimensions, ScrollView, Text, View } from 'react-native';
 
 import { styles } from './styles';
-import { TextInputPaper } from '../../components/TextInputPaper';
-import { SelectDifficulty } from '../../components/views/SelectDifficulty';
-import { SummaryStats } from '../../components/views/SummaryStats';
-import { ListCategories } from '../../components/ListCategories';
-import { RectangularBrowser } from '../../components/buttons/RectangularBrowser';
-import { BackScreen } from '../../components/buttons/BackScreen';
+import { TextInputPaper } from '../../TextInputPaper';
+import { SelectDifficulty } from '../SelectDifficulty';
+import { SummaryStats } from '../SummaryStats';
+import { ListCategories } from '../../ListCategories';
+import { RectangularBrowser } from '../../buttons/RectangularBrowser';
+import { BackScreen } from '../../buttons/BackScreen';
 
 export function CreateTask({navigation}: any) {
 
