@@ -34,7 +34,11 @@ export function CreateTask({navigation}: any) {
             <Text style={styles.label}>Categoria</Text>
             
             <ListCategories />
-            <RectangularBrowser text="INICIAR"/>
+            <RectangularBrowser text="INICIAR"
+              onPress={() => {
+                navigation.navigate('Pomodoro')
+              }}
+            />
           </View>
         </ScrollView>
       </View>
