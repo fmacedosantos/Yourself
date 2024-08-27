@@ -8,6 +8,11 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: COLORS.WINTER.BACKGROUND,
       },
+      backButton: {
+        position: 'absolute',
+        top: 80,
+        left: 20,
+      },
       icon: {
         height: '40%', 
         width: '100%', 
