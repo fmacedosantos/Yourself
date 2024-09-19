@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../constants/colors';
+import { COLORS } from '../../constants/colors';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.WINTER.BACKGROUND,
+    backgroundColor: COLORS.GRAY,
   },
   containerScroll: {
     marginTop: '19%',
@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 35,
     paddingHorizontal: '17%',
-    color: COLORS.WINTER.ICON.RED,
+    color: COLORS.RED,
     fontWeight: '900',
   },
   label: {

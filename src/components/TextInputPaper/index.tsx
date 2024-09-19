@@ -14,7 +14,7 @@ interface inputTextProps{
     style?: any
 }
 
-export function TextInputPaper({label, placeholder, colorUnderline = COLORS.WINTER.ICON.RED, 
+export function TextInputPaper({label, placeholder, colorUnderline = COLORS.RED, 
     isMultilene = false, numberLines = 1, style}: inputTextProps) {
     const [text, setText] = useState('');
 

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../constants/colors';
+import { COLORS } from '../../constants/colors';
 
 export const styles = StyleSheet.create({
     closeView: {
@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
         borderRadius: 10,
         borderColor: COLORS.BLACK,
         color: COLORS.WHITE,
-        backgroundColor: COLORS.WINTER.ICON.RED,
+        backgroundColor: COLORS.RED,
         elevation: 10,
       },
 });

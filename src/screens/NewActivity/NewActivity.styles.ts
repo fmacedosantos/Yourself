@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.WINTER.BACKGROUND,
+    backgroundColor: COLORS.GRAY,
   },
   icon: {
     height: '40%', 
@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
   textTitle: {
     fontSize: 35,
     fontWeight: 'bold',
-    color: COLORS.WINTER.ICON.RED,
+    color: COLORS.WHITE,
   },
   textTimer: {
     fontSize: 25,

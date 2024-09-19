@@ -1,8 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { BottomTabRoutes } from "./bottom-tabs.routes";
-import { CreateTask } from "../components/views/CreateTask";
-import { Pomodoro } from "../components/views/Pomodoro";
+import { CreateTask } from "../components/CreateTask";
+import { Pomodoro } from "../components/Pomodoro";
 
 const Stack = createStackNavigator();
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-import { styles } from './styles';
-import { SummaryStats } from '../../components/views/SummaryStats';
+import { styles } from './Profile.styles';
+import { SummaryStats } from '../../components/SummaryStats';
 
 export function Profile() {
   return (

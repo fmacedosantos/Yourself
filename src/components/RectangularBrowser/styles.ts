@@ -1,16 +1,17 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../constants/colors';
+import { COLORS } from '../../constants/colors';
 
 export const styles = StyleSheet.create({
     buttonCreateTask: {
         paddingHorizontal: 25,
         paddingVertical: 15,
-        borderRadius: 40,
-        backgroundColor: COLORS.WINTER.ICON.RED,
+        borderRadius: 10,
+        backgroundColor: COLORS.RED,
         elevation: 10,
     },
       textCreateTask: {
+        textAlign: 'center',
         color: COLORS.WHITE,
-        fontSize: 30,
+        fontSize: 18,
     }
 });

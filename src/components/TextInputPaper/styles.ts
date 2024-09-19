@@ -8,6 +8,6 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.BLACK,
     borderRadius: 10,
     marginBottom: 20,
-    color: COLORS.SUMMER.BACKGROUND,
+    color: COLORS.GRAY,
   }
 });

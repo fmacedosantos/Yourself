@@ -7,9 +7,9 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/pictures/icon.png",
+      "image": "./assets/pictures/tomato-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#FBB24A"
+      "backgroundColor": "#373435"
     },
     "ios": {
       "supportsTablet": true
@@ -21,7 +21,7 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/pictures/tomato-icon.png"
     }
   }
 }

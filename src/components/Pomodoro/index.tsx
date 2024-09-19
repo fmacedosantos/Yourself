@@ -2,8 +2,8 @@ import React from 'react';
 import { Image, Text, View } from 'react-native';
 
 import { styles } from './styles';
-import icon from '../../../../assets/pictures/icon.png'
-import { BackScreen } from '../../buttons/BackScreen';
+import pomodoroIcon from '../../../assets/pictures/tomato-icon.png'
+import { BackScreen } from '../BackScreen';
 import { SummaryStats } from '../SummaryStats';
 
 export function Pomodoro({navigation}: any) {
@@ -13,7 +13,7 @@ export function Pomodoro({navigation}: any) {
       <BackScreen navigation={navigation} style={styles.backButton}/>
         <Text style={styles.textTitle}>CONCENTRAÇÃO</Text>
         <Text style={styles.textTimer}>00:00</Text>
-        <Image source={icon} style={styles.icon}/>
+        <Image source={pomodoroIcon} style={styles.icon}/>
     </View>
   );
 }

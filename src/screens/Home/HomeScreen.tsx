@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 
-import { styles } from './styles';
-import { CircularBrowser } from '../../components/buttons/CircularBrowser';
-import { SummaryStats } from '../../components/views/SummaryStats';
+import { styles } from './Home.styles';
+import { CircularBrowser } from '../../components/CircularBrowser';
+import { SummaryStats } from '../../components/SummaryStats';
 
 export function Home({navigation}: any) {
   return (

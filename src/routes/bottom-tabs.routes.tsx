@@ -1,11 +1,11 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Home } from "../screens/Home";
-import { Tasks } from "../screens/Tasks";
+import { Home } from "../screens/Home/HomeScreen";
+import { Tasks } from "../screens/NewActivity/NewActivityScreen";
 
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { COLORS } from "../constants/colors";
-import { Shop } from "../screens/Shop";
-import { Profile } from "../screens/Profile";
+import { Shop } from "../screens/Shop/ShopScreen";
+import { Profile } from "../screens/Profile/ProfileScreen";
 
 const Tab = createBottomTabNavigator()
 

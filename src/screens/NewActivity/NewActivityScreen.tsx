@@ -1,9 +1,9 @@
 import { View } from 'react-native';
 
-import { styles } from './styles';
+import { styles } from './NewActivity.styles';
 
-import { SummaryStats } from '../../components/views/SummaryStats';
-import { RectangularBrowser } from '../../components/buttons/RectangularBrowser';
+import { SummaryStats } from '../../components/SummaryStats';
+import { RectangularBrowser } from '../../components/RectangularBrowser';
 
 export function Tasks({navigation}: any) {
 

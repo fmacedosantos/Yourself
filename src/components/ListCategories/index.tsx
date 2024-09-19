@@ -26,7 +26,7 @@ export function ListCategories({style}: any) {
 
     const theme = {
       colors: {
-        primary: COLORS.WINTER.ICON.RED,
+        primary: COLORS.RED,
       },
     }
 

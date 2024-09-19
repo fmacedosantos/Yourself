@@ -1,12 +1,12 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../../constants/colors';
+import { COLORS } from '../../constants/colors';
 
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: COLORS.WINTER.BACKGROUND,
+        backgroundColor: COLORS.GRAY,
       },
       backButton: {
         position: 'absolute',
@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
       textTitle: {
         fontSize: 35,
         fontWeight: 'bold',
-        color: COLORS.WINTER.ICON.RED,
+        color: COLORS.RED,
       },
       textTimer: {
         fontSize: 25,
