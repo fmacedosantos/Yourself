@@ -4,7 +4,7 @@ import { Text, View, Button } from "react-native";
 export default function Index() {
 
   function handleEntrar(){
-    router.replace('/(tabs)/screens')
+    router.replace('/(tabs)/screens/')
   }
 
   return (

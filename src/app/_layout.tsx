@@ -10,7 +10,7 @@ export default function RootLayout() {
       <Stack.Screen name="cadastro" options={{
         headerShown: false
       }}/>
-      <Stack.Screen name="(tabs)/screens" options={{
+      <Stack.Screen name="(tabs)" options={{
         headerShown: false
       }}/>
     </Stack>

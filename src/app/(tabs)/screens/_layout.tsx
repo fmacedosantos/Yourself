@@ -6,12 +6,13 @@ import ProfileIcon from '../../../assets/icons/profile-icon.svg';
 
 export default function Layout() {
   return (
-    <Tabs>
+    <Tabs screenOptions={{ 
+        headerShown: false,
+        tabBarShowLabel: false,
+      }}>
       <Tabs.Screen
         name="index"
         options={{
-          headerShown: false,
-          tabBarShowLabel: false,
           tabBarIcon: ({ focused, color, size }) => (
             <HistoricalIcon
               width={35}
@@ -24,8 +25,6 @@ export default function Layout() {
       <Tabs.Screen
         name="addNewActivity"
         options={{
-          headerShown: false,
-          tabBarShowLabel: false,
           tabBarIcon: ({ focused, color, size }) => (
             <AddActivityIcon
               width={35}
@@ -38,8 +37,6 @@ export default function Layout() {
       <Tabs.Screen
         name="shop"
         options={{
-          headerShown: false,
-          tabBarShowLabel: false,
           tabBarIcon: ({ focused, color, size }) => (
             <ShopIcon
               width={35}
@@ -52,8 +49,6 @@ export default function Layout() {
       <Tabs.Screen
         name="profile"
         options={{
-          headerShown: false,
-          tabBarShowLabel: false,
           tabBarIcon: ({ focused, color, size }) => (
             <ProfileIcon
               width={35}
