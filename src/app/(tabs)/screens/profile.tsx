@@ -7,6 +7,7 @@ export default function Profile() {
       className="flex-1 justify-center items-center"
     >
       <Text>Profile</Text>
+      <Link href='/(tabs)/settings'>Configurações</Link>
       <Link href="/">Sair da conta</Link>
     </View>
   );
