@@ -43,6 +43,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: COLORS.GRAY,
         width: '100%',
-        marginBottom: 20
+        marginBottom: 10
       },
 })

@@ -17,11 +17,11 @@ export function BigButton({title, action, type}: primaryButtonProps) {
                 borderRadius: 15,
                 alignItems: 'center',
                 width: '80%',
-                marginBottom: 10
+                marginVertical: 10
             },
             text: {
                 color: COLORS.WHITE,
-                fontSize: 18
+                fontSize: 15
             }
         })
     } else {
@@ -34,11 +34,11 @@ export function BigButton({title, action, type}: primaryButtonProps) {
                 borderWidth: 2,
                 alignItems: 'center',
                 width: '80%',
-                marginBottom: 10
+                marginVertical: 10
             },
             text: {
                 color: COLORS.WHITE,
-                fontSize: 18
+                fontSize: 15
             }
         })
     } 

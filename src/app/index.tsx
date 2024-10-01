@@ -23,7 +23,7 @@ export default function Index() {
       }}
     >
 
-      <TextIcon/>
+      <TextIcon isAbsolute={true} top={50}/>
       <FormInput label="Email" placeholder="seu@email.com" />
       <FormInput label="Senha" placeholder="senha" isPassword={true}/>
       <BigButton title="Entrar" action={handleEntrar} type={1}/>
