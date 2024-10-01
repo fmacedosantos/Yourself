@@ -3,12 +3,17 @@ import HistoricalIcon from "../../../assets/icons/historical-icon.svg";
 import AddActivityIcon from "../../../assets/icons/add_activity-icon.svg";
 import ShopIcon from '../../../assets/icons/shop-icon.svg';
 import ProfileIcon from '../../../assets/icons/profile-icon.svg';
+import { COLORS } from "@/src/constants/Colors";
 
 export default function Layout() {
   return (
     <Tabs screenOptions={{ 
         headerShown: false,
         tabBarShowLabel: false,
+        tabBarStyle: {
+          height: 60, 
+          backgroundColor: COLORS.WHITE
+        }
       }}>
       <Tabs.Screen
         name="index"
