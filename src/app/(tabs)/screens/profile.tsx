@@ -1,10 +1,10 @@
 import { Link } from "expo-router";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 export default function Profile() {
   return (
     <View
-      className="flex-1 justify-center items-center"
+      style={styles.container}
     >
       <Text>Profile</Text>
       <Link href='/(tabs)/settings'>Configurações</Link>
@@ -12,3 +12,11 @@ export default function Profile() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+})

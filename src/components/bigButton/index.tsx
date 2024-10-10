@@ -1,5 +1,5 @@
 import { COLORS } from '@/src/constants/Colors';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Pressable, StyleSheet, Text } from 'react-native';
 
 interface primaryButtonProps{
     title: string
@@ -43,13 +43,13 @@ export function BigButton({title, action, type}: primaryButtonProps) {
         })
     } 
  return (
-   <TouchableOpacity
+   <Pressable
         onPress={action}
         style={styles?.button}
    >
         <Text
             style={styles?.text}
         >{title}</Text>
-   </TouchableOpacity>
+   </Pressable>
   );
 }

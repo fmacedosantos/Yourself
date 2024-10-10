@@ -1,4 +1,4 @@
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import { Text, View, Button, StyleSheet } from "react-native";
 import { BigButton } from "../components/bigButton";
 import { COLORS } from "../constants/Colors";
@@ -17,10 +17,9 @@ export default function Index() {
 
   return (
     <View
-      className="flex-1 justify-center items-center"
-      style={{
+      style={[{
         backgroundColor: COLORS.GRAY
-      }}
+      }, styles.container]}
     >
 
       <TextIcon isAbsolute={true} top={50}/>
@@ -42,4 +41,9 @@ const styles = StyleSheet.create({
       bottom: '5%',
       color: COLORS.ORANGE
   },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 })
