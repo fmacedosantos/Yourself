@@ -8,7 +8,7 @@ interface AtividadeComponentProps {
   corNivel: string;
 }
 
-export const AtividadeComponent: React.FC<AtividadeComponentProps> = ({ minutos, nome, nivel, corNivel }) => {
+export const AtividadeComponent = ({ minutos, nome, nivel, corNivel }: AtividadeComponentProps) => {
   return (
     <View style={styles.atividadeContainer}>
       <View style={styles.minutosContainer}>
