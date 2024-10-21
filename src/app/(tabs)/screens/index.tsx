@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, ScrollView, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { TituloComponent } from '../components/HistoricoComponents/TituloComponent';
-import { SummaryStats } from '../components/SummaryStats';
+import { TituloComponent } from '../../../components/Titulo';
+import { SummaryStats } from '../../../components/summaryStats';
 import { AtividadeComponent } from '../../../components/historico';
 
 export default function Home() {
