@@ -5,10 +5,18 @@ import { COLORS } from "../constants/Colors";
 import FormInput from "../components/formInput";
 import { TextIcon } from "../components/textIcon";
 
+import firebase from '../../firebase-init.js'; // Importa o firebase compat
+
 export default function Index() {
 
   function handleEntrar(){
-    router.replace('/(tabs)/screens/')
+    firebase.auth().signInWithEmailAndPassword("teste001@gmail.com", "123456")
+      .then(response => {
+        router.replace('/(tabs)/screens/')
+      })
+      .catch(error => {
+        console.error("Erro de login: ", error);
+      });
   }
 
   function handleCadastrar(){
@@ -21,7 +29,6 @@ export default function Index() {
         backgroundColor: COLORS.GRAY
       }, styles.container]}
     >
-
       <TextIcon isAbsolute={true} top={50}/>
       <FormInput label="Email" placeholder="seu@email.com" />
       <FormInput label="Senha" placeholder="senha" isPassword={true}/>
@@ -46,4 +53,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   }
-})
+});
