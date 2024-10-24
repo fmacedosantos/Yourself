@@ -28,7 +28,7 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
-        name="addNewActivity"
+        name="activity"
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <AddActivityIcon

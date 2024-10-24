@@ -6,7 +6,6 @@ export default function RootLayout() {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="cadastro" options={{ headerShown: false }} />
-      <Stack.Screen name="historico" options={{ headerShown: false }} />  {/* Adiciona a tela de histórico */}
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>
   );
