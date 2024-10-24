@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: 18,
+    fontFamily: 'Itim-Regular' 
   },
   nomeAtividade: {
     flex: 1,
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
+    fontFamily: 'Itim-Regular' 
   },
   nivelContainer: {
     backgroundColor: '#5DB075', 
@@ -67,5 +69,6 @@ const styles = StyleSheet.create({
   nivelText: {
     color: 'white',
     fontWeight: 'bold',
+    fontFamily: 'Itim-Regular' 
   },
 });

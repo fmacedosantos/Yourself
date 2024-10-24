@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
         width: '100%',
         paddingVertical: 20,
         backgroundColor: COLORS.GRAY,
-        borderBottomWidth: 2,
+        borderBottomWidth: 3,
         borderBottomColor: COLORS.WHITE
       },
       statItem: {
@@ -20,6 +20,8 @@ export const styles = StyleSheet.create({
       },
       statValue: {
         marginLeft: 5,
-        color: COLORS.WHITE
+        color: COLORS.WHITE,
+        fontSize: 18,
+        fontFamily: 'Itim-Regular' 
       },
 });

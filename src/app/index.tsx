@@ -1,24 +1,32 @@
-import { router } from "expo-router";
-import { Text, View, StyleSheet, Alert } from "react-native";
+import { useState } from 'react';
+import { Text, View, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { useFonts } from 'expo-font'; // Importando useFonts
 import { BigButton } from "../components/bigButton";
 import { COLORS } from "../constants/Colors";
-import { FormInput }  from "../components/formInput";
+import { FormInput } from "../components/formInput";
 import YourselfTitle from '../assets/images/yourself-title.svg';
-import { useState } from 'react';
-import firebase from '../../firebase-init.js'; 
+import firebase from '../../firebase-init.js';
+import { router } from "expo-router";
 
 export default function Index() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
-  function handleEntrar(){
-    // verificando se todos os campos foram preenchidos
+  // Carregar fonte personalizada
+  const [fontsLoaded] = useFonts({
+    'Itim-Regular': require('../../assets/fonts/Itim-Regular.ttf'), // Caminho para sua fonte
+  });
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color={COLORS.ORANGE} />;
+  }
+
+  function handleEntrar() {
     if (!email || !senha) {
       Alert.alert("Erro", "Por favor, preencha todos os campos.");
       return;
     }
 
-    // validando formato de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       Alert.alert("Erro", "O formato do email está incorreto.");
@@ -26,20 +34,14 @@ export default function Index() {
     }
 
     firebase.auth().signInWithEmailAndPassword(email, senha)
-      .then(response => {
+      .then(() => {
         router.replace('/(tabs)/screens/');
       })
       .catch(error => {
         switch (error.code) {
           case 'auth/user-not-found':
-            Alert.alert("Erro", "Informações incorretas.");
-            break;
           case 'auth/wrong-password':
-            Alert.alert("Erro", "Informações incorretas.");
-            break;
           case 'auth/invalid-email':
-            Alert.alert("Erro", "O email fornecido é inválido.");
-            break;
           case 'auth/invalid-credential':
             Alert.alert("Erro", "Informações incorretas.");
             break;
@@ -50,34 +52,30 @@ export default function Index() {
       });
   }
 
-  function handleCadastrar(){
+  function handleCadastrar() {
     router.navigate('/cadastro');
   }
 
   return (
-    <View
-      style={[{
-        backgroundColor: COLORS.GRAY
-      }, styles.container]}
-    >
+    <View style={[{ backgroundColor: COLORS.GRAY }, styles.container]}>
       <YourselfTitle width={200} height={100} />
 
-      <FormInput 
-        label="Email" 
+      <FormInput
+        label="Email"
         placeholder="seu@email.com"
         value={email}
-        onChangeText={setEmail}  
+        onChangeText={setEmail}
       />
-      <FormInput 
-        label="Senha" 
-        placeholder="senha" 
+      <FormInput
+        label="Senha"
+        placeholder="senha"
         isPassword={true}
         value={senha}
-        onChangeText={setSenha}  
+        onChangeText={setSenha}
       />
 
-      <BigButton title="Entrar" action={handleEntrar} type={1}/>
-      <BigButton title="Cadastrar" action={handleCadastrar} type={2}/>
+      <BigButton title="Entrar" action={handleEntrar} type={1} />
+      <BigButton title="Cadastrar" action={handleCadastrar} type={2} />
 
       <Text style={styles.forget}>Esqueceu a senha?</Text>
     </View>
@@ -88,11 +86,14 @@ const styles = StyleSheet.create({
   forget: {
     position: 'absolute',
     bottom: '5%',
-    color: COLORS.ORANGE
+    fontSize: 16,
+    color: COLORS.ORANGE,
+    fontFamily: 'Itim-Regular' 
   },
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    fontFamily: 'Itim-Regular' 
   }
 });

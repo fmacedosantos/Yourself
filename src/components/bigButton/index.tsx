@@ -21,7 +21,8 @@ export function BigButton({title, action, type}: primaryButtonProps) {
             },
             text: {
                 color: COLORS.WHITE,
-                fontSize: 15
+                fontSize: 18,
+                fontFamily: 'Itim-Regular' 
             }
         })
     } else {
@@ -38,7 +39,8 @@ export function BigButton({title, action, type}: primaryButtonProps) {
             },
             text: {
                 color: COLORS.WHITE,
-                fontSize: 15
+                fontSize: 18,
+                fontFamily: 'Itim-Regular' 
             }
         })
     } 

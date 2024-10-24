@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginVertical: 10,
     textAlign: 'center',
+    fontFamily: 'Itim-Regular' 
   },
   summaryContainer: {
     width: '100%', // Para cobrir toda a largura da tela

@@ -22,5 +22,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     color: 'white',
+    fontFamily: 'Itim-Regular' 
   },
 });
