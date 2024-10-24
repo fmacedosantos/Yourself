@@ -1,5 +1,5 @@
+import { COLORS } from '@/src/constants/Colors';
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../constants/Colors';
 
 export const styles = StyleSheet.create({
     container: {
@@ -10,13 +10,16 @@ export const styles = StyleSheet.create({
         justifyContent: 'space-around',
         width: '100%',
         paddingVertical: 20,
-        backgroundColor: COLORS.WHITE
+        backgroundColor: COLORS.GRAY,
+        borderBottomWidth: 2,
+        borderBottomColor: COLORS.WHITE
       },
       statItem: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'center'
       },
       statValue: {
         marginLeft: 5,
+        color: COLORS.WHITE
       },
 });
