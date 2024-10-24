@@ -52,6 +52,33 @@ export default function Index() {
       });
   }
 
+  // Função para redefinir a senha
+  function handleEsquecerSenha() {
+    if (!email) {
+      Alert.alert("Erro", "Por favor, insira seu email para redefinir a senha.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      Alert.alert("Erro", "O formato do email está incorreto.");
+      return;
+    }
+
+    firebase.auth().sendPasswordResetEmail(email)
+      .then(() => {
+        Alert.alert("Sucesso", "Um e-mail de redefinição de senha foi enviado.");
+      })
+      .catch(error => {
+        if (error.code === 'auth/user-not-found') {
+          Alert.alert("Erro", "Usuário não encontrado com este email.");
+        } else {
+          Alert.alert("Erro", "Ocorreu um erro ao enviar o e-mail de redefinição de senha.");
+          console.error("Erro ao redefinir senha: ", error);
+        }
+      });
+  }
+
   function handleCadastrar() {
     router.navigate('/cadastro');
   }
@@ -77,7 +104,12 @@ export default function Index() {
       <BigButton title="Entrar" action={handleEntrar} type={1} />
       <BigButton title="Cadastrar" action={handleCadastrar} type={2} />
 
-      <Text style={styles.forget}>Esqueceu a senha?</Text>
+      <Text
+        style={styles.forget}
+        onPress={handleEsquecerSenha} 
+      >
+        Esqueceu a senha?
+      </Text>
     </View>
   );
 }
@@ -88,12 +120,13 @@ const styles = StyleSheet.create({
     bottom: '5%',
     fontSize: 16,
     color: COLORS.ORANGE,
-    fontFamily: 'Itim-Regular' 
+    fontFamily: 'Itim-Regular',
+    textDecorationLine: 'underline' 
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    fontFamily: 'Itim-Regular' 
+    fontFamily: 'Itim-Regular',
   }
 });
