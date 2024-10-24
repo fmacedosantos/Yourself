@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { router } from "expo-router";
-import { StyleSheet, Text, View, Alert } from "react-native";
-import { TextIcon } from "../components/textIcon";
+import { StyleSheet, View, Alert } from "react-native";
+import YourselfTitle from '../assets/images/yourself-title.svg';
 import { COLORS } from "../constants/Colors";
 import { FormInput } from "../components/formInput";
 import { BigButton } from "../components/bigButton";
@@ -70,7 +70,7 @@ export default function Cadastro() {
         backgroundColor: COLORS.GRAY
       }, styles.container]}
     >
-      <TextIcon isAbsolute={false} margin={15}/>
+      <YourselfTitle width={200} height={100} />
       <FormInput label="Email" placeholder="seu@email.com" value={email} onChangeText={setEmail}/>
       <FormInput label="Nome" placeholder="Nome completo" value={nome} onChangeText={setNome}/>
       <FormInput label="Nome de usuário" placeholder="Nome de usuário" value={apelido} onChangeText={setApelido}/>
@@ -78,10 +78,6 @@ export default function Cadastro() {
       <FormInput label="Confirme a senha" placeholder="Confirme a senha" value={confirmarSenha} onChangeText={setConfirmarSenha} isPassword={true}/>
       <BigButton title="Cadastrar" action={handleCadastrar} type={1}/>
 
-      <Text
-          style={styles.login}
-          onPress={handleLogin}
-      >Login</Text>
     </View>
     
   );

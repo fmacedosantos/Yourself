@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Alert } from "react-native";
 import { BigButton } from "../components/bigButton";
 import { COLORS } from "../constants/Colors";
 import { FormInput }  from "../components/formInput";
-import { TextIcon } from "../components/textIcon";
+import YourselfTitle from '../assets/images/yourself-title.svg';
 import { useState } from 'react';
 import firebase from '../../firebase-init.js'; 
 
@@ -60,7 +60,7 @@ export default function Index() {
         backgroundColor: COLORS.GRAY
       }, styles.container]}
     >
-      <TextIcon isAbsolute={true} top={50}/>
+      <YourselfTitle width={200} height={100} />
 
       <FormInput 
         label="Email" 
