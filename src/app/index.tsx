@@ -5,21 +5,20 @@ import { COLORS } from "../constants/Colors";
 import { FormInput }  from "../components/formInput";
 import { TextIcon } from "../components/textIcon";
 import { useState } from 'react';
-import firebase from '../../firebase-init.js'; // Importa o firebase compat
+import firebase from '../../firebase-init.js'; 
 
 export default function Index() {
-  // Adiciona estados para capturar email e senha
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
   function handleEntrar(){
-    // Validações básicas
+    // verificando se todos os campos foram preenchidos
     if (!email || !senha) {
       Alert.alert("Erro", "Por favor, preencha todos os campos.");
       return;
     }
 
-    // Validação simples de formato de email
+    // validando formato de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       Alert.alert("Erro", "O formato do email está incorreto.");
@@ -31,7 +30,6 @@ export default function Index() {
         router.replace('/(tabs)/screens/');
       })
       .catch(error => {
-        // Captura erros específicos do Firebase e exibe uma mensagem
         switch (error.code) {
           case 'auth/user-not-found':
             Alert.alert("Erro", "Informações incorretas.");
@@ -64,19 +62,18 @@ export default function Index() {
     >
       <TextIcon isAbsolute={true} top={50}/>
 
-      {/* Atribui os valores digitados pelo usuário */}
       <FormInput 
         label="Email" 
         placeholder="seu@email.com"
         value={email}
-        onChangeText={setEmail}  // Atualiza o estado do email
+        onChangeText={setEmail}  
       />
       <FormInput 
         label="Senha" 
         placeholder="senha" 
         isPassword={true}
         value={senha}
-        onChangeText={setSenha}  // Atualiza o estado da senha
+        onChangeText={setSenha}  
       />
 
       <BigButton title="Entrar" action={handleEntrar} type={1}/>
