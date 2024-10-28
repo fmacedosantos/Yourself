@@ -2,23 +2,44 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 interface AtividadeComponentProps {
-  minutos: number;
-  nome: string;
-  nivel: string;
-  corNivel: string;
+  titulo: string;
+  categoria: string;
+  pontos: number;
+  dificuldade: number;
+  data: string;
 }
 
-export const AtividadeComponent = ({ minutos, nome, nivel, corNivel }: AtividadeComponentProps) => {
+export const AtividadeComponent = ({
+  titulo,
+  categoria,
+  pontos,
+  dificuldade,
+  data
+}: AtividadeComponentProps) => {
+  
+  // Função para determinar a cor com base na dificuldade
+  const getNivelColor = (dificuldade: number) => {
+    switch (dificuldade) {
+      case 1: return '#5DB075'; // Verde
+      case 2: return '#F7A800'; // Amarelo
+      case 3: return '#FF5733'; // Vermelho
+      default: return '#333';
+    }
+  };
+
   return (
     <View style={styles.atividadeContainer}>
-      <View style={styles.minutosContainer}>
-        <Text style={styles.minutosText}>{minutos}</Text>
+      <View style={styles.pontosContainer}>
+        <Text style={styles.pontosText}>{pontos}</Text>
       </View>
 
-      <Text style={styles.nomeAtividade}>{nome}</Text>
+      <View style={styles.infoContainer}>
+        <Text style={styles.tituloText}>{titulo}</Text>
+        <Text style={styles.categoriaText}>{categoria} • {data}</Text>
+      </View>
 
-      <View style={[styles.nivelContainer, { backgroundColor: corNivel }]}>
-        <Text style={styles.nivelText}>{nivel}</Text>
+      <View style={[styles.nivelContainer, { backgroundColor: getNivelColor(dificuldade) }]}>
+        <Text style={styles.nivelText}>Nível {dificuldade}</Text>
       </View>
     </View>
   );
@@ -33,33 +54,39 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     marginVertical: 5,
-    width: '70%', 
-    alignSelf: 'center', 
-    minHeight: 60, 
+    width: '90%',
+    alignSelf: 'center',
+    minHeight: 60,
   },
-  minutosContainer: {
-    backgroundColor: '#4A90E2', 
+  pontosContainer: {
+    backgroundColor: '#4A90E2',
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 20,
     alignItems: 'center',
   },
-  minutosText: {
+  pontosText: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 18,
-    fontFamily: 'Itim-Regular' 
+    fontFamily: 'Itim-Regular',
   },
-  nomeAtividade: {
+  infoContainer: {
     flex: 1,
-    marginLeft: 10, 
+    marginLeft: 10,
+  },
+  tituloText: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
-    fontFamily: 'Itim-Regular' 
+    fontFamily: 'Itim-Regular',
+  },
+  categoriaText: {
+    fontSize: 14,
+    color: '#777',
+    fontFamily: 'Itim-Regular',
   },
   nivelContainer: {
-    backgroundColor: '#5DB075', 
     borderRadius: 10,
     paddingVertical: 5,
     paddingHorizontal: 10,
@@ -69,6 +96,6 @@ const styles = StyleSheet.create({
   nivelText: {
     color: 'white',
     fontWeight: 'bold',
-    fontFamily: 'Itim-Regular' 
+    fontFamily: 'Itim-Regular',
   },
 });

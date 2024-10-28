@@ -7,6 +7,7 @@ import { FormInput } from "../components/formInput";
 import YourselfTitle from '../assets/images/yourself-title.svg';
 import firebase from '../../firebase-init.js';
 import { router } from "expo-router";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Index() {
   const [email, setEmail] = useState('');
@@ -26,16 +27,26 @@ export default function Index() {
       Alert.alert("Erro", "Por favor, preencha todos os campos.");
       return;
     }
-
+  
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       Alert.alert("Erro", "O formato do email está incorreto.");
       return;
     }
-
+  
     firebase.auth().signInWithEmailAndPassword(email, senha)
-      .then(() => {
-        router.replace('/(tabs)/screens/');
+      .then(async (userCredential) => {
+        if (userCredential.user) {
+          const token = await userCredential.user.getIdToken(); // Obtenha o JWT do Firebase
+
+          console.log(token);
+          console.log("opa")
+
+          await AsyncStorage.setItem('jwt', token); // Armazene o token no dispositivo
+          
+          router.replace('/(tabs)/screens/');
+        }
+        
       })
       .catch(error => {
         switch (error.code) {

@@ -16,7 +16,8 @@ export const TituloComponent: React.FC<TituloProps> = ({ title }) => {
 const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 20, // Ajusta o espaço embaixo da logo
+    marginBottom: 20, 
+    marginTop: '25%'
   },
   logoText: {
     fontSize: 30,

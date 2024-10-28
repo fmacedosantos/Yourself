@@ -1,61 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { TituloComponent } from '../../../components/Titulo';
 import { SummaryStats } from '../../../components/summaryStats';
 import { AtividadeComponent } from '../../../components/historico';
+import { fetchWithAuth } from '../../../utils/fetchWithAuth';
+
+interface Atividade {
+  id: string;
+  titulo: string;
+  categoria: string;
+  pontos: number;
+  dificuldade: number;
+  data: string;
+}
 
 export default function Home() {
   const [showMore, setShowMore] = useState(false);
-  const [title, setTitle] = useState('Últimas atividades');
+  const [atividades, setAtividades] = useState<Atividade[]>([]);
 
-  const handleShowMore = () => {
-    setShowMore(!showMore);
-    setTitle(showMore ? 'Últimas atividades' : 'Histórico de atividades');
-  };
+  useEffect(() => {
+    async function carregarAtividades() {
+      try {
+        const response = await fetchWithAuth('http://192.168.0.229:3000/atividade/mostrar');
+        const data = await response.json();
+  
+        if (response.ok) {
+          setAtividades(data.dadosAtividades as Atividade[]); // Cast para Atividade[]
+        } else {
+          console.error('Erro ao buscar atividades:', data.message);
+        }
+      } catch (error) {
+        console.error('Erro na requisição:', error);
+      }
+    }
+  
+    carregarAtividades();
+  }, []);  
+
+  const handleShowMore = () => setShowMore(!showMore);
 
   return (
     <View style={styles.container}>
-      {/* SummaryStats ajustado com 100% de largura */}
       <View style={styles.summaryContainer}>
         <SummaryStats />
       </View>
 
-      {/* Título dinâmico */}
-      <View style={styles.titleContainer}>
-        <TituloComponent title={title} />
-      </View>
+      <TituloComponent title='Atividades' />
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Atividades iniciais */}
-        <AtividadeComponent minutos={40} nome="Node.js" nivel="II" corNivel="#F7A800" />
-        <AtividadeComponent minutos={20} nome="React Native" nivel="I" corNivel="#5DB075" />
-        <AtividadeComponent minutos={25} nome="HTML" nivel="I" corNivel="#5DB075" />
-
-        {/* Botão "Ver mais" ou "Ver menos" controlado por showMore */}
-        {showMore ? (
-          <>
-            {/* Atividades extras */}
-            <AtividadeComponent minutos={55} nome="Spring Boot" nivel="III" corNivel="#FF5733" />
-            <AtividadeComponent minutos={30} nome="CSS" nivel="I" corNivel="#5DB075" />
-            <AtividadeComponent minutos={60} nome="JavaScript" nivel="II" corNivel="#F7A800" />
-            <AtividadeComponent minutos={35} nome="TypeScript" nivel="II" corNivel="#F7A800" />
-            <AtividadeComponent minutos={25} nome="Python" nivel="I" corNivel="#5DB075" />
-            <AtividadeComponent minutos={12} nome="Ruby" nivel="I" corNivel="#5DB075" />
-            <AtividadeComponent minutos={45} nome="Django" nivel="III" corNivel="#FF5733" />
-            <AtividadeComponent minutos={38} nome="Go" nivel="II" corNivel="#F7A800" />
-            <AtividadeComponent minutos={27} nome="PHP" nivel="I" corNivel="#5DB075" />
-            <AtividadeComponent minutos={55} nome="C++" nivel="II" corNivel="#F7A800" />
-
-            {/* Exibe o botão "Ver menos" abaixo das atividades extras */}
-            <TouchableOpacity onPress={handleShowMore} style={styles.verMais}>
-              <Text style={styles.verMais}>Ver menos</Text>
-            </TouchableOpacity>
-          </>
-        ) : (
-          <TouchableOpacity onPress={handleShowMore} style={styles.verMais}>
-            <Text style={styles.verMais}>Ver mais...</Text>
-          </TouchableOpacity>
-        )}
+        {atividades.slice(0, showMore ? atividades.length : 3).map((atividade) => (
+          <AtividadeComponent
+            key={atividade.id}
+            titulo={atividade.titulo}
+            categoria={atividade.categoria}
+            pontos={atividade.pontos}
+            dificuldade={atividade.dificuldade}
+            data={atividade.data}
+          />
+        ))}
+        <TouchableOpacity onPress={handleShowMore}>
+          <Text style={styles.verMais}>{showMore ? 'Ver menos' : 'Ver mais...'}</Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -70,7 +75,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    flexGrow: 1, // Permite que o ScrollView cresça
+    flexGrow: 1,
   },
   verMais: {
     color: '#00AEEF',
@@ -80,15 +85,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Itim-Regular' 
   },
   summaryContainer: {
-    width: '100%', // Para cobrir toda a largura da tela
+    width: '100%',
     justifyContent: 'flex-start',
-    marginBottom: 10, // Mantém um espaço abaixo do SummaryStats
-    paddingHorizontal: 0, // Removendo preenchimento lateral
-  },
-  titleContainer: {
-    marginVertical: 10,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    marginTop: 80, // Adiciona espaço acima do título
+    marginBottom: 10,
+    paddingHorizontal: 0,
   },
 });
