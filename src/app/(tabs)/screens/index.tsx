@@ -4,6 +4,7 @@ import { TituloComponent } from '../../../components/Titulo';
 import { SummaryStats } from '../../../components/summaryStats';
 import { AtividadeComponent } from '../../../components/historico';
 import { fetchWithAuth } from '../../../utils/fetchWithAuth';
+import { ROUTES, Paths } from '@/src/constants/Routes';
 
 interface Atividade {
   id: string;
@@ -21,7 +22,7 @@ export default function Home() {
   useEffect(() => {
     async function carregarAtividades() {
       try {
-        const response = await fetchWithAuth('http://192.168.0.229:3000/atividade/mostrar');
+        const response = await fetchWithAuth(ROUTES(Paths.SHOW_ACTIVITIES));
         const data = await response.json();
   
         if (response.ok) {
