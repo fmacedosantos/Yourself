@@ -85,7 +85,7 @@ export default function Home() {
       <TituloComponent title='Atividades' />
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {atividades.slice(0, showMore ? atividades.length : 3).map((atividade) => (
+        {atividades.slice(0, showMore ? atividades.length : 8).map((atividade) => (
           <AtividadeComponent
             key={atividade.id}
             titulo={atividade.titulo}
