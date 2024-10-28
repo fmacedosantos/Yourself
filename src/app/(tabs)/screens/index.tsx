@@ -15,9 +15,18 @@ interface Atividade {
   data: string;
 }
 
+interface ResumoEstatisticas {
+  ofensiva: number;
+  pontos: number;
+}
+
 export default function Home() {
   const [showMore, setShowMore] = useState(false);
   const [atividades, setAtividades] = useState<Atividade[]>([]);
+  const [resumoEstatisticas, setResumoEstatisticas] = useState<ResumoEstatisticas>({
+    ofensiva: 0,
+    pontos: 0
+  });
 
   useEffect(() => {
     async function carregarAtividades() {
@@ -26,7 +35,7 @@ export default function Home() {
         const data = await response.json();
   
         if (response.ok) {
-          setAtividades(data.dadosAtividades as Atividade[]); // Cast para Atividade[]
+          setAtividades(data.dadosAtividades as Atividade[]);
         } else {
           console.error('Erro ao buscar atividades:', data.message);
         }
@@ -34,7 +43,31 @@ export default function Home() {
         console.error('Erro na requisição:', error);
       }
     }
-  
+
+    async function carregarResumoEstatisticas() {
+      try {
+        const response = await fetchWithAuth(ROUTES(Paths.SHOW_STATS));
+        const data = await response.json();
+
+        const ofensiva = data.dadosEstatisticas.ofensiva;
+
+        console.log("Dados de estatísticas recebidos:", data);  // Verifique a estrutura do objeto
+
+        if (response.ok && data.dadosEstatisticas) {
+          setResumoEstatisticas({
+            ofensiva: data.dadosEstatisticas.ofensiva,
+            pontos: data.dadosEstatisticas.pontos
+          });
+          console.log(ofensiva)
+        } else {
+          console.error('Erro ao buscar estatísticas:', data.message);
+        }
+      } catch (error) {
+        console.error('Erro na requisição:', error);
+      }
+    }
+
+    carregarResumoEstatisticas();
     carregarAtividades();
   }, []);  
 
@@ -43,7 +76,10 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <View style={styles.summaryContainer}>
-        <SummaryStats />
+        <SummaryStats 
+          ofensiva={resumoEstatisticas.ofensiva} 
+          pontos={resumoEstatisticas.pontos}
+        />
       </View>
 
       <TituloComponent title='Atividades' />
