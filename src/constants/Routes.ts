@@ -2,7 +2,8 @@ import { IPS } from "./Ips";
 
 export enum Paths {
     SHOW_ACTIVITIES = 'atividade/mostrar',
-    SHOW_STATS = 'usuario/mostrar-estatisticas'
+    SHOW_STATS = 'usuario/mostrar-estatisticas',
+    REGISTER_USER = 'usuario/cadastrar'
 }
 
 export const ROUTES = (route: Paths) => {

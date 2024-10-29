@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import { Text, View, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { Text, View, Alert, ActivityIndicator } from 'react-native';
 import { useFonts } from 'expo-font'; 
-import { COLORS } from "../constants/Colors";
-import { FormInput } from "../components/formInput";
-import YourselfTitle from '../assets/images/yourself-title.svg';
-import firebase from '../../firebase-init.js';
+import { COLORS } from "../../constants/Colors";
+import { FormInput } from "../../components/formInput";
+import YourselfTitle from '../../assets/images/yourself-title.svg';
+import firebase from '../../../firebase-init.js';
 import { router } from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { EnterButton } from '../components/enterButton';
-import { RegisterButton } from '../components/registerButton';
+import { EnterButton } from '../../components/enterButton';
+import { RegisterButton } from '../../components/registerButton';
+import { styles } from './styles';
 
 export default function Index() {
   const [email, setEmail] = useState('');
@@ -16,7 +17,7 @@ export default function Index() {
 
   // Carregar fonte personalizada
   const [fontsLoaded] = useFonts({
-    'Itim-Regular': require('../../assets/fonts/Itim-Regular.ttf'), // Caminho para sua fonte
+    'Itim-Regular': require('../../../assets/fonts/Itim-Regular.ttf'), // Caminho para sua fonte
   });
 
   if (!fontsLoaded) {
@@ -45,7 +46,7 @@ export default function Index() {
 
           await AsyncStorage.setItem('jwt', token); // Armazene o token no dispositivo
           
-          router.replace('/(tabs)/screens/');
+          router.replace('/(tabs)/screens/index');
         }
         
       })
@@ -92,11 +93,11 @@ export default function Index() {
   }
 
   function handleCadastrar() {
-    router.navigate('/cadastro');
+    router.navigate('/register');
   }
 
   return (
-    <View style={[{ backgroundColor: COLORS.GRAY }, styles.container]}>
+    <View style={styles.container}>
       <YourselfTitle width={200} height={100} />
 
       <FormInput
@@ -126,19 +127,4 @@ export default function Index() {
   );
 }
 
-const styles = StyleSheet.create({
-  forget: {
-    position: 'absolute',
-    bottom: '5%',
-    fontSize: 16,
-    color: COLORS.ORANGE,
-    fontFamily: 'Itim-Regular',
-    textDecorationLine: 'underline' 
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontFamily: 'Itim-Regular',
-  }
-});
+

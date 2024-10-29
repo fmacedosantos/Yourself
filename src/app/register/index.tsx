@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { router } from "expo-router";
 import { StyleSheet, View, Alert } from "react-native";
-import YourselfTitle from '../assets/images/yourself-title.svg';
-import { COLORS } from "../constants/Colors";
-import { FormInput } from "../components/formInput";
-import { RegisterButton } from "../components/registerButton";
+import YourselfTitle from '../../assets/images/yourself-title.svg';
+import { COLORS } from "../../constants/Colors";
+import { FormInput } from "../../components/formInput";
+import { RegisterButton } from "../../components/registerButton";
+import { styles } from "../index/styles";
+import { Paths, ROUTES } from "@/src/constants/Routes";
 
 export default function Cadastro() {
   const [email, setEmail] = useState('');
@@ -34,7 +36,7 @@ export default function Cadastro() {
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/usuario/cadastrar`, {
+      const response = await fetch(ROUTES(Paths.REGISTER_USER), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +52,7 @@ export default function Cadastro() {
       const data = await response.json();
 
       if (response.ok) {
-        router.replace('/(tabs)/screens/'); 
+        router.replace('/(tabs)/screens/index'); 
       } else {
         Alert.alert('Erro', data.message || 'Ocorreu um erro no cadastro.');
       }
@@ -60,15 +62,9 @@ export default function Cadastro() {
     }
   }
 
-  function handleLogin() {
-    router.navigate('/');
-  }
-
   return (
     <View
-      style={[{
-        backgroundColor: COLORS.GRAY
-      }, styles.container]}
+      style={styles.container}
     >
       <YourselfTitle width={200} height={100} />
       <FormInput label="Email" placeholder="seu@email.com" value={email} onChangeText={setEmail}/>
@@ -83,15 +79,4 @@ export default function Cadastro() {
   );
 }
 
-const styles = StyleSheet.create({
-  login: {
-      position: 'absolute',
-      bottom: '5%',
-      color: COLORS.ORANGE
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-})
+

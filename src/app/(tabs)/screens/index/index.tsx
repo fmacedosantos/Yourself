@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Title } from '../../../components/title';
-import { SummaryStats } from '../../../components/summaryStats';
-import { Activity } from '../../../components/activity';
-import { fetchWithAuth } from '../../../utils/fetchWithAuth';
+import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { Title } from '../../../../components/title';
+import { SummaryStats } from '../../../../components/summaryStats';
+import { Activity } from '../../../../components/activity';
+import { fetchWithAuth } from '../../../../utils/fetchWithAuth';
 import { ROUTES, Paths } from '@/src/constants/Routes';
+import { styles } from './styles';
 
 interface Atividade {
   id: string;
@@ -103,28 +104,4 @@ export default function Home() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#373435',
-  },
-  scrollContainer: {
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    flexGrow: 1,
-  },
-  verMais: {
-    color: '#00AEEF',
-    fontSize: 16,
-    marginVertical: 10,
-    textAlign: 'center',
-    fontFamily: 'Itim-Regular' 
-  },
-  summaryContainer: {
-    width: '100%',
-    justifyContent: 'flex-start',
-    marginBottom: 10,
-    paddingHorizontal: 0,
-  },
-});
+

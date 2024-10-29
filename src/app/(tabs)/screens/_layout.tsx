@@ -16,7 +16,7 @@ export default function Layout() {
         }
       }}>
       <Tabs.Screen
-        name="index"
+        name="index/index"
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <HistoricalIcon
@@ -28,7 +28,7 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
-        name="activity"
+        name="activity/index"
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <AddActivityIcon
@@ -40,7 +40,7 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
-        name="shop"
+        name="shop/index"
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <ShopIcon
@@ -52,7 +52,7 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="profile/index"
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <ProfileIcon
