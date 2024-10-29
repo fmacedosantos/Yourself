@@ -52,7 +52,7 @@ export default function Cadastro() {
       const data = await response.json();
 
       if (response.ok) {
-        router.replace('/(tabs)/screens/index'); 
+        router.replace('/(tabs)/screens/home');
       } else {
         Alert.alert('Erro', data.message || 'Ocorreu um erro no cadastro.');
       }

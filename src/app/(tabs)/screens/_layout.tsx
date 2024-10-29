@@ -5,7 +5,7 @@ import ShopIcon from '../../../assets/icons/shop-icon.svg';
 import ProfileIcon from '../../../assets/icons/profile-icon.svg';
 import { COLORS } from "@/src/constants/Colors";
 
-export default function Layout() {
+export default function TabsLayout() {
   return (
     <Tabs screenOptions={{ 
         headerShown: false,
@@ -16,7 +16,7 @@ export default function Layout() {
         }
       }}>
       <Tabs.Screen
-        name="index/index"
+        name="home/index"
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <HistoricalIcon

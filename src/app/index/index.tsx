@@ -46,7 +46,7 @@ export default function Index() {
 
           await AsyncStorage.setItem('jwt', token); // Armazene o token no dispositivo
           
-          router.replace('/(tabs)/screens/index');
+          router.replace('/(tabs)/screens/home');
         }
         
       })
