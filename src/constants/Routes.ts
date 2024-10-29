@@ -6,5 +6,5 @@ export enum Paths {
 }
 
 export const ROUTES = (route: Paths) => {
-    return `http://${IPS.SENAI}:3000/${route}`;
+    return `http://${IPS.CASA}:3000/${route}`;
 };

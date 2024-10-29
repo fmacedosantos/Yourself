@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { List } from 'react-native-paper';
 import { useState } from 'react';
 
-import { styles } from './style';
+import { styles } from './styles';
 import { MD3Colors } from 'react-native-paper';
 import { COLORS } from '../../constants/Colors';
 

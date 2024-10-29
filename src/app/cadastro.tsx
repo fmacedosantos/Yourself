@@ -4,7 +4,7 @@ import { StyleSheet, View, Alert } from "react-native";
 import YourselfTitle from '../assets/images/yourself-title.svg';
 import { COLORS } from "../constants/Colors";
 import { FormInput } from "../components/formInput";
-import { BigButton } from "../components/bigButton";
+import { RegisterButton } from "../components/registerButton";
 
 export default function Cadastro() {
   const [email, setEmail] = useState('');
@@ -76,7 +76,7 @@ export default function Cadastro() {
       <FormInput label="Nome de usuário" placeholder="Nome de usuário" value={apelido} onChangeText={setApelido}/>
       <FormInput label="Senha" placeholder="Senha" value={senha} onChangeText={setSenha} isPassword={true}/>
       <FormInput label="Confirme a senha" placeholder="Confirme a senha" value={confirmarSenha} onChangeText={setConfirmarSenha} isPassword={true}/>
-      <BigButton title="Cadastrar" action={handleCadastrar} type={1}/>
+      <RegisterButton title='Cadastrar' action={handleCadastrar}/>
 
     </View>
     

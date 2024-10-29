@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { TituloComponent } from '../../../components/Titulo';
+import { Title } from '../../../components/title';
 import { SummaryStats } from '../../../components/summaryStats';
-import { AtividadeComponent } from '../../../components/historico';
+import { Activity } from '../../../components/activity';
 import { fetchWithAuth } from '../../../utils/fetchWithAuth';
 import { ROUTES, Paths } from '@/src/constants/Routes';
 
@@ -82,11 +82,11 @@ export default function Home() {
         />
       </View>
 
-      <TituloComponent title='Atividades' />
+      <Title title='Atividades' />
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {atividades.slice(0, showMore ? atividades.length : 8).map((atividade) => (
-          <AtividadeComponent
+          <Activity
             key={atividade.id}
             titulo={atividade.titulo}
             categoria={atividade.categoria}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-import { styles } from './style';
+import { styles } from './styles';
 import FireIcon from '../../assets/images/fire-icon.svg'
 import XpIcon from '../../assets/images/xp-icon.svg'
 

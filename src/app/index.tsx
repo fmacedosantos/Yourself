@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { Text, View, StyleSheet, Alert, ActivityIndicator } from 'react-native';
-import { useFonts } from 'expo-font'; // Importando useFonts
-import { BigButton } from "../components/bigButton";
+import { useFonts } from 'expo-font'; 
 import { COLORS } from "../constants/Colors";
 import { FormInput } from "../components/formInput";
 import YourselfTitle from '../assets/images/yourself-title.svg';
 import firebase from '../../firebase-init.js';
 import { router } from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { EnterButton } from '../components/enterButton';
+import { RegisterButton } from '../components/registerButton';
 
 export default function Index() {
   const [email, setEmail] = useState('');
@@ -112,8 +113,8 @@ export default function Index() {
         onChangeText={setSenha}
       />
 
-      <BigButton title="Entrar" action={handleEntrar} type={1} />
-      <BigButton title="Cadastrar" action={handleCadastrar} type={2} />
+      <EnterButton title='Entrar' action={handleEntrar}/>
+      <RegisterButton title='Cadastrar' action={handleCadastrar}/>
 
       <Text
         style={styles.forget}
