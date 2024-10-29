@@ -10,10 +10,8 @@ import { styles } from './styles';
 interface Atividade {
   id: string;
   titulo: string;
-  categoria: string;
   pontos: number;
   dificuldade: number;
-  data: string;
 }
 
 interface ResumoEstatisticas {
@@ -86,14 +84,12 @@ export default function Home() {
       <Title title='Atividades' />
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {atividades.slice(0, showMore ? atividades.length : 8).map((atividade) => (
+        {atividades.slice(0, showMore ? atividades.length : 5).map((atividade) => (
           <Activity
             key={atividade.id}
             titulo={atividade.titulo}
-            categoria={atividade.categoria}
             pontos={atividade.pontos}
             dificuldade={atividade.dificuldade}
-            data={atividade.data}
           />
         ))}
         <TouchableOpacity onPress={handleShowMore}>

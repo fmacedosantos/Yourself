@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     pontosText: {
       color: 'white',
       fontWeight: 'bold',
-      fontSize: 18,
+      fontSize: 22,
       fontFamily: 'Itim-Regular',
     },
     infoContainer: {
@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
       marginLeft: 10,
     },
     tituloText: {
-      fontSize: 16,
+      fontSize: 20,
       fontWeight: 'bold',
       color: '#333',
       fontFamily: 'Itim-Regular',
@@ -51,6 +51,7 @@ export const styles = StyleSheet.create({
     nivelText: {
       color: 'white',
       fontWeight: 'bold',
+      fontSize: 16,
       fontFamily: 'Itim-Regular',
     },
   });
