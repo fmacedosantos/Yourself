@@ -12,6 +12,13 @@ export const styles = StyleSheet.create({
       paddingHorizontal: 20,
       flexGrow: 1,
     },
+    noActivitiesText: {
+      color: COLORS.WHITE, 
+      textAlign: 'center',
+      fontSize: 16,
+      marginTop: '35%', 
+      fontFamily: 'Itim-Regular'
+    },    
     verMais: {
       color: '#00AEEF',
       fontSize: 16,

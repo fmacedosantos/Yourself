@@ -33,7 +33,7 @@ export default function Home() {
     userService.carregarResumoEstatisticas(setResumoEstatisticas);
   }, []);  
 
-  function handleShowMore () {
+  function handleShowMore() {
     setShowMore(!showMore);
     setTitle(!title);
   } 
@@ -50,20 +50,26 @@ export default function Home() {
       <Title title={title ? 'Histórico' : 'Últimas atividades'} />
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {atividades.slice(0, showMore ? atividades.length : 5).map((atividade) => (
-          <Activity
-            key={atividade.id}
-            titulo={atividade.titulo}
-            pontos={atividade.pontos}
-            dificuldade={atividade.dificuldade}
-          />
-        ))}
-        <TouchableOpacity onPress={handleShowMore}>
-          <Text style={styles.verMais}>{showMore ? 'Ver menos' : 'Ver mais...'}</Text>
-        </TouchableOpacity>
+        {atividades.length === 0 ? (
+          <Text style={styles.noActivitiesText}>Nenhuma atividade...</Text>
+        ) : (
+          <>
+            {atividades.slice(0, showMore ? atividades.length : 5).map((atividade) => (
+              <Activity
+                key={atividade.id}
+                titulo={atividade.titulo}
+                pontos={atividade.pontos}
+                dificuldade={atividade.dificuldade}
+              />
+            ))}
+            {atividades.length > 5 && (
+              <TouchableOpacity onPress={handleShowMore}>
+                <Text style={styles.verMais}>{showMore ? 'Ver menos' : 'Ver mais...'}</Text>
+              </TouchableOpacity>
+            )}
+          </>
+        )}
       </ScrollView>
     </View>
   );
 }
-
-
