@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { styles } from './styles';
 
 interface TitleProps {
@@ -7,9 +7,10 @@ interface TitleProps {
 }
 
 export function Title ({ title }: TitleProps) {
+  
   return (
-    <View style={styles.logoContainer}>
-      <Text style={styles.logoText}>{title}</Text>
+    <View style={styles.titleContainer}>
+      <Text style={styles.titleText}>{title}</Text>
     </View>
   );
 };
