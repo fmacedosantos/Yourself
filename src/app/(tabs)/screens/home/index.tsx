@@ -40,12 +40,10 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.summaryContainer}>
-        <SummaryStats 
-          ofensiva={resumoEstatisticas.ofensiva} 
-          pontos={resumoEstatisticas.pontos}
-        />
-      </View>
+      <SummaryStats 
+        ofensiva={resumoEstatisticas.ofensiva} 
+        pontos={resumoEstatisticas.pontos}
+      />
 
       <Title title={title ? 'Histórico' : 'Últimas atividades'} />
 

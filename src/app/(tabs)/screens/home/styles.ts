@@ -25,11 +25,5 @@ export const styles = StyleSheet.create({
       marginVertical: 10,
       textAlign: 'center',
       fontFamily: 'Itim-Regular' 
-    },
-    summaryContainer: {
-      width: '100%',
-      justifyContent: 'flex-start',
-      marginBottom: 10,
-      paddingHorizontal: 0,
-    },
+    }
   });
