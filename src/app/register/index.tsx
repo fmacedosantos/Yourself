@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { router } from "expo-router";
-import { StyleSheet, View, Alert } from "react-native";
+import { View } from "react-native";
 import YourselfTitle from '../../assets/images/yourself-title.svg';
-import { COLORS } from "../../constants/Colors";
 import { FormInput } from "../../components/formInput";
 import { RegisterButton } from "../../components/registerButton";
 import { styles } from "../index/styles";
-import { Paths, ROUTES } from "@/src/constants/Routes";
+import { passwordsMatch, validateEmail, validateFields } from "@/src/utils/validators";
+import { register } from "@/src/services/api/auth";
 
 export default function Cadastro() {
   const [email, setEmail] = useState('');
@@ -16,49 +15,9 @@ export default function Cadastro() {
   const [confirmarSenha, setConfirmarSenha] = useState('');
 
   async function handleCadastrar() {
-    // verificando se todos os campos foram preenchidos
-    if (!email || !nome || !apelido || !senha || !confirmarSenha) {
-      Alert.alert("Erro", "Por favor, preencha todos os campos.");
-      return;
-    }
 
-    // validando formato de email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      Alert.alert("Erro", "O formato do email está incorreto.");
-      return;
-    }
-
-    // verificando as senhas
-    if (senha !== confirmarSenha) {
-      Alert.alert('Erro', 'As senhas não conferem!');
-      return;
-    }
-
-    try {
-      const response = await fetch(ROUTES(Paths.REGISTER_USER), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          nome,
-          apelido,
-          senha
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        router.replace('/(tabs)/screens/home');
-      } else {
-        Alert.alert('Erro', data.message || 'Ocorreu um erro no cadastro.');
-      }
-
-    } catch (error) {
-      Alert.alert('Erro', 'Falha ao conectar com o servidor.');
+    if (!validateFields({email, nome, apelido, senha, confirmarSenha}) && !validateEmail(email) && !passwordsMatch(senha, confirmarSenha)) {
+      register(email, nome, apelido, senha);
     }
   }
 
