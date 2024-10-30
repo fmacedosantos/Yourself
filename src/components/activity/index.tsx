@@ -14,7 +14,7 @@ export const Activity = ({
   dificuldade
 }: ActivityProps) => {
   
-  const getNivelColor = (dificuldade: number) => {
+  const getLevelColor = (dificuldade: number) => {
     switch (dificuldade) {
       case 1: return '#5DB075'; 
       case 2: return '#F7A800'; 
@@ -22,6 +22,15 @@ export const Activity = ({
       default: return '#333';
     }
   };
+
+  const getTextLevel = (dificuldade: number) => {
+    switch (dificuldade) {
+      case 1: return 'I';
+      case 2: return 'II';
+      case 3: return 'III';
+      default: return '8'
+    }
+  }
 
   return (
     <View style={styles.atividadeContainer}>
@@ -33,8 +42,8 @@ export const Activity = ({
         <Text style={styles.tituloText}>{titulo}</Text>
       </View>
 
-      <View style={[styles.nivelContainer, { backgroundColor: getNivelColor(dificuldade) }]}>
-        <Text style={styles.nivelText}>Nível {dificuldade}</Text>
+      <View style={[styles.nivelContainer, { backgroundColor: getLevelColor(dificuldade) }]}>
+        <Text style={styles.nivelText}>{getTextLevel(dificuldade)}</Text>
       </View>
     </View>
   );
