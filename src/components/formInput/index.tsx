@@ -4,7 +4,7 @@ import { styles } from './styles';
 
 interface FormInputProps {
   label: string;
-  placeholder: string;
+  placeholder?: string;
   isPassword?: boolean;
   value: string;
   onChangeText: (text: string) => void;
