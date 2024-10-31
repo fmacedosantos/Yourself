@@ -10,14 +10,13 @@ export function ListCategories({ setCategoria, style }: any) {
     const handlePress = () => setExpanded(!expanded);
 
     const categories = [
-        "Matemática",
-        "Física",
-        "Química",
-        "Biologia",
-        "Português",
-        "História",
-        "Geografia",
-        "Filosofia"
+        "Estudos",
+        "Trabalho",
+        "Saúde",
+        "Pessoal",
+        "Social",
+        "Desenvolvimento",
+        "Entretenimento"
     ];
 
     return (

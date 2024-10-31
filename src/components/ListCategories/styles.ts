@@ -11,9 +11,9 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderWidth: 1,
-        borderColor: COLORS.BLACK,
+        borderColor: COLORS.GRAY,
         borderRadius: 5,
-        paddingVertical: 10,
+        paddingVertical: 13,
         backgroundColor: COLORS.WHITE,
     },
     customButtonText: {
@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     },
     dropdown: {
         borderWidth: 1,
-        borderColor: COLORS.BLACK,
+        borderColor: COLORS.GRAY,
         borderRadius: 5,
         backgroundColor: COLORS.WHITE,
         marginTop: 5,
@@ -33,11 +33,11 @@ export const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 15,
         borderBottomWidth: 1,
-        borderBottomColor: COLORS.BLACK,
+        borderBottomColor: COLORS.GRAY,
     },
     dropdownText: {
-        color: COLORS.BLACK,
-        fontSize: 16,
+        color: COLORS.GRAY,
+        fontSize: 18,
         fontFamily: 'Itim-Regular'
     },
     text: {
