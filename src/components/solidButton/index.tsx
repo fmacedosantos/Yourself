@@ -6,7 +6,7 @@ interface ButtonProps {
     action: () => void;
 }
 
-export function EnterButton({ title, action }: ButtonProps) {
+export function SolidButton({ title, action }: ButtonProps) {
     return (
         <Pressable onPress={action} style={styles.enterButton}>
             <Text style={styles.enterText}>{title}</Text>

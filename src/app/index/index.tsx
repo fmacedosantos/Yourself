@@ -4,8 +4,8 @@ import { COLORS } from "../../constants/Colors";
 import { FormInput } from "../../components/formInput";
 import YourselfTitle from '../../assets/images/yourself-title.svg';
 import { router } from "expo-router";
-import { EnterButton } from '../../components/enterButton';
-import { RegisterButton } from '../../components/registerButton';
+import { SolidButton } from '../../components/solidButton';
+import { BorderButton } from '../../components/borderButton';
 import { styles } from './styles';
 import { validateEmail, validateFields } from '@/src/utils/validators';
 import { LoadFont } from '@/src/utils/loadFont';
@@ -56,8 +56,8 @@ export default function Index() {
         onChangeText={setSenha}
       />
 
-      <EnterButton title='Entrar' action={handleEnter}/>
-      <RegisterButton title='Cadastrar' action={handleGoToRegister}/>
+      <SolidButton title='Entrar' action={handleEnter}/>
+      <BorderButton title='Cadastrar' color={1} action={handleGoToRegister}/>
 
       <Text
         style={styles.forget}

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import YourselfTitle from '../../assets/images/yourself-title.svg';
 import { FormInput } from "../../components/formInput";
-import { RegisterButton } from "../../components/registerButton";
+import { BorderButton } from "../../components/borderButton";
 import { styles } from "../index/styles";
 import { passwordsMatch, validateEmail, validateFields } from "@/src/utils/validators";
 import { register } from "@/src/services/api/auth";
@@ -31,7 +31,7 @@ export default function Cadastro() {
       <FormInput label="Nome de usuário" placeholder="Nome de usuário" value={apelido} onChangeText={setApelido}/>
       <FormInput label="Senha" placeholder="Senha" value={senha} onChangeText={setSenha} isPassword={true}/>
       <FormInput label="Confirme a senha" placeholder="Confirme a senha" value={confirmarSenha} onChangeText={setConfirmarSenha} isPassword={true}/>
-      <RegisterButton title='Cadastrar' action={handleCadastrar}/>
+      <BorderButton title='Cadastrar' color={2} action={handleCadastrar}/>
 
     </View>
     

@@ -6,14 +6,12 @@ export const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         padding: 15,
         borderRadius: 15,
-        borderColor: '#fff',
         borderWidth: 2,
         alignItems: 'center',
         width: '80%',
         marginVertical: 10,
     },
     registerText: {
-        color: COLORS.WHITE,
         fontSize: 18,
         fontFamily: 'Itim-Regular',
     }
