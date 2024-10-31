@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { styles } from './styles';
 
-export function ListCategories({ style }: any) {
+export function ListCategories({ setCategoria, style }: any) {
     const [titleList, setTitleList] = useState('Categoria');
     const [expanded, setExpanded] = useState(false);
 
@@ -33,6 +33,7 @@ export function ListCategories({ style }: any) {
                             key={index}
                             onPress={() => {
                                 setTitleList(category);
+                                setCategoria(category); 
                                 setExpanded(false);
                             }}
                             style={styles.dropdownItem}

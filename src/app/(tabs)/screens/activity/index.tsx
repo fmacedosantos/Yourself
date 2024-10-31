@@ -32,7 +32,12 @@ export default function AddNewActivity() {
   }, []);
 
   function handleStartActivity() {
-    router.navigate('/(tabs)/pomodoro');
+    if (categoria !== '') {
+      console.log("Categoria selecionada:", categoria);
+    } else {
+      console.log("Selecione uma categoria");
+    }
+    //router.navigate('/(tabs)/pomodoro');
   }
 
   function handleDifficultySelect(difficulty: number) {
@@ -49,7 +54,7 @@ export default function AddNewActivity() {
       <FormInput label="Titulo" value={titulo} onChangeText={setTitulo} />
       <FormInput label="Descrição" value={descricao} onChangeText={setDescricao} />
       <SelectDifficulty onDifficultySelect={handleDifficultySelect} selectedDifficulty={selectedDifficulty} />
-      <ListCategories />
+      <ListCategories setCategoria={setCategoria} />
       <View style={{width: '100%', alignItems: 'center'}}>
       <SolidButton title="Iniciar" action={handleStartActivity} />
       </View>
