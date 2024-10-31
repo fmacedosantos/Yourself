@@ -9,9 +9,9 @@ export function validateEmail(email: string): boolean {
   return true;
 }
 
-export function validateFields(fields: { [key: string]: string }): boolean {
+export function validateFields(fields: { [key: string]: string | number | null }): boolean {
   for (const [fieldName, fieldValue] of Object.entries(fields)) {
-    if (!fieldValue) {
+    if (fieldValue === "" || fieldValue === null || fieldValue === undefined) {
       Alert.alert("Erro", `Por favor, preencha o campo ${fieldName}.`);
       return false;
     }
