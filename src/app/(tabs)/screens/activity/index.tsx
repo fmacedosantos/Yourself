@@ -7,6 +7,7 @@ import { userService } from "@/src/services/api/user";
 import { SummaryStats } from "@/src/components/summaryStats";
 import { SolidButton } from "@/src/components/solidButton";
 import { router } from "expo-router";
+import { SelectDifficulty } from "@/src/components/selectDifficulty";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -16,7 +17,7 @@ interface ResumoEstatisticas {
 export default function AddNewActivity() {
   const [titulo, setTitulo] = useState('');
   const [descricao, setDescricao] = useState('');
-  const [nivelDificuldade, setNivelDificuldade] = useState('');
+  const [selectedDifficulty, setSelectedDifficulty] = useState<number | null>(null);
   const [categoria, setCategoria] = useState('');
 
   const [resumoEstatisticas, setResumoEstatisticas] = useState<ResumoEstatisticas>({
@@ -32,6 +33,10 @@ export default function AddNewActivity() {
     router.navigate('/(tabs)/pomodoro');
   }
 
+  function handleDifficultySelect(difficulty: number) {
+    setSelectedDifficulty(difficulty);
+  }
+
   return (
     <View
       style={styles.container}
@@ -43,7 +48,7 @@ export default function AddNewActivity() {
       <Title title="Nova tarefa"/>
       <FormInput label="Titulo" value={titulo} onChangeText={setTitulo}/>
       <FormInput label="Descrição" value={descricao} onChangeText={setDescricao}/>
-      <FormInput label="Nível de dificuldade" value={nivelDificuldade} onChangeText={setNivelDificuldade}/>
+      <SelectDifficulty onDifficultySelect={handleDifficultySelect} selectedDifficulty={selectedDifficulty} />
       <FormInput label="Categoria" value={categoria} onChangeText={setCategoria}/>
       <SolidButton title="Iniciar" action={handleStartActivity}/>
     </View>
