@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { Title } from "@/src/components/title";
 import { userService } from "@/src/services/api/user";
 import { SummaryStats } from "@/src/components/summaryStats";
+import { SolidButton } from "@/src/components/solidButton";
+import { router } from "expo-router";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -26,6 +28,10 @@ export default function AddNewActivity() {
     userService.carregarResumoEstatisticas(setResumoEstatisticas);
   }, []); 
 
+  function handleStartActivity(){
+    router.navigate('/(tabs)/pomodoro');
+  }
+
   return (
     <View
       style={styles.container}
@@ -39,6 +45,7 @@ export default function AddNewActivity() {
       <FormInput label="Descrição" value={descricao} onChangeText={setDescricao}/>
       <FormInput label="Nível de dificuldade" value={nivelDificuldade} onChangeText={setNivelDificuldade}/>
       <FormInput label="Categoria" value={categoria} onChangeText={setCategoria}/>
+      <SolidButton title="Iniciar" action={handleStartActivity}/>
     </View>
   );
 }
