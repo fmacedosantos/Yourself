@@ -7,8 +7,8 @@ import { userService } from "@/src/services/api/user";
 import { SummaryStats } from "@/src/components/summaryStats";
 import { SolidButton } from "@/src/components/solidButton";
 import { router } from "expo-router";
-import { SelectDifficulty } from "@/src/components/selectDifficulty";
-import { ListCategories } from "@/src/components/listCategories/Index";
+import { SelectDifficulty } from "../../../../components/selectDifficulty";
+import { ListCategories } from "../../../../components/ListCategories";
 import { COLORS } from "@/src/constants/Colors";
 
 interface ResumoEstatisticas {
