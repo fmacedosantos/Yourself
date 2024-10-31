@@ -22,7 +22,9 @@ export function ListCategories({ style }: any) {
     return (
         <View style={[styles.listaContainer, style]}>
             <TouchableOpacity onPress={handlePress} style={styles.customButton}>
-                <Text style={styles.customButtonText}>+ {titleList}</Text>
+                <Text style={styles.customButtonText}>
+                    {titleList === 'Categoria' ? `+ ${titleList}` : titleList}
+                </Text>
             </TouchableOpacity>
             {expanded && (
                 <View style={styles.dropdown}>
