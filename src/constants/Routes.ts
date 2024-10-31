@@ -1,4 +1,4 @@
-const IP = '192.168.0.229';
+const IP = '192.168.56.1';
 
 export enum PATHS {
     SHOW_ACTIVITIES = 'atividade/mostrar',

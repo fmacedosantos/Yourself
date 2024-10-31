@@ -4,7 +4,7 @@ import { styles } from './styles';
 import AddCategory from '../../assets/images/add-category-icon.svg';
 
 export function ListCategories({ setCategoria, style }: any) {
-    const [titleList, setTitleList] = useState('+');
+    const [titleList, setTitleList] = useState('');
     const [expanded, setExpanded] = useState(false);
 
     const handlePress = () => setExpanded(!expanded);
@@ -24,9 +24,11 @@ export function ListCategories({ setCategoria, style }: any) {
         <View style={[styles.listaContainer, style]}>
             <Text style={styles.text}>Categoria</Text>
             <TouchableOpacity onPress={handlePress} style={styles.customButton}>
-                <Text style={styles.customButtonText}>
-                    {titleList === 'Categoria' ? `+ ${titleList}` : titleList}
-                </Text>
+                {titleList === '' ? (
+                    <AddCategory width={25} height={25} /> 
+                ) : (
+                    <Text style={styles.customButtonText}>{titleList}</Text>
+                )}
             </TouchableOpacity>
             {expanded && (
                 <View style={styles.dropdown}>
