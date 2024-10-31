@@ -4,7 +4,7 @@ export enum PATHS {
     SHOW_ACTIVITIES = 'atividade/mostrar',
     SHOW_STATS = 'usuario/mostrar-estatisticas',
     REGISTER_USER = 'usuario/cadastrar',
-    SHOW_ITEMS = 'item/mostrar'
+    SHOW_ITEMS = 'item/mostrar-todos'
 }
 
 export const ROUTES = (route: PATHS) => {
