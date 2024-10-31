@@ -19,6 +19,7 @@ export const styles = StyleSheet.create({
     customButtonText: {
         color: COLORS.BLACK,
         fontSize: 16,
+        fontFamily: 'Itim-Regular'
     },
     dropdown: {
         borderWidth: 1,
@@ -37,5 +38,13 @@ export const styles = StyleSheet.create({
     dropdownText: {
         color: COLORS.BLACK,
         fontSize: 16,
+        fontFamily: 'Itim-Regular'
     },
+    text: {
+        alignSelf: 'flex-start',
+        fontSize: 18,
+        marginBottom: 10,
+        color: COLORS.WHITE,
+        fontFamily: 'Itim-Regular', 
+      },
 });
