@@ -10,6 +10,7 @@ import { router } from "expo-router";
 import { SelectDifficulty } from "../../../../components/selectDifficulty";
 import { ListCategories } from "../../../../components/ListCategories";
 import { COLORS } from "@/src/constants/Colors";
+import { validateFields } from "@/src/utils/validators";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -32,12 +33,17 @@ export default function AddNewActivity() {
   }, []);
 
   function handleStartActivity() {
-    if (categoria !== '') {
-      console.log("Categoria selecionada:", categoria);
-    } else {
-      console.log("Selecione uma categoria");
-    }
-    //router.navigate('/(tabs)/pomodoro');
+    if (validateFields({ titulo, categoria, selectedDifficulty })) {
+      router.replace({
+        pathname: '/(tabs)/pomodoro',
+        params: {
+          titulo,
+          descricao,
+          selectedDifficulty, 
+          categoria
+        },
+      });
+    } 
   }
 
   function handleDifficultySelect(difficulty: number) {
@@ -45,7 +51,7 @@ export default function AddNewActivity() {
   }
 
   return (
-    <ScrollView style={{backgroundColor: COLORS.GRAY}} contentContainerStyle={styles.container}>
+    <ScrollView style={{ backgroundColor: COLORS.GRAY }} contentContainerStyle={styles.container}>
       <SummaryStats
         ofensiva={resumoEstatisticas.ofensiva}
         pontos={resumoEstatisticas.pontos}
@@ -55,8 +61,8 @@ export default function AddNewActivity() {
       <FormInput label="Descrição" value={descricao} onChangeText={setDescricao} />
       <SelectDifficulty onDifficultySelect={handleDifficultySelect} selectedDifficulty={selectedDifficulty} />
       <ListCategories setCategoria={setCategoria} />
-      <View style={{width: '100%', alignItems: 'center'}}>
-      <SolidButton title="Iniciar" action={handleStartActivity} />
+      <View style={{ width: '100%', alignItems: 'center' }}>
+        <SolidButton title="Iniciar" action={handleStartActivity} />
       </View>
     </ScrollView>
   );
