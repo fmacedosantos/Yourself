@@ -8,6 +8,8 @@ import { SummaryStats } from "@/src/components/summaryStats";
 import { SolidButton } from "@/src/components/solidButton";
 import { router } from "expo-router";
 import { SelectDifficulty } from "@/src/components/selectDifficulty";
+import { ListCategories } from "@/src/components/listCategories/Index";
+import { COLORS } from "@/src/constants/Colors";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -38,7 +40,7 @@ export default function AddNewActivity() {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView style={{backgroundColor: COLORS.GRAY}} contentContainerStyle={styles.container}>
       <SummaryStats
         ofensiva={resumoEstatisticas.ofensiva}
         pontos={resumoEstatisticas.pontos}
@@ -47,8 +49,10 @@ export default function AddNewActivity() {
       <FormInput label="Titulo" value={titulo} onChangeText={setTitulo} />
       <FormInput label="Descrição" value={descricao} onChangeText={setDescricao} />
       <SelectDifficulty onDifficultySelect={handleDifficultySelect} selectedDifficulty={selectedDifficulty} />
-      <FormInput label="Categoria" value={categoria} onChangeText={setCategoria} />
+      <ListCategories />
+      <View style={{width: '100%', alignItems: 'center'}}>
       <SolidButton title="Iniciar" action={handleStartActivity} />
+      </View>
     </ScrollView>
   );
 }

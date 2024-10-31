@@ -4,11 +4,10 @@ import { List } from 'react-native-paper';
 import { useState } from 'react';
 
 import { styles } from './styles';
-import { MD3Colors } from 'react-native-paper';
 import { COLORS } from '../../constants/Colors';
 
 export function ListCategories({style}: any) {
-    const [titleList, setTitleList] = useState('Categorize sua tarefa')
+    const [titleList, setTitleList] = useState('')
     const [expanded, setExpanded] = useState(false)
   
     const handlePress = () => setExpanded(!expanded);
@@ -31,7 +30,8 @@ export function ListCategories({style}: any) {
     }
 
   return (
-    <List.Section style={[styles.listaContainer, style]}>
+    <View style={styles.container}>
+      <List.Section style={[styles.listaContainer, style]}>
         <List.Accordion style={[styles.lista]} title={titleList}
         expanded={expanded} theme={theme}
         onPress={handlePress}>
@@ -67,5 +67,6 @@ export function ListCategories({style}: any) {
         }}/>
         </List.Accordion>
     </List.Section>
+    </View>
   );
 }
