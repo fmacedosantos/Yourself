@@ -35,7 +35,7 @@ export default function Pomodoro() {
   const [isPaused, setIsPaused] = useState(false);
   const [isConcentracao, setIsConcentracao] = useState(true);
   const [timeLeft, setTimeLeft] = useState(0);
-  const [minutosConcentracao, setMinutosConcentracao] = useState(0);
+  const [tempoTotalConcentracao, setTempoTotalConcentracao] = useState(0); // Acumula o tempo total de concentração
 
   const difficultyLevel = Number(selectedDifficulty);
 
@@ -55,9 +55,11 @@ export default function Pomodoro() {
       timer = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
+            // Se o ciclo de concentração terminar, acumula o tempo total de concentração
             if (isConcentracao) {
-              setMinutosConcentracao((prev) => prev + preferencias.preferenciaConcentracao);
+              setTempoTotalConcentracao((prevTotal) => prevTotal + preferencias.preferenciaConcentracao);
             }
+            // Alterna para a próxima fase (concentração ou descanso)
             setIsConcentracao(!isConcentracao);
             return isConcentracao 
               ? preferencias.preferenciaDescanso * 60 
@@ -79,19 +81,15 @@ export default function Pomodoro() {
 
   const handleFinishActivity = () => {
     setIsPaused(true); // Pausa o timer quando a atividade é finalizada
+
+    // Se estiver na fase de concentração ao finalizar, contabiliza o tempo restante
     if (isConcentracao) {
-      // Calcula os minutos concentrados com base no tempo restante
       const minutosConcentradosNoCicloAtual = Math.floor((preferencias.preferenciaConcentracao * 60 - timeLeft) / 60);
-      
-      // Atualiza o estado de minutosConcentracao imediatamente com o valor acumulado
-      setMinutosConcentracao(prev => {
-        const totalMinutosConcentracao = prev + minutosConcentradosNoCicloAtual;
-        console.log(`Total de minutos de concentração: ${totalMinutosConcentracao}`);
-        return totalMinutosConcentracao;
-      });
+      setTempoTotalConcentracao((prevTotal) => prevTotal + minutosConcentradosNoCicloAtual);
     }
+
+    console.log(`Total de minutos de concentração: ${tempoTotalConcentracao}`);
   };
-  
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -121,6 +119,7 @@ export default function Pomodoro() {
         />
         <FinishActivityButton action={handleFinishActivity} />
       </View>
+
     </View>
   );
 }
