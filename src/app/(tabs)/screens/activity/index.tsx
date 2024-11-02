@@ -8,9 +8,9 @@ import { SummaryStats } from "@/src/components/summaryStats";
 import { SolidButton } from "@/src/components/solidButton";
 import { router } from "expo-router";
 import { SelectDifficulty } from "../../../../components/selectDifficulty";
-import { ListCategories } from "../../../../components/ListCategories";
 import { COLORS } from "@/src/constants/Colors";
 import { validateFields } from "@/src/utils/validators";
+import { ListCategories } from "@/src/components/listCategories/Index";
 
 interface ResumoEstatisticas {
   ofensiva: number;

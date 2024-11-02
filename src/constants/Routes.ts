@@ -1,8 +1,9 @@
-const IP = '192.168.56.1';
+const IP = '192.168.0.229';
 
 export enum PATHS {
     SHOW_ACTIVITIES = 'atividade/mostrar',
     SHOW_STATS = 'usuario/mostrar-estatisticas',
+    SHOW_PREFERENCES = 'usuario/mostrar-preferencias',
     REGISTER_USER = 'usuario/cadastrar',
     SHOW_ITEMS = 'item/mostrar-todos'
 }

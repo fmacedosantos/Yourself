@@ -13,6 +13,11 @@ interface ResumoEstatisticas {
   pontos: number;
 }
 
+interface Preferencias {
+  preferenciaConcentracao: number;
+  preferenciaDescanso: number
+}
+
 export const userService = {
   async carregarAtividades(setAtividades: React.Dispatch<React.SetStateAction<Atividade[]>>) {
     try {
@@ -41,6 +46,24 @@ export const userService = {
         });
       } else {
         console.error('Erro ao buscar estatísticas:', data.message);
+      }
+    } catch (error) {
+      console.error('Erro na requisição:', error);
+    }
+  },
+
+  async carregarPreferencias(setPreferencias: React.Dispatch<React.SetStateAction<Preferencias>>) {
+    try {
+      const response = await fetchWithAuth(ROUTES(PATHS.SHOW_PREFERENCES));
+      const data = await response.json();
+
+      if (response.ok && data.dadosPreferencias) {
+        setPreferencias({
+          preferenciaConcentracao: data.dadosPreferencias.preferenciaConcentracao,
+          preferenciaDescanso: data.dadosPreferencias.preferenciaDescanso
+        });
+      } else {
+        console.error('Erro ao buscar preferências de temporizador:', data.message);
       }
     } catch (error) {
       console.error('Erro na requisição:', error);

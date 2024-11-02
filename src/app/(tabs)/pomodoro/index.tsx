@@ -15,6 +15,11 @@ interface ResumoEstatisticas {
   pontos: number;
 }
 
+interface Preferencias {
+  preferenciaConcentracao: number;
+  preferenciaDescanso: number;
+}
+
 export default function Pomodoro() {
   const { titulo, descricao, selectedDifficulty, categoria } = useLocalSearchParams();
   const [resumoEstatisticas, setResumoEstatisticas] = useState<ResumoEstatisticas>({
@@ -22,14 +27,21 @@ export default function Pomodoro() {
     pontos: 0
   });
 
+  const [preferencias, setPreferencias] = useState<Preferencias>({
+    preferenciaConcentracao: 0,
+    preferenciaDescanso: 0
+  })
+
   const difficultyLevel = Number(selectedDifficulty);
 
   useEffect(() => {
     userService.carregarResumoEstatisticas(setResumoEstatisticas);
+    userService.carregarPreferencias(setPreferencias);
   }, []);  
 
   function handlePauseUnpauseButton(){
     console.log("Clicado")
+    console.log(`${preferencias.preferenciaConcentracao} \n\n${preferencias.preferenciaDescanso}`)
   }
 
   return (
