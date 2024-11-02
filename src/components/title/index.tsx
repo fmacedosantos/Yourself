@@ -8,11 +8,10 @@ interface TitleProps {
 }
 
 export function Title ({ title, style }: TitleProps) {
-  const defaultStyle = {};
   
   return (
     <View style={styles.titleContainer}>
-      <Text style={[styles.titleText, style || defaultStyle]}>{title}</Text>
+      <Text style={[styles.titleText, style]}>{title}</Text>
     </View>
   );
 };

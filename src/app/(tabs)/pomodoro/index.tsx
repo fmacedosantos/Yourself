@@ -35,7 +35,7 @@ export default function Pomodoro() {
   const [isPaused, setIsPaused] = useState(false);
   const [isConcentracao, setIsConcentracao] = useState(true);
   const [timeLeft, setTimeLeft] = useState(0);
-  const [tempoTotalConcentracao, setTempoTotalConcentracao] = useState(0); // Acumula o tempo total de concentração
+  const [tempoTotalConcentracao, setTempoTotalConcentracao] = useState(0); 
 
   const difficultyLevel = Number(selectedDifficulty);
 
@@ -55,11 +55,9 @@ export default function Pomodoro() {
       timer = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
-            // Se o ciclo de concentração terminar, acumula o tempo total de concentração
             if (isConcentracao) {
               setTempoTotalConcentracao((prevTotal) => prevTotal + preferencias.preferenciaConcentracao);
             }
-            // Alterna para a próxima fase (concentração ou descanso)
             setIsConcentracao(!isConcentracao);
             return isConcentracao 
               ? preferencias.preferenciaDescanso * 60 
@@ -80,9 +78,8 @@ export default function Pomodoro() {
   };
 
   const handleFinishActivity = () => {
-    setIsPaused(true); // Pausa o timer quando a atividade é finalizada
+    setIsPaused(true); 
 
-    // Se estiver na fase de concentração ao finalizar, contabiliza o tempo restante
     if (isConcentracao) {
       const minutosConcentradosNoCicloAtual = Math.floor((preferencias.preferenciaConcentracao * 60 - timeLeft) / 60);
       setTempoTotalConcentracao((prevTotal) => prevTotal + minutosConcentradosNoCicloAtual);
@@ -98,26 +95,41 @@ export default function Pomodoro() {
   };
 
   return (
-    <View style={styles.container}>
+    <View 
+      style={styles.container}
+    >
       <SummaryStats 
         ofensiva={resumoEstatisticas.ofensiva} 
         pontos={resumoEstatisticas.pontos}
       />
       
-      <Title style={styles.text} title={isConcentracao ? 'Concentração' : 'Descanso'} />
+      <Title 
+        style={{ color: isConcentracao ? COLORS.RED : COLORS.GREEN }} 
+        title={isConcentracao ? 'Concentração' : 'Descanso'} 
+      />
       
-      <Text style={styles.timerText}>
+      <Text 
+        style={[ styles.timerText, { color: isConcentracao ? COLORS.RED : COLORS.GREEN }]}
+      >
         {formatTime(timeLeft)}
       </Text>
     
-      <Tomato width={250} height={250} />
+      <Tomato 
+        width={250} 
+        height={250} 
+      />
       
-      <View style={styles.buttonContainer}>
+      <View 
+        style={styles.buttonContainer}
+      >
         <PauseUnpauseButton 
+          style={{ backgroundColor: isConcentracao ? COLORS.RED : COLORS.GREEN }}
           isPaused={isPaused} 
           action={handlePauseUnpauseButton}
         />
-        <FinishActivityButton action={handleFinishActivity} />
+        <FinishActivityButton 
+          action={handleFinishActivity} 
+        />
       </View>
 
     </View>

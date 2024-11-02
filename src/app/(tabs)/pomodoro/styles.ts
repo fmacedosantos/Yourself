@@ -20,8 +20,5 @@ export const styles = StyleSheet.create({
       fontSize: 28,
       fontFamily: 'Itim-Regular',
       marginBottom: '10%'
-    },
-    text: {
-      color: COLORS.RED
     }
   })
