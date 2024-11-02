@@ -39,7 +39,6 @@ export function login(email: string, senha: string){
           const token = await userCredential.user.getIdToken(); 
 
           console.log(token);
-          console.log("opa")
 
           await AsyncStorage.setItem('jwt', token); 
           

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { SummaryStats } from '@/src/components/summaryStats';
 import { Title } from '@/src/components/title';
@@ -32,7 +32,7 @@ export default function Pomodoro() {
     preferenciaDescanso: 0,
   });
 
-  const [isPaused, setIsPaused] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
   const [isConcentracao, setIsConcentracao] = useState(true);
   const [timeLeft, setTimeLeft] = useState(0);
   const [minutosConcentracao, setMinutosConcentracao] = useState(0);
@@ -50,25 +50,24 @@ export default function Pomodoro() {
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
+
     if (!isPaused) {
       timer = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
             if (isConcentracao) {
               setMinutosConcentracao((prev) => prev + preferencias.preferenciaConcentracao);
-              setTimeLeft(preferencias.preferenciaDescanso * 60);
-            } else {
-              setTimeLeft(preferencias.preferenciaConcentracao * 60);
             }
             setIsConcentracao(!isConcentracao);
-            return isConcentracao ? preferencias.preferenciaDescanso * 60 : preferencias.preferenciaConcentracao * 60;
+            return isConcentracao 
+              ? preferencias.preferenciaDescanso * 60 
+              : preferencias.preferenciaConcentracao * 60;
           }
           return prev - 1;
         });
       }, 1000);
-    } else if (timer) {
-      clearInterval(timer);
     }
+
     return () => {
       if (timer) clearInterval(timer);
     };
@@ -78,6 +77,22 @@ export default function Pomodoro() {
     setIsPaused((prev) => !prev);
   };
 
+  const handleFinishActivity = () => {
+    setIsPaused(true); // Pausa o timer quando a atividade é finalizada
+    if (isConcentracao) {
+      // Calcula os minutos concentrados com base no tempo restante
+      const minutosConcentradosNoCicloAtual = Math.floor((preferencias.preferenciaConcentracao * 60 - timeLeft) / 60);
+      
+      // Atualiza o estado de minutosConcentracao imediatamente com o valor acumulado
+      setMinutosConcentracao(prev => {
+        const totalMinutosConcentracao = prev + minutosConcentradosNoCicloAtual;
+        console.log(`Total de minutos de concentração: ${totalMinutosConcentracao}`);
+        return totalMinutosConcentracao;
+      });
+    }
+  };
+  
+
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -86,19 +101,26 @@ export default function Pomodoro() {
 
   return (
     <View style={styles.container}>
-      <SummaryStats ofensiva={resumoEstatisticas.ofensiva} pontos={resumoEstatisticas.pontos} />
+      <SummaryStats 
+        ofensiva={resumoEstatisticas.ofensiva} 
+        pontos={resumoEstatisticas.pontos}
+      />
       
-      <Title title={isConcentracao ? 'Concentração' : 'Descanso'} />
-      <Text style={{ color: COLORS.WHITE, fontSize: 28, fontFamily: 'Itim-Regular', marginBottom: '10%' }}>
+      <Title style={styles.text} title={isConcentracao ? 'Concentração' : 'Descanso'} />
+      
+      <Text style={styles.timerText}>
         {formatTime(timeLeft)}
       </Text>
     
       <Tomato width={250} height={250} />
-      <View style={{ width: '80%', flexDirection: 'row', justifyContent: 'space-around', marginTop: '20%' }}>
-        <PauseUnpauseButton isPaused={isPaused} action={handlePauseUnpauseButton} />
-        <FinishActivityButton action={handlePauseUnpauseButton} />
+      
+      <View style={styles.buttonContainer}>
+        <PauseUnpauseButton 
+          isPaused={isPaused} 
+          action={handlePauseUnpauseButton}
+        />
+        <FinishActivityButton action={handleFinishActivity} />
       </View>
     </View>
   );
 }
-
