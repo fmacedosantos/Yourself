@@ -5,6 +5,7 @@ import { router } from "expo-router";
 interface Atividade {
   id: string;
   titulo: string;
+  categoria: string;
   pontos: number;
   dificuldade: number;
 }
