@@ -37,7 +37,7 @@ export const styles = StyleSheet.create({
       fontFamily: 'Itim-Regular',
     },
     categoriaText: {
-      fontSize: 14,
+      fontSize: 16,
       color: '#777',
       fontFamily: 'Itim-Regular',
     },

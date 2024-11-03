@@ -9,6 +9,7 @@ import { userService } from '@/src/services/api/user';
 interface Atividade {
   id: string;
   titulo: string;
+  categoria: string;
   pontos: number;
   dificuldade: number;
 }
@@ -56,6 +57,7 @@ export default function Home() {
               <Activity
                 key={atividade.id}
                 titulo={atividade.titulo}
+                categoria={atividade.categoria}
                 pontos={atividade.pontos}
                 dificuldade={atividade.dificuldade}
               />

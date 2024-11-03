@@ -4,12 +4,14 @@ import { styles } from './styles';
 
 interface ActivityProps {
   titulo: string;
+  categoria: string
   pontos: number;
   dificuldade: number;
 }
 
 export const Activity = ({
   titulo,
+  categoria,
   pontos,
   dificuldade
 }: ActivityProps) => {
@@ -40,6 +42,7 @@ export const Activity = ({
 
       <View style={styles.infoContainer}>
         <Text style={styles.tituloText}>{titulo}</Text>
+        <Text style={styles.categoriaText}>{categoria}</Text>
       </View>
 
       <View style={[styles.nivelContainer, { backgroundColor: getLevelColor(dificuldade) }]}>
