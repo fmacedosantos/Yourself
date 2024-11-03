@@ -5,6 +5,7 @@ export enum PATHS {
     SHOW_STATS = 'usuario/mostrar-estatisticas',
     SHOW_PREFERENCES = 'usuario/mostrar-preferencias',
     REGISTER_USER = 'usuario/cadastrar',
+    REGISTER_ACTIVITY = 'atividade/cadastrar',
     SHOW_ITEMS = 'item/mostrar-todos'
 }
 

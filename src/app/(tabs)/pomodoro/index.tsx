@@ -35,7 +35,7 @@ export default function Pomodoro() {
   const [isPaused, setIsPaused] = useState(false);
   const [isConcentracao, setIsConcentracao] = useState(true);
   const [timeLeft, setTimeLeft] = useState(0);
-  const [tempoTotalConcentracao, setTempoTotalConcentracao] = useState(0); 
+  const [tempoTotalConcentracao, setTempoTotalConcentracao] = useState(0);
 
   const difficultyLevel = Number(selectedDifficulty);
 
@@ -78,14 +78,22 @@ export default function Pomodoro() {
   };
 
   const handleFinishActivity = () => {
-    setIsPaused(true); 
-
-    if (isConcentracao) {
-      const minutosConcentradosNoCicloAtual = Math.floor((preferencias.preferenciaConcentracao * 60 - timeLeft) / 60);
-      setTempoTotalConcentracao((prevTotal) => prevTotal + minutosConcentradosNoCicloAtual);
-    }
-
-    console.log(`Total de minutos de concentração: ${tempoTotalConcentracao}`);
+    const minutosConcentradosNoCicloAtual = isConcentracao
+      ? Math.floor((preferencias.preferenciaConcentracao * 60 - timeLeft) / 60)
+      : 0;
+    
+    const tempoTotal = tempoTotalConcentracao + minutosConcentradosNoCicloAtual;
+    
+    //setTempoTotalConcentracao(tempoTotal);
+    
+    // Usa o valor calculado diretamente
+    userService.cadastrarAtividade(
+      String(titulo),
+      String(descricao),
+      difficultyLevel,
+      String(categoria),
+      tempoTotal 
+    );
   };
 
   const formatTime = (seconds: number) => {
@@ -95,9 +103,7 @@ export default function Pomodoro() {
   };
 
   return (
-    <View 
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <SummaryStats 
         ofensiva={resumoEstatisticas.ofensiva} 
         pontos={resumoEstatisticas.pontos}
@@ -119,9 +125,7 @@ export default function Pomodoro() {
         height={250} 
       />
       
-      <View 
-        style={styles.buttonContainer}
-      >
+      <View style={styles.buttonContainer}>
         <PauseUnpauseButton 
           style={{ backgroundColor: isConcentracao ? COLORS.RED : COLORS.GREEN }}
           isPaused={isPaused} 
@@ -131,7 +135,6 @@ export default function Pomodoro() {
           action={handleFinishActivity} 
         />
       </View>
-
     </View>
   );
 }
