@@ -16,7 +16,7 @@ export default function Cadastro() {
 
   async function handleCadastrar() {
 
-    if (!validateFields({email, nome, apelido, senha, confirmarSenha}) && !validateEmail(email) && !passwordsMatch(senha, confirmarSenha)) {
+    if (validateFields({email, nome, apelido, senha, confirmarSenha}) && validateEmail(email) && passwordsMatch(senha, confirmarSenha)) {
       register(email, nome, apelido, senha);
     }
   }
