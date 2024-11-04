@@ -22,7 +22,7 @@ export async function register(email: string, nome: string, apelido: string, sen
     const data = await response.json();
 
     if (response.ok) {
-      router.replace('/(tabs)/screens/home');
+      login(email, senha);
     } else {
       Alert.alert('Erro', data.message || 'Ocorreu um erro no cadastro.');
     }
