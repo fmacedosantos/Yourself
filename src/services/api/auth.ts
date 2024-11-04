@@ -75,3 +75,13 @@ export function forgotPassword(email: string){
         }
       });
 }
+
+export async function logout() {
+  try {
+    await AsyncStorage.removeItem('jwt'); 
+    router.replace('/'); 
+  } catch (error) {
+    Alert.alert("Erro", "Não foi possível sair da conta.");
+    console.error("Erro ao sair da conta: ", error);
+  }
+}

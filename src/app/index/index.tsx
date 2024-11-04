@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Text, View, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLORS } from "../../constants/Colors";
 import { FormInput } from "../../components/formInput";
 import YourselfTitle from '../../assets/images/yourself-title.svg';
@@ -14,22 +15,33 @@ import { forgotPassword, login } from '@/src/services/api/auth';
 export default function Index() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const fontsLoaded = LoadFont();
-  if (!fontsLoaded) {
+
+  useEffect(() => {
+    async function checkToken() {
+      const token = await AsyncStorage.getItem('jwt');
+      if (token) {
+        router.replace('/(tabs)/screens/home'); 
+      }
+      setLoading(false); 
+    }
+    checkToken();
+  }, []);
+
+  if (!fontsLoaded || loading) {
     return <ActivityIndicator size="large" color={COLORS.ORANGE} />;
   }
 
   function handleEnter() {
-  
     if (validateFields({email, senha}) && validateEmail(email)) {
       login(email, senha);
     }
   }
 
   function handleForgotPassword() {
-
-    if (!validateFields({email}) && !validateEmail(email)) {
+    if (validateFields({email}) && validateEmail(email)) {
       forgotPassword(email);
     }
   }
@@ -56,8 +68,8 @@ export default function Index() {
         onChangeText={setSenha}
       />
 
-      <SolidButton title='Entrar' action={handleEnter}/>
-      <BorderButton title='Cadastrar' color={1} action={handleGoToRegister}/>
+      <SolidButton title='Entrar' action={handleEnter} />
+      <BorderButton title='Cadastrar' color={1} action={handleGoToRegister} />
 
       <Text
         style={styles.forget}
@@ -68,5 +80,3 @@ export default function Index() {
     </View>
   );
 }
-
-

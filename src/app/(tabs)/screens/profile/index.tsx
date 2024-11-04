@@ -1,16 +1,14 @@
-import { Link } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { styles } from "./styles";
+import { logout } from '@/src/services/api/auth';
+import { Link } from "expo-router";
 
 export default function Profile() {
   return (
-    <View
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <Text>Profile</Text>
       <Link href='/(tabs)/settings'>Configurações</Link>
-      <Link href="/">Sair da conta</Link>
+      <Text onPress={logout}>Sair da conta</Text> 
     </View>
   );
 }
-
