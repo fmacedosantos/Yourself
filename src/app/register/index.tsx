@@ -4,7 +4,7 @@ import YourselfTitle from '../../assets/images/yourself-title.svg';
 import { FormInput } from "../../components/formInput";
 import { BorderButton } from "../../components/borderButton";
 import { styles } from "../index/styles";
-import { passwordsMatch, validateEmail, validateFields } from "@/src/utils/validators";
+import { passwordsMatch, validateEmail, validateFields, validatePasswordStrength } from "@/src/utils/validators";
 import { register } from "@/src/services/api/auth";
 
 export default function Cadastro() {
@@ -15,8 +15,10 @@ export default function Cadastro() {
   const [confirmarSenha, setConfirmarSenha] = useState('');
 
   async function handleCadastrar() {
-
-    if (validateFields({email, nome, apelido, senha, confirmarSenha}) && validateEmail(email) && passwordsMatch(senha, confirmarSenha)) {
+    const passwordValidation = validatePasswordStrength(senha);
+    
+    if (validateFields({email, nome, apelido, senha, confirmarSenha}) && validateEmail(email) && 
+        passwordValidation.isValid && passwordsMatch(senha, confirmarSenha)) {
       register(email, nome, apelido, senha);
     }
   }
