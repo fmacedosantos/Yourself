@@ -33,33 +33,34 @@ export async function register(email: string, nome: string, apelido: string, sen
 }
 
 export function login(email: string, senha: string){
-    firebase.auth().signInWithEmailAndPassword(email, senha)
-      .then(async (userCredential) => {
-        if (userCredential.user) {
-          const token = await userCredential.user.getIdToken(); 
-
-          console.log(token);
-
-          await AsyncStorage.setItem('jwt', token); 
-          
-          router.replace('/(tabs)/screens/home');
-        }
+  firebase.auth().signInWithEmailAndPassword(email, senha)
+    .then(async (userCredential) => {
+      if (userCredential.user) {
+        const token = await userCredential.user.getIdToken(); 
         
-      })
-      .catch(error => {
-        switch (error.code) {
-          case 'auth/user-not-found':
-          case 'auth/wrong-password':
-          case 'auth/invalid-email':
-          case 'auth/invalid-credential':
-            Alert.alert("Erro", "Informações incorretas.");
-            break;
-          default:
-            Alert.alert("Erro", "Ocorreu um erro ao fazer login. Tente novamente.");
-            console.error("Erro de login: ", error);
-        }
-      });
+        await AsyncStorage.setItem('jwt', token); 
+        const loginDate = new Date().toISOString();
+        await AsyncStorage.setItem('loginDate', loginDate); 
+
+        router.replace('/(tabs)/screens/home');
+      }
+      
+    })
+    .catch(error => {
+      switch (error.code) {
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+        case 'auth/invalid-email':
+        case 'auth/invalid-credential':
+          Alert.alert("Erro", "Informações incorretas.");
+          break;
+        default:
+          Alert.alert("Erro", "Ocorreu um erro ao fazer login. Tente novamente.");
+          console.error("Erro de login: ", error);
+      }
+    });
 }
+
 
 export function forgotPassword(email: string){
     firebase.auth().sendPasswordResetEmail(email)
