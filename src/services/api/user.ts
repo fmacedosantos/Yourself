@@ -21,7 +21,7 @@ interface Preferencias {
 }
 
 export const userService = {
-  async carregarAtividades(setAtividades: React.Dispatch<React.SetStateAction<Atividade[]>>) {
+  async carregarAtividades(setAtividades: (atividades: Atividade[]) => void) {
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_ACTIVITIES));
       const data = await response.json();
@@ -36,7 +36,7 @@ export const userService = {
     }
   },
 
-  async carregarResumoEstatisticas(setResumoEstatisticas: React.Dispatch<React.SetStateAction<ResumoEstatisticas>>) {
+  async carregarResumoEstatisticas(setResumoEstatisticas: (resumo: ResumoEstatisticas) => void) {
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_STATS));
       const data = await response.json();
@@ -54,7 +54,7 @@ export const userService = {
     }
   },
 
-  async carregarPreferencias(setPreferencias: React.Dispatch<React.SetStateAction<Preferencias>>) {
+  async carregarPreferencias(setPreferencias: (preferencias: Preferencias) => void) {
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_PREFERENCES));
       const data = await response.json();
@@ -72,13 +72,7 @@ export const userService = {
     }
   }, 
 
-  async cadastrarAtividade(
-    titulo: string,
-    descricao: string,
-    dificuldade: number,
-    categoria: string,
-    tempoConcentracao: number
-  ) {
+  async cadastrarAtividade(titulo: string, descricao: string, dificuldade: number, categoria: string, tempoConcentracao: number ) {
       try {
           const options = {
               method: 'POST',

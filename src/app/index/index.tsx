@@ -10,7 +10,7 @@ import { BorderButton } from '../../components/borderButton';
 import { styles } from './styles';
 import { validateEmail, validateFields } from '@/src/utils/validators';
 import { LoadFont } from '@/src/utils/loadFont';
-import { forgotPassword, login, logout } from '@/src/services/api/auth';
+import { checkToken, forgotPassword, login } from '@/src/services/api/auth';
 
 export default function Index() {
   const [email, setEmail] = useState('');
@@ -20,25 +20,7 @@ export default function Index() {
   const fontsLoaded = LoadFont();
 
   useEffect(() => {
-    async function checkToken() {
-      const token = await AsyncStorage.getItem('jwt');
-      const loginDate = await AsyncStorage.getItem('loginDate');
-
-      if (token && loginDate) {
-        const now = new Date();
-        const loginDateTime = new Date(loginDate);
-        const diffDays = (Number(now) - Number(loginDateTime)) / (1000 * 60 * 60 * 24); 
-
-        if (diffDays <= 3) {
-          router.replace('/(tabs)/screens/home'); // Redireciona se o token estiver válido
-        } else {
-          await logout(); // Expira a sessão e remove o token
-        }
-      }
-      setLoading(false); // Finaliza o carregamento
-    }
-
-    checkToken();
+    checkToken(setLoading);
   }, []);
 
   if (!fontsLoaded || loading) {

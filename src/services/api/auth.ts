@@ -86,3 +86,21 @@ export async function logout() {
     console.error("Erro ao sair da conta: ", error);
   }
 }
+
+export async function checkToken(setLoading: (value: boolean) => void) {
+  const token = await AsyncStorage.getItem('jwt');
+  const loginDate = await AsyncStorage.getItem('loginDate');
+
+  if (token && loginDate) {
+    const now = new Date();
+    const loginDateTime = new Date(loginDate);
+    const diffDays = (Number(now) - Number(loginDateTime)) / (1000 * 60 * 60 * 24); 
+
+    if (diffDays <= 3) {
+      router.replace('/(tabs)/screens/home'); 
+    } else {
+      await logout(); 
+    }
+  }
+  setLoading(false); 
+}
