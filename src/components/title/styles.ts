@@ -7,9 +7,8 @@ export const styles = StyleSheet.create({
         marginTop: '25%'
       },
       titleText: {
-        fontSize: 30,
-        fontWeight: 'bold',
+        fontSize: 35,
         color: 'white',
-        fontFamily: 'Itim-Regular' 
+        fontFamily: 'Itim-Regular'
       },
 })

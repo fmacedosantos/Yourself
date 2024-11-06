@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Text, View, ActivityIndicator } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLORS } from "../../constants/Colors";
 import { FormInput } from "../../components/formInput";
 import YourselfTitle from '../../assets/images/yourself-title.svg';
@@ -20,11 +19,17 @@ export default function Index() {
   const fontsLoaded = LoadFont();
 
   useEffect(() => {
-    checkToken(setLoading);
-  }, []);
+    async function initializeApp() {
+      if (fontsLoaded) {
+        await checkToken(setLoading); 
+      }
+    }
+
+    initializeApp();
+  }, [fontsLoaded]); 
 
   if (!fontsLoaded || loading) {
-    return <ActivityIndicator size="large" color={COLORS.ORANGE} />;
+    return <ActivityIndicator size="large" color={COLORS.ORANGE}/>;
   }
 
   function handleEnter() {
