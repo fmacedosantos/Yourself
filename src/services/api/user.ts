@@ -1,6 +1,7 @@
 import { PATHS, ROUTES } from "@/src/constants/Routes";
 import { fetchWithAuth } from "@/src/utils/fetchWithAuth";
 import { router } from "expo-router";
+import { Alert, Platform } from "react-native";
 
 interface Atividade {
   id: string;
@@ -26,6 +27,8 @@ interface Informacoes {
   anoRegistro: number
 }
 
+const erroServidor = 'Encontramos problemas ao conectar com o servidor.';
+
 export const userService = {
   async carregarUsuario(setInformacoes: (informacoes: Informacoes) => void) {
     try {
@@ -39,10 +42,19 @@ export const userService = {
           anoRegistro: data.dadosUsuario.anoRegistro
         })
       } else {
+        if (Platform.OS === 'web') {
+          
+        } else {
+
+        }
         console.error('Erro ao buscar informações:', data.message);
       }
     } catch (error) {
-      console.error('Erro na requisição:', error);
+      if (Platform.OS === 'web') {
+          window.alert(erroServidor);
+      } else {
+        Alert.alert('Erro', erroServidor)
+      }
     }
   },
 
@@ -54,10 +66,19 @@ export const userService = {
       if (response.ok) {
         setAtividades(data.dadosAtividades as Atividade[]);
       } else {
+        if (Platform.OS === 'web') {
+          
+        } else {
+          
+        }
         console.error('Erro ao buscar atividades:', data.message);
       }
     } catch (error) {
-      console.error('Erro na requisição:', error);
+      if (Platform.OS === 'web') {
+        window.alert(erroServidor);
+      } else {
+        Alert.alert('Erro', erroServidor)
+      }
     }
   },
 
@@ -72,10 +93,19 @@ export const userService = {
           pontos: data.dadosEstatisticas.pontos
         });
       } else {
+        if (Platform.OS === 'web') {
+          
+        } else {
+          
+        }
         console.error('Erro ao buscar estatísticas:', data.message);
       }
     } catch (error) {
-      console.error('Erro na requisição:', error);
+      if (Platform.OS === 'web') {
+        window.alert(erroServidor);
+      } else {
+        Alert.alert('Erro', erroServidor)
+      }
     }
   },
 
@@ -90,10 +120,19 @@ export const userService = {
           preferenciaDescanso: data.dadosPreferencias.preferenciaDescanso
         });
       } else {
+        if (Platform.OS === 'web') {
+          
+        } else {
+          
+        }
         console.error('Erro ao buscar preferências de temporizador:', data.message);
       }
     } catch (error) {
-      console.error('Erro na requisição:', error);
+      if (Platform.OS === 'web') {
+        window.alert(erroServidor);
+      } else {
+        Alert.alert('Erro', erroServidor)
+      }
     }
   }, 
 
@@ -116,10 +155,19 @@ export const userService = {
           if (response.ok) {
               router.replace('/(tabs)/screens/home');
           } else {
+            if (Platform.OS === 'web') {
+          
+            } else {
+              
+            }
               console.error('Erro ao cadastrar atividade:', data.message || 'Ocorreu um erro.');
           }
       } catch (error) {
-          console.error('Erro na requisição:', error);
+        if (Platform.OS === 'web') {
+          window.alert(erroServidor);
+        } else {
+          Alert.alert('Erro', erroServidor)
+        }
       }
   }
   

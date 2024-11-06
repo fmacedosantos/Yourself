@@ -5,11 +5,11 @@ interface FetchOptions extends RequestInit {
   }
   
   export async function fetchWithAuth(url: string, options: FetchOptions = {}) {
-    const token = await AsyncStorage.getItem('jwt');  // Obtenha o token armazenado
+    const token = await AsyncStorage.getItem('jwt');  
 
     const headers = {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,  // Adiciona o JWT no cabeçalho
+        Authorization: `Bearer ${token}`,  
         ...options.headers,
     };
 

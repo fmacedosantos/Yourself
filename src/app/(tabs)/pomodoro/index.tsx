@@ -88,11 +88,10 @@ export default function Pomodoro() {
       const mensagemErro = 'É necessário um tempo de concentração de, no mínimo 1 minuto, para concluir uma atividade.';
       if (Platform.OS === 'web') {
         window.alert(mensagemErro);
-        return;
       } else {
         Alert.alert('Erro', mensagemErro);
-        return;
       }
+      return;
     }
     userService.cadastrarAtividade(
       String(titulo),

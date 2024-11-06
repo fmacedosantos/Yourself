@@ -33,7 +33,7 @@ export default function AddNewActivity() {
   }, []);
 
   function handleStartActivity() {
-    if (validateFields({ titulo, categoria, selectedDifficulty })) {
+    if (validateFields({ titulo, categoria, dificuldade: selectedDifficulty })) {
       router.replace({
         pathname: '/(tabs)/pomodoro',
         params: {

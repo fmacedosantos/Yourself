@@ -1,8 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firebase from '../../../firebase-init.js';
 import { router } from 'expo-router';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import { PATHS, ROUTES } from '../../constants/Routes.ts';
+
+const erroServidor = 'Encontramos problemas ao conectar com o servidor.';
 
 export async function register(email: string, nome: string, apelido: string, senha: string){
   try {
@@ -24,11 +26,21 @@ export async function register(email: string, nome: string, apelido: string, sen
     if (response.ok) {
       login(email, senha);
     } else {
-      Alert.alert('Erro', data.message || 'Ocorreu um erro no cadastro.');
+      if (Platform.OS === 'web') {
+        window.alert(data.message || 'Ocorreu um erro no cadastro.');
+        return;
+      } else {
+        Alert.alert('Erro', data.message || 'Ocorreu um erro no cadastro.');
+        return;
+      }
     }
 
   } catch (error) {
-    Alert.alert('Erro', 'Falha ao conectar com o servidor.');
+    if (Platform.OS === 'web') {
+      window.alert(erroServidor);
+    } else {
+      Alert.alert('Erro', erroServidor)
+    }
   }
 }
 
