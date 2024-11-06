@@ -13,7 +13,8 @@ export default function TabsLayout() {
         tabBarStyle: {
           height: 60, 
           backgroundColor: COLORS.WHITE
-        }
+        },
+        tabBarHideOnKeyboard: true, 
       }}>
       <Tabs.Screen
         name="home/index"
