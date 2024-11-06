@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Alert, Platform, Text, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { SummaryStats } from '@/src/components/summaryStats';
 import { Title } from '@/src/components/title';
@@ -84,9 +84,16 @@ export default function Pomodoro() {
     
     const tempoTotal = tempoTotalConcentracao + minutosConcentradosNoCicloAtual;
     
-    //setTempoTotalConcentracao(tempoTotal);
-    
-    // Usa o valor calculado diretamente
+    if (tempoTotal < 1) {
+      const mensagemErro = 'É necessário um tempo de concentração de, no mínimo 1 minuto, para concluir uma atividade.';
+      if (Platform.OS === 'web') {
+        window.alert(mensagemErro);
+        return;
+      } else {
+        Alert.alert('Erro', mensagemErro);
+        return;
+      }
+    }
     userService.cadastrarAtividade(
       String(titulo),
       String(descricao),
