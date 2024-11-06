@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Text, View, ActivityIndicator } from 'react-native';
-import { COLORS } from "../../constants/Colors";
+import { Text, View } from 'react-native';
 import { FormInput } from "../../components/formInput";
 import YourselfTitle from '../../assets/images/yourself-title.svg';
 import { router } from "expo-router";
@@ -10,6 +9,7 @@ import { styles } from './styles';
 import { validateEmail, validateFields } from '@/src/utils/validators';
 import { LoadFont } from '@/src/utils/loadFont';
 import { checkToken, forgotPassword, login } from '@/src/services/api/auth';
+import LoadingScreen from '@/src/components/loadindScreen';
 
 export default function Index() {
   const [email, setEmail] = useState('');
@@ -29,7 +29,7 @@ export default function Index() {
   }, [fontsLoaded]); 
 
   if (!fontsLoaded || loading) {
-    return <ActivityIndicator size="large" color={COLORS.ORANGE}/>;
+    return <LoadingScreen />;
   }
 
   function handleEnter() {
