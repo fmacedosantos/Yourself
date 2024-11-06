@@ -6,7 +6,8 @@ export enum PATHS {
     SHOW_PREFERENCES = 'usuario/mostrar-preferencias',
     REGISTER_USER = 'usuario/cadastrar',
     REGISTER_ACTIVITY = 'atividade/cadastrar',
-    SHOW_ITEMS = 'item/mostrar-todos'
+    SHOW_ITEMS = 'item/mostrar-todos',
+    SHOW_USER = 'usuario/mostrar',
 }
 
 export const ROUTES = (route: PATHS) => {

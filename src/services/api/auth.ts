@@ -37,6 +37,8 @@ export function login(email: string, senha: string){
     .then(async (userCredential) => {
       if (userCredential.user) {
         const token = await userCredential.user.getIdToken(); 
+
+        console.log(token);
         
         await AsyncStorage.setItem('jwt', token); 
         const loginDate = new Date().toISOString();

@@ -20,7 +20,32 @@ interface Preferencias {
   preferenciaDescanso: number
 }
 
+interface Informacoes {
+  nome: string
+  apelido: string
+  anoRegistro: number
+}
+
 export const userService = {
+  async carregarUsuario(setInformacoes: (informacoes: Informacoes) => void) {
+    try {
+      const response = await fetchWithAuth(ROUTES(PATHS.SHOW_USER));
+      const data = await response.json();
+
+      if (response.ok && data.dadosUsuario) {
+        setInformacoes({
+          nome: data.dadosUsuario.nome,
+          apelido: data.dadosUsuario.apelido,
+          anoRegistro: data.dadosUsuario.anoRegistro
+        })
+      } else {
+        console.error('Erro ao buscar informações:', data.message);
+      }
+    } catch (error) {
+      console.error('Erro na requisição:', error);
+    }
+  },
+
   async carregarAtividades(setAtividades: (atividades: Atividade[]) => void) {
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_ACTIVITIES));
