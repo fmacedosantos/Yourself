@@ -1,4 +1,4 @@
-import { Text, ScrollView, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { styles } from "./styles";
 import { FormInput } from "@/src/components/formInput";
 import { useEffect, useState } from "react";
@@ -8,7 +8,6 @@ import { SummaryStats } from "@/src/components/summaryStats";
 import { SolidButton } from "@/src/components/solidButton";
 import { router } from "expo-router";
 import { SelectDifficulty } from "../../../../components/selectDifficulty";
-import { COLORS } from "@/src/constants/Colors";
 import { validateFields } from "@/src/utils/validators";
 import { ListCategories } from "@/src/components/listCategories/Index";
 
@@ -51,19 +50,25 @@ export default function AddNewActivity() {
   }
 
   return (
-    <ScrollView style={{ backgroundColor: COLORS.GRAY }} contentContainerStyle={styles.container}>
-      <SummaryStats
-        ofensiva={resumoEstatisticas.ofensiva}
-        pontos={resumoEstatisticas.pontos}
-      />
-      <Title title="Nova tarefa" />
-      <FormInput label="Titulo" value={titulo} onChangeText={setTitulo} />
-      <FormInput label="Descrição" value={descricao} onChangeText={setDescricao} />
-      <SelectDifficulty onDifficultySelect={handleDifficultySelect} selectedDifficulty={selectedDifficulty} />
-      <ListCategories setCategoria={setCategoria} />
-      <View style={{ width: '100%', alignItems: 'center' }}>
-        <SolidButton title="Iniciar" action={handleStartActivity} />
-      </View>
-    </ScrollView>
+    <View style={styles.container}>
+      <ScrollView
+        style={styles.scrool}
+        contentContainerStyle={styles.scrollContainer}
+        keyboardShouldPersistTaps="handled" 
+      >
+        <SummaryStats
+          ofensiva={resumoEstatisticas.ofensiva}
+          pontos={resumoEstatisticas.pontos}
+        />
+        <Title title="Nova tarefa" />
+        <FormInput label="Titulo" value={titulo} onChangeText={setTitulo} />
+        <FormInput label="Descrição" value={descricao} onChangeText={setDescricao} />
+        <SelectDifficulty onDifficultySelect={handleDifficultySelect} selectedDifficulty={selectedDifficulty} />
+        <ListCategories setCategoria={setCategoria} />
+        <View style={styles.buttonContainer}>
+          <SolidButton title="Iniciar" action={handleStartActivity} />
+        </View>
+      </ScrollView>
+    </View>
   );
 }
