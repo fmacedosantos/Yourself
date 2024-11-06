@@ -14,20 +14,22 @@ export const styles = StyleSheet.create({
       marginLeft: '5%'
     },
     nome: {
-      fontSize: 25,
-      fontWeight: 'bold',
+      fontSize: 30,
       color: COLORS.ORANGE,
       marginBottom: 4,
+      fontFamily: 'Itim-Regular'
     },
     apelido: {
-      fontSize: 16,
+      fontSize: 20,
       color: COLORS.WHITE,
       marginBottom: 4,
+      fontFamily: 'Itim-Regular'
     },
     anoRegistro: {
-      fontSize: 16,
+      fontSize: 20,
       color: COLORS.WHITE,
       marginBottom: 16,
+      fontFamily: 'Itim-Regular'
     },
   })
   
