@@ -31,5 +31,21 @@ export const styles = StyleSheet.create({
       marginBottom: 16,
       fontFamily: 'Itim-Regular'
     },
+    accountContainer: {
+      flexDirection: 'row',
+      width: '100%',
+    },
+    settingsButton: {
+      width: '45%',
+      padding: 10,
+      marginLeft: '3%',
+      backgroundColor: COLORS.BLUE
+    },
+    leaveAccountButton: {
+      width: '45%',
+      padding: 10,
+      marginLeft: '3%',
+      backgroundColor: COLORS.RED
+    },
   })
   

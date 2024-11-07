@@ -1,10 +1,11 @@
 import { Text, View } from "react-native";
 import { styles } from "./styles";
 import { logout } from '@/src/services/api/auth';
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { useEffect, useState } from "react";
 import { userService } from "@/src/services/api/user";
 import { SummaryStats } from "@/src/components/summaryStats";
+import { SolidButton } from "@/src/components/solidButton";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -33,6 +34,14 @@ export default function Profile() {
     userService.carregarUsuario(setInformacoes);
   }, []);  
 
+  function handleGoToSettings(){
+    router.navigate('/(tabs)/settings');
+  }
+
+  function handleLeaveAccount(){
+    logout();
+  }
+
 
   return (
     <View style={styles.container}>
@@ -45,10 +54,11 @@ export default function Profile() {
         <Text style={styles.apelido}>{informacoes.apelido}</Text>
         <Text style={styles.anoRegistro}>Na plataforma desde {informacoes.anoRegistro}</Text>
       </View>
+      <View style={styles.accountContainer}>
+        <SolidButton title="Configurações" action={handleGoToSettings} style={styles.settingsButton}/>
+        <SolidButton title="Sair da conta" action={handleLeaveAccount} style={styles.leaveAccountButton}/>
+      </View>
 
-
-      <Link href='/(tabs)/settings'>Configurações</Link>
-      <Text onPress={logout}>Sair da conta</Text> 
     </View>
   );
 }
