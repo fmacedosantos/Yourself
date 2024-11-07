@@ -19,6 +19,11 @@ interface Informacoes {
   anoRegistro: number
 }
 
+interface MelhoresEstatisticas {
+  maiorOfensiva: number;
+  totalPontos: number;
+}
+
 export default function Profile() {
   const [resumoEstatisticas, setResumoEstatisticas] = useState<ResumoEstatisticas>({
     ofensiva: 0,
@@ -28,11 +33,16 @@ export default function Profile() {
     nome: '',
     apelido: '',
     anoRegistro: 0
-  })
+  });
+  const [melhoresEstatisticas, setMelhoresEstatisticas] = useState<MelhoresEstatisticas>({
+    maiorOfensiva: 0,
+    totalPontos: 0
+  });
 
   useEffect(() => {
     userService.carregarResumoEstatisticas(setResumoEstatisticas);
     userService.carregarUsuario(setInformacoes);
+    userService.carregarMelhoresEstatisticas(setMelhoresEstatisticas);
   }, []);  
 
   function handleGoToSettings(){
@@ -60,7 +70,7 @@ export default function Profile() {
         <SolidButton title="Sair da conta" action={handleLeaveAccount} style={styles.leaveAccountButton}/>
       </View>
 
-      <BestStats/>
+      <BestStats melhorOfensiva={melhoresEstatisticas.maiorOfensiva} totalXp={melhoresEstatisticas.totalPontos}/>
     </View>
   );
 }

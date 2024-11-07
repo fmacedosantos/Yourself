@@ -16,6 +16,11 @@ interface ResumoEstatisticas {
   pontos: number;
 }
 
+interface MelhoresEstatisticas {
+  maiorOfensiva: number;
+  totalPontos: number;
+}
+
 interface Preferencias {
   preferenciaConcentracao: number;
   preferenciaDescanso: number
@@ -43,11 +48,10 @@ export const userService = {
         })
       } else {
         if (Platform.OS === 'web') {
-          
+          window.alert('Erro ao buscar informações de usuário.');
         } else {
-
+          Alert.alert('Erro', 'Erro ao buscar informações de usuário.');
         }
-        console.error('Erro ao buscar informações:', data.message);
       }
     } catch (error) {
       if (Platform.OS === 'web') {
@@ -67,11 +71,10 @@ export const userService = {
         setAtividades(data.dadosAtividades as Atividade[]);
       } else {
         if (Platform.OS === 'web') {
-          
+          window.alert('Erro ao buscar atividades.');
         } else {
-          
+          Alert.alert('Erro', 'Erro ao buscar atividades.');
         }
-        console.error('Erro ao buscar atividades:', data.message);
       }
     } catch (error) {
       if (Platform.OS === 'web') {
@@ -94,11 +97,36 @@ export const userService = {
         });
       } else {
         if (Platform.OS === 'web') {
-          
+          window.alert('Erro ao buscar estatísticas.');
         } else {
-          
+          Alert.alert('Erro', 'Erro ao buscar estatísticas.');
         }
-        console.error('Erro ao buscar estatísticas:', data.message);
+      }
+    } catch (error) {
+      if (Platform.OS === 'web') {
+        window.alert(erroServidor);
+      } else {
+        Alert.alert('Erro', erroServidor)
+      }
+    }
+  },
+
+  async carregarMelhoresEstatisticas(setMelhoresEstatisticas: (melhores: MelhoresEstatisticas) => void) {
+    try {
+      const response = await fetchWithAuth(ROUTES(PATHS.SHOW_STATS));
+      const data = await response.json();
+
+      if (response.ok && data.dadosEstatisticas) {
+        setMelhoresEstatisticas({
+          maiorOfensiva: data.dadosEstatisticas.maiorOfensiva,
+          totalPontos: data.dadosEstatisticas.totalPontos
+        });
+      } else {
+        if (Platform.OS === 'web') {
+          window.alert('Erro ao buscar estatísticas.');
+        } else {
+          Alert.alert('Erro', 'Erro ao buscar estatísticas.');
+        }
       }
     } catch (error) {
       if (Platform.OS === 'web') {
@@ -121,11 +149,10 @@ export const userService = {
         });
       } else {
         if (Platform.OS === 'web') {
-          
+          window.alert('Erro ao buscar preferências de temporizador.');
         } else {
-          
+          Alert.alert('Erro', 'Erro ao buscar preferências de temporizador.');
         }
-        console.error('Erro ao buscar preferências de temporizador:', data.message);
       }
     } catch (error) {
       if (Platform.OS === 'web') {
@@ -156,11 +183,10 @@ export const userService = {
               router.replace('/(tabs)/screens/home');
           } else {
             if (Platform.OS === 'web') {
-          
+              window.alert('Erro ao cadastrar atividade.');
             } else {
-              
+              Alert.alert('Erro', 'Erro ao cadastrar atividade.');
             }
-              console.error('Erro ao cadastrar atividade:', data.message || 'Ocorreu um erro.');
           }
       } catch (error) {
         if (Platform.OS === 'web') {
