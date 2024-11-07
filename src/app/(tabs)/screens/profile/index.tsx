@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { userService } from "@/src/services/api/user";
 import { SummaryStats } from "@/src/components/summaryStats";
 import { SolidButton } from "@/src/components/solidButton";
+import { BestStats } from "@/src/components/bestStats";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -59,6 +60,7 @@ export default function Profile() {
         <SolidButton title="Sair da conta" action={handleLeaveAccount} style={styles.leaveAccountButton}/>
       </View>
 
+      <BestStats/>
     </View>
   );
 }

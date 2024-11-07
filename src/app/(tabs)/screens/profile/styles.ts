@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     },
     accountContainer: {
       flexDirection: 'row',
-      width: '100%',
+      width: '100%'
     },
     settingsButton: {
       width: '45%',
