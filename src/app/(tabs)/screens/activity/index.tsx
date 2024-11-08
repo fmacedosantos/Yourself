@@ -10,6 +10,7 @@ import { router } from "expo-router";
 import { SelectDifficulty } from "../../../../components/selectDifficulty";
 import { validateFields } from "@/src/utils/validators";
 import { ListCategories } from "@/src/components/listCategories/Index";
+import LoadingScreen from "@/src/components/loadindScreen";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -26,9 +27,14 @@ export default function AddNewActivity() {
     ofensiva: 0,
     pontos: 0
   });
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
-    userService.carregarResumoEstatisticas(setResumoEstatisticas);
+    async function carregarDados() {
+      userService.carregarResumoEstatisticas(setResumoEstatisticas);
+      setLoading(false)
+    }
+    carregarDados();
   }, []);
 
   function handleStartActivity() {
@@ -43,6 +49,10 @@ export default function AddNewActivity() {
         },
       });
     } 
+  }
+
+  if (loading) {
+    return <LoadingScreen />; 
   }
 
   function handleDifficultySelect(difficulty: number) {

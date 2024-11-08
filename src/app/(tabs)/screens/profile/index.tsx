@@ -7,6 +7,7 @@ import { userService } from "@/src/services/api/user";
 import { SummaryStats } from "@/src/components/summaryStats";
 import { SolidButton } from "@/src/components/solidButton";
 import { BestStats } from "@/src/components/bestStats";
+import LoadingScreen from "@/src/components/loadindScreen";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -38,11 +39,16 @@ export default function Profile() {
     maiorOfensiva: 0,
     totalPontos: 0
   });
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
-    userService.carregarResumoEstatisticas(setResumoEstatisticas);
-    userService.carregarUsuario(setInformacoes);
-    userService.carregarMelhoresEstatisticas(setMelhoresEstatisticas);
+    async function carregarDados() {
+      userService.carregarResumoEstatisticas(setResumoEstatisticas);
+      userService.carregarUsuario(setInformacoes);
+      userService.carregarMelhoresEstatisticas(setMelhoresEstatisticas);
+      setLoading(false)
+    }
+    carregarDados();
   }, []);  
 
   function handleGoToSettings(){
@@ -51,6 +57,10 @@ export default function Profile() {
 
   function handleLeaveAccount(){
     logout();
+  }
+
+  if (loading) {
+    return <LoadingScreen />; 
   }
 
 

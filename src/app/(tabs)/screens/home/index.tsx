@@ -5,6 +5,7 @@ import { SummaryStats } from '../../../../components/summaryStats';
 import { Activity } from '../../../../components/activity';
 import { styles } from './styles';
 import { userService } from '@/src/services/api/user';
+import LoadingScreen from '@/src/components/loadindScreen';
 
 interface Atividade {
   id: string;
@@ -28,16 +29,26 @@ export default function Home() {
     ofensiva: 0,
     pontos: 0
   });
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
-    userService.carregarAtividades(setAtividades);
-    userService.carregarResumoEstatisticas(setResumoEstatisticas);
+    async function carregarDados() {
+      await userService.carregarAtividades(setAtividades);
+      await userService.carregarResumoEstatisticas(setResumoEstatisticas);
+      setLoading(false); 
+    }
+
+    carregarDados();
   }, []);  
 
   function handleShowMore() {
     setShowMore(!showMore);
     setTitle(!title);
   } 
+
+  if (loading) {
+    return <LoadingScreen />; 
+  }
 
   return (
     <View style={styles.container}>

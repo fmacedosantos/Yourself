@@ -3,6 +3,7 @@ import { styles } from "./styles";
 import { useEffect, useState } from "react";
 import { userService } from "@/src/services/api/user";
 import { SummaryStats } from "@/src/components/summaryStats";
+import LoadingScreen from "@/src/components/loadindScreen";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -14,10 +15,19 @@ export default function Shop() {
     ofensiva: 0,
     pontos: 0
   });
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
-    userService.carregarResumoEstatisticas(setResumoEstatisticas);
+    async function carregarDados() {
+      userService.carregarResumoEstatisticas(setResumoEstatisticas);
+      setLoading(false)
+    }
+    carregarDados();
   }, []);  
+
+  if (loading) {
+    return <LoadingScreen />; 
+  }
   return (
     <View
       style={styles.container}
