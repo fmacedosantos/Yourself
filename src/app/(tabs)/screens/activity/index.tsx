@@ -9,8 +9,8 @@ import { SolidButton } from "@/src/components/solidButton";
 import { router } from "expo-router";
 import { SelectDifficulty } from "../../../../components/selectDifficulty";
 import { validateFields } from "@/src/utils/validators";
-import { ListCategories } from "@/src/components/listCategories/Index";
 import LoadingScreen from "@/src/components/loadindScreen";
+import { ListCategories } from "@/src/components/ListCategories";
 
 interface ResumoEstatisticas {
   ofensiva: number;
