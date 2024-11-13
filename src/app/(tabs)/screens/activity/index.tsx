@@ -10,7 +10,7 @@ import { router } from "expo-router";
 import { SelectDifficulty } from "../../../../components/selectDifficulty";
 import { validateFields } from "@/src/utils/validators";
 import LoadingScreen from "@/src/components/loadindScreen";
-import { ListCategories } from "@/src/components/ListCategories";
+import { ListCategories } from "../../../../components/ListCategories";
 
 interface ResumoEstatisticas {
   ofensiva: number;
