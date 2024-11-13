@@ -49,8 +49,6 @@ export function login(email: string, senha: string){
     .then(async (userCredential) => {
       if (userCredential.user) {
         const token = await userCredential.user.getIdToken(); 
-
-        console.log(token);
         
         await AsyncStorage.setItem('jwt', token); 
         const loginDate = new Date().toISOString();
@@ -66,11 +64,18 @@ export function login(email: string, senha: string){
         case 'auth/wrong-password':
         case 'auth/invalid-email':
         case 'auth/invalid-credential':
-          Alert.alert("Erro", "Informações incorretas.");
+          if (Platform.OS === 'web') {
+            window.alert("Informações incorretas.");
+          } else {
+            Alert.alert("Erro", "Informações incorretas.");
+          }
           break;
         default:
-          Alert.alert("Erro", "Ocorreu um erro ao fazer login. Tente novamente.");
-          console.error("Erro de login: ", error);
+          if (Platform.OS === 'web') {
+            window.alert("Ocorreu um erro ao fazer login. Tente novamente.");
+          } else {
+            Alert.alert("Erro", "Ocorreu um erro ao fazer login. Tente novamente.");
+          }
       }
     });
 }
@@ -83,10 +88,17 @@ export function forgotPassword(email: string){
       })
       .catch(error => {
         if (error.code === 'auth/user-not-found') {
-          Alert.alert("Erro", "Usuário não encontrado com este email.");
+          if (Platform.OS === 'web') {
+            window.alert("Email inválido.");
+          } else {
+            Alert.alert("Erro", "Email inválido.");
+          }
         } else {
-          Alert.alert("Erro", "Ocorreu um erro ao enviar o e-mail de redefinição de senha.");
-          console.error("Erro ao redefinir senha: ", error);
+          if (Platform.OS === 'web') {
+            window.alert("Ocorreu um erro ao enviar o e-mail de redefinição de senha.");
+          } else {
+            Alert.alert("Erro", "Ocorreu um erro ao enviar o e-mail de redefinição de senha.");
+          }
         }
       });
 }
@@ -96,8 +108,39 @@ export async function logout() {
     await AsyncStorage.removeItem('jwt'); 
     router.replace('/'); 
   } catch (error) {
-    Alert.alert("Erro", "Não foi possível sair da conta.");
-    console.error("Erro ao sair da conta: ", error);
+    if (Platform.OS === 'web') {
+      window.alert('Não foi possível sair da conta.');
+    } else {
+      Alert.alert("Erro", "Não foi possível sair da conta.");
+    }
+
+  }
+}
+
+export async function reauthenticateUser(senha: string) {
+  const user = firebase.auth().currentUser;
+  if (user) {
+    const credential = firebase.auth.EmailAuthProvider.credential(user.email as string, senha);
+    try {
+      await user.reauthenticateWithCredential(credential);
+      if (Platform.OS === 'web') {
+        window.alert('Usuário credenciado.');
+      } else {
+      Alert.alert("Sucesso", "Usuário credenciado.");
+      }
+    } catch (error) {
+      if (Platform.OS === 'web') {
+        window.alert("Senha incorreta. Tente novamente.");
+      } else {
+        Alert.alert("Erro", "Senha incorreta. Tente novamente.");
+      }
+    }
+  } else {
+    if (Platform.OS === 'web') {
+      window.alert("Usuário não encontrado.");
+    } else {
+      Alert.alert("Erro", "Usuário não encontrado.");
+    }
   }
 }
 

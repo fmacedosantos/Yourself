@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { styles } from './styles';
 import { useEffect, useState } from 'react';
 import { userService } from '@/src/services/api/user';
@@ -6,6 +6,7 @@ import LoadingScreen from '@/src/components/loadindScreen';
 import { SummaryStats } from '@/src/components/summaryStats';
 import { FormInput } from '@/src/components/formInput';
 import { SolidButton } from '@/src/components/solidButton';
+import { reauthenticateUser } from '@/src/services/api/auth';
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -32,9 +33,10 @@ export default function Settings() {
     return <LoadingScreen />; 
   }
 
-  function handleNext(){
-
+  function handleNext() {
+    reauthenticateUser(senha);
   }
+
  return (
   <View
   style={styles.container}
