@@ -52,7 +52,7 @@ export default function Profile() {
   }, []);  
 
   function handleGoToSettings(){
-    router.navigate('/(tabs)/settings');
+    router.navigate('/(tabs)/confirmPassword');
   }
 
   function handleLeaveAccount(){

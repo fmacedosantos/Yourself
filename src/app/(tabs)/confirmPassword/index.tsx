@@ -13,7 +13,7 @@ interface ResumoEstatisticas {
   pontos: number;
 }
 
-export default function Settings() {
+export default function ConfirmPassword() {
   const [resumoEstatisticas, setResumoEstatisticas] = useState<ResumoEstatisticas>({
     ofensiva: 0,
     pontos: 0
