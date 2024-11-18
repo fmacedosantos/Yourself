@@ -5,6 +5,7 @@ export default function Layout() {
     <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="screens" />
         <Stack.Screen name="confirmPassword/index"/>
+        <Stack.Screen name="settings/index"/>
         <Stack.Screen name="pomodoro/index"/>
     </Stack>
   );

@@ -8,6 +8,7 @@ export enum PATHS {
     REGISTER_ACTIVITY = 'atividade/cadastrar',
     SHOW_ITEMS = 'item/mostrar-todos',
     SHOW_USER = 'usuario/mostrar',
+    UPDATE_USER = 'usuario/atualizar'
 }
 
 export const ROUTES = (route: PATHS) => {

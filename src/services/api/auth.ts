@@ -123,11 +123,7 @@ export async function reauthenticateUser(senha: string) {
     const credential = firebase.auth.EmailAuthProvider.credential(user.email as string, senha);
     try {
       await user.reauthenticateWithCredential(credential);
-      if (Platform.OS === 'web') {
-        window.alert('Usuário credenciado.');
-      } else {
-      Alert.alert("Sucesso", "Usuário credenciado.");
-      }
+      router.navigate('/(tabs)/settings')
     } catch (error) {
       if (Platform.OS === 'web') {
         window.alert("Senha incorreta. Tente novamente.");
