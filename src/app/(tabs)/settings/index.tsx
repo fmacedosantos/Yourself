@@ -6,6 +6,7 @@ import LoadingScreen from '@/src/components/loadindScreen';
 import { SummaryStats } from '@/src/components/summaryStats';
 import { FormInput } from '@/src/components/formInput';
 import { SolidButton } from '@/src/components/solidButton';
+import { passwordsMatch } from '@/src/utils/validators';
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -45,7 +46,15 @@ export default function Settings() {
     return <LoadingScreen />; 
   }
 
-  function handleNext() {
+  function handleUpdate() {
+    if (senha != null || confirmarSenha != null) {
+      if (passwordsMatch(senha, confirmarSenha)) {
+        userService.atualizarUsuario(nome, apelido, senha);
+      }
+    } else {
+      userService.atualizarUsuario(nome, apelido, senha);
+    }
+    // por enquanto muda tudo
   }
 
  return (
@@ -61,7 +70,7 @@ export default function Settings() {
     <FormInput value={apelido} onChangeText={setApelido} placeholder={informacoes.apelido} label='Apelido'/>
     <FormInput value={senha} onChangeText={setSenha} label='Nova senha' isPassword={true}/>
     <FormInput value={confirmarSenha} onChangeText={setConfirmarSenha} label='Confirmar senha' isPassword={true}/>
-    <SolidButton title='Atualizar' action={handleNext}/>
+    <SolidButton title='Atualizar' action={handleUpdate}/>
 </View>
   );
 }

@@ -177,7 +177,6 @@ export const userService = {
           };
   
           const response = await fetchWithAuth(ROUTES(PATHS.REGISTER_ACTIVITY), options);
-          const data = await response.json();
   
           if (response.ok) {
               router.replace('/(tabs)/screens/home');
@@ -195,7 +194,30 @@ export const userService = {
           Alert.alert('Erro', erroServidor)
         }
       }
-  }
+  },
   
+  async atualizarUsuario(nome: string, apelido: string, senha: string) {
+    try {
+      const options = {
+        method: 'PATCH',
+        body: JSON.stringify({
+          nome,
+          apelido,
+          senha
+        })
+      };
+
+      const response = await fetchWithAuth(ROUTES(PATHS.UPDATE_USER), options);
+      if (response.ok) {
+        window.alert('Deu certo!')
+      }
+    } catch (error) {
+      if (Platform.OS === 'web') {
+        window.alert(erroServidor);
+      } else {
+        Alert.alert('Erro', erroServidor)
+      }
+    }
+  }
 
 };
