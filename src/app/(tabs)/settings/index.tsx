@@ -14,16 +14,16 @@ interface ResumoEstatisticas {
 }
 
 interface Informacoes {
-    nome: string
-    apelido: string
-  }
+  nome: string;
+  apelido: string;
+}
 
 export default function Settings() {
   const [resumoEstatisticas, setResumoEstatisticas] = useState<ResumoEstatisticas>({
     ofensiva: 0,
     pontos: 0
   });
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const [senha, setSenha] = useState('');
   const [nome, setNome] = useState('');
   const [apelido, setApelido] = useState('');
@@ -35,42 +35,78 @@ export default function Settings() {
 
   useEffect(() => {
     async function carregarDados() {
-      userService.carregarResumoEstatisticas(setResumoEstatisticas);
-      userService.carregarUsuario(setInformacoes);
-      setLoading(false)
+      await Promise.all([
+        userService.carregarResumoEstatisticas(setResumoEstatisticas),
+        userService.carregarUsuario(setInformacoes)
+      ]);
+      setLoading(false);
     }
     carregarDados();
-  }, []);  
+  }, []);
 
   if (loading) {
-    return <LoadingScreen />; 
+    return <LoadingScreen />;
   }
 
-  function handleUpdate() {
-    if (senha != null || confirmarSenha != null) {
-      if (passwordsMatch(senha, confirmarSenha)) {
-        userService.atualizarUsuario(nome, apelido, senha);
+  async function handleUpdate() {
+    // Verifica se há tentativa de atualização de senha
+    if (senha || confirmarSenha) {
+      if (!passwordsMatch(senha, confirmarSenha)) {
+        return;
       }
-    } else {
-      userService.atualizarUsuario(nome, apelido, senha);
     }
-    // por enquanto muda tudo
+
+    const userData = {
+      nome: nome || undefined,
+      apelido: apelido || undefined,
+      novaSenha: senha || undefined
+    };
+
+    const success = await userService.atualizarUsuario(userData);
+    if (success) {
+      // Limpa os campos após atualização bem-sucedida
+      setSenha('');
+      setConfirmarSenha('');
+      setNome('');
+      setApelido('');
+      
+      // Recarrega os dados do usuário
+      userService.carregarUsuario(setInformacoes);
+    }
   }
 
- return (
-  <View
-  style={styles.container}
-  >
-    <SummaryStats 
-      ofensiva={resumoEstatisticas.ofensiva} 
-      pontos={resumoEstatisticas.pontos}
-    />
+  return (
+    <View style={styles.container}>
+      <SummaryStats
+        ofensiva={resumoEstatisticas.ofensiva}
+        pontos={resumoEstatisticas.pontos}
+      />
 
-    <FormInput value={nome} onChangeText={setNome} placeholder={informacoes.nome} label='Nome'/>
-    <FormInput value={apelido} onChangeText={setApelido} placeholder={informacoes.apelido} label='Apelido'/>
-    <FormInput value={senha} onChangeText={setSenha} label='Nova senha' isPassword={true}/>
-    <FormInput value={confirmarSenha} onChangeText={setConfirmarSenha} label='Confirmar senha' isPassword={true}/>
-    <SolidButton title='Atualizar' action={handleUpdate}/>
-</View>
+      <FormInput
+        value={nome}
+        onChangeText={setNome}
+        placeholder={informacoes.nome}
+        label='Nome'
+      />
+      <FormInput
+        value={apelido}
+        onChangeText={setApelido}
+        placeholder={informacoes.apelido}
+        label='Apelido'
+      />
+      <FormInput
+        value={senha}
+        onChangeText={setSenha}
+        label='Nova senha'
+        isPassword={true}
+      />
+      <FormInput
+        value={confirmarSenha}
+        onChangeText={setConfirmarSenha}
+        label='Confirmar senha'
+        isPassword={true}
+      />
+      <SolidButton title='Atualizar' action={handleUpdate} />
+    </View>
   );
 }

@@ -23,14 +23,28 @@ interface MelhoresEstatisticas {
 
 interface Preferencias {
   preferenciaConcentracao: number;
-  preferenciaDescanso: number
+  preferenciaDescanso: number;
 }
 
 interface Informacoes {
-  nome: string
-  apelido: string
-  anoRegistro: number
+  nome: string;
+  apelido: string;
+  anoRegistro: number;
 }
+
+interface UpdateUserData {
+  nome?: string;
+  apelido?: string;
+  novaSenha?: string;
+}
+
+const showAlert = (message: string) => {
+  if (Platform.OS === 'web') {
+    window.alert(message);
+  } else {
+    Alert.alert('Erro', message);
+  }
+};
 
 const erroServidor = 'Encontramos problemas ao conectar com o servidor.';
 
@@ -45,20 +59,12 @@ export const userService = {
           nome: data.dadosUsuario.nome,
           apelido: data.dadosUsuario.apelido,
           anoRegistro: data.dadosUsuario.anoRegistro
-        })
+        });
       } else {
-        if (Platform.OS === 'web') {
-          window.alert('Erro ao buscar informações de usuário.');
-        } else {
-          Alert.alert('Erro', 'Erro ao buscar informações de usuário.');
-        }
+        showAlert('Erro ao buscar informações de usuário.');
       }
     } catch (error) {
-      if (Platform.OS === 'web') {
-          window.alert(erroServidor);
-      } else {
-        Alert.alert('Erro', erroServidor)
-      }
+      showAlert(erroServidor);
     }
   },
 
@@ -70,18 +76,10 @@ export const userService = {
       if (response.ok) {
         setAtividades(data.dadosAtividades as Atividade[]);
       } else {
-        if (Platform.OS === 'web') {
-          window.alert('Erro ao buscar atividades.');
-        } else {
-          Alert.alert('Erro', 'Erro ao buscar atividades.');
-        }
+        showAlert('Erro ao buscar atividades.');
       }
     } catch (error) {
-      if (Platform.OS === 'web') {
-        window.alert(erroServidor);
-      } else {
-        Alert.alert('Erro', erroServidor)
-      }
+      showAlert(erroServidor);
     }
   },
 
@@ -96,18 +94,10 @@ export const userService = {
           pontos: data.dadosEstatisticas.pontos
         });
       } else {
-        if (Platform.OS === 'web') {
-          window.alert('Erro ao buscar estatísticas.');
-        } else {
-          Alert.alert('Erro', 'Erro ao buscar estatísticas.');
-        }
+        showAlert('Erro ao buscar estatísticas.');
       }
     } catch (error) {
-      if (Platform.OS === 'web') {
-        window.alert(erroServidor);
-      } else {
-        Alert.alert('Erro', erroServidor)
-      }
+      showAlert(erroServidor);
     }
   },
 
@@ -122,18 +112,10 @@ export const userService = {
           totalPontos: data.dadosEstatisticas.totalPontos
         });
       } else {
-        if (Platform.OS === 'web') {
-          window.alert('Erro ao buscar estatísticas.');
-        } else {
-          Alert.alert('Erro', 'Erro ao buscar estatísticas.');
-        }
+        showAlert('Erro ao buscar estatísticas.');
       }
     } catch (error) {
-      if (Platform.OS === 'web') {
-        window.alert(erroServidor);
-      } else {
-        Alert.alert('Erro', erroServidor)
-      }
+      showAlert(erroServidor);
     }
   },
 
@@ -148,76 +130,67 @@ export const userService = {
           preferenciaDescanso: data.dadosPreferencias.preferenciaDescanso
         });
       } else {
-        if (Platform.OS === 'web') {
-          window.alert('Erro ao buscar preferências de temporizador.');
-        } else {
-          Alert.alert('Erro', 'Erro ao buscar preferências de temporizador.');
-        }
+        showAlert('Erro ao buscar preferências de temporizador.');
       }
     } catch (error) {
-      if (Platform.OS === 'web') {
-        window.alert(erroServidor);
-      } else {
-        Alert.alert('Erro', erroServidor)
-      }
+      showAlert(erroServidor);
     }
-  }, 
-
-  async cadastrarAtividade(titulo: string, descricao: string, dificuldade: number, categoria: string, tempoConcentracao: number ) {
-      try {
-          const options = {
-              method: 'POST',
-              body: JSON.stringify({
-                  titulo,
-                  descricao,
-                  dificuldade,
-                  categoria,
-                  tempoConcentracao
-              })
-          };
-  
-          const response = await fetchWithAuth(ROUTES(PATHS.REGISTER_ACTIVITY), options);
-  
-          if (response.ok) {
-              router.replace('/(tabs)/screens/home');
-          } else {
-            if (Platform.OS === 'web') {
-              window.alert('Erro ao cadastrar atividade.');
-            } else {
-              Alert.alert('Erro', 'Erro ao cadastrar atividade.');
-            }
-          }
-      } catch (error) {
-        if (Platform.OS === 'web') {
-          window.alert(erroServidor);
-        } else {
-          Alert.alert('Erro', erroServidor)
-        }
-      }
   },
-  
-  async atualizarUsuario(nome: string, apelido: string, senha: string) {
+
+  async cadastrarAtividade(titulo: string, descricao: string, dificuldade: number, categoria: string, tempoConcentracao: number) {
     try {
       const options = {
-        method: 'PATCH',
+        method: 'POST',
         body: JSON.stringify({
-          nome,
-          apelido,
-          senha
+          titulo,
+          descricao,
+          dificuldade,
+          categoria,
+          tempoConcentracao
         })
       };
 
-      const response = await fetchWithAuth(ROUTES(PATHS.UPDATE_USER), options);
+      const response = await fetchWithAuth(ROUTES(PATHS.REGISTER_ACTIVITY), options);
+
       if (response.ok) {
-        window.alert('Deu certo!')
+        router.replace('/(tabs)/screens/home');
+      } else {
+        showAlert('Erro ao cadastrar atividade.');
       }
     } catch (error) {
-      if (Platform.OS === 'web') {
-        window.alert(erroServidor);
-      } else {
-        Alert.alert('Erro', erroServidor)
+      showAlert(erroServidor);
+    }
+  },
+
+  async atualizarUsuario(userData: UpdateUserData) {
+    try {
+      // Remove undefined values from the object
+      const filteredData = Object.fromEntries(
+        Object.entries(userData).filter(([_, value]) => value !== undefined && value !== '')
+      );
+
+      if (Object.keys(filteredData).length === 0) {
+        showAlert('Nenhum dado para atualizar.');
+        return;
       }
+
+      const options = {
+        method: 'PATCH',
+        body: JSON.stringify(filteredData)
+      };
+
+      const response = await fetchWithAuth(ROUTES(PATHS.UPDATE_USER), options);
+      
+      if (response.ok) {
+        showAlert('Dados atualizados com sucesso!');
+        return true;
+      } else {
+        showAlert('Erro ao atualizar dados.');
+        return false;
+      }
+    } catch (error) {
+      showAlert(erroServidor);
+      return false;
     }
   }
-
 };
