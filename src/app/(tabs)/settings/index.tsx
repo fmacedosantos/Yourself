@@ -7,6 +7,7 @@ import { SummaryStats } from '@/src/components/summaryStats';
 import { FormInput } from '@/src/components/formInput';
 import { SolidButton } from '@/src/components/solidButton';
 import { passwordsMatch } from '@/src/utils/validators';
+import { MessageAlert } from '@/src/components/messageAlert';
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -24,6 +25,7 @@ export default function Settings() {
     pontos: 0
   });
   const [loading, setLoading] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [senha, setSenha] = useState('');
   const [nome, setNome] = useState('');
   const [apelido, setApelido] = useState('');
@@ -48,10 +50,13 @@ export default function Settings() {
     return <LoadingScreen />;
   }
 
+  let message;
+
   async function handleUpdate() {
-    // Verifica se há tentativa de atualização de senha
     if (senha || confirmarSenha) {
       if (!passwordsMatch(senha, confirmarSenha)) {
+        message = "As senhas não coincidem!";
+        setVisible(true);
         return;
       }
     }
@@ -64,13 +69,14 @@ export default function Settings() {
 
     const success = await userService.atualizarUsuario(userData);
     if (success) {
-      // Limpa os campos após atualização bem-sucedida
       setSenha('');
       setConfirmarSenha('');
       setNome('');
       setApelido('');
       
-      // Recarrega os dados do usuário
+      message = "Dados atualizados com sucesso!"
+      setVisible(true);
+      
       userService.carregarUsuario(setInformacoes);
     }
   }
@@ -93,6 +99,13 @@ export default function Settings() {
         onChangeText={setApelido}
         placeholder={informacoes.apelido}
         label='Apelido'
+      />
+      <MessageAlert
+        type={1}
+        title="Aviso:"
+        message="Dados atualizados com sucesso!"
+        visible={visible}
+        onCancel={() => setVisible(false)}
       />
       <FormInput
         value={senha}
