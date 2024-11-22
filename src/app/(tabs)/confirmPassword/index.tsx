@@ -6,7 +6,6 @@ import LoadingScreen from '@/src/components/loadindScreen';
 import { SummaryStats } from '@/src/components/summaryStats';
 import { FormInput } from '@/src/components/formInput';
 import { SolidButton } from '@/src/components/solidButton';
-import { reauthenticateUser } from '@/src/services/api/auth';
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -34,7 +33,7 @@ export default function ConfirmPassword() {
   }
 
   function handleNext() {
-    reauthenticateUser(senha);
+    userService.reauthenticateUser(senha);
   }
 
  return (

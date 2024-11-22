@@ -1,7 +1,10 @@
-import { PATHS, ROUTES } from "@/src/constants/Routes";
-import { fetchWithAuth } from "@/src/utils/fetchWithAuth";
-import { router } from "expo-router";
-import { Alert, Platform } from "react-native";
+// src/services/authUserService.ts
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import firebase from '../../../firebase-init.js';
+import { router } from 'expo-router';
+import { Alert, Platform } from 'react-native';
+import { PATHS, ROUTES } from '@/src/constants/Routes';
+import { fetchWithAuth } from '@/src/utils/fetchWithAuth';
 
 interface Atividade {
   id: string;
@@ -38,6 +41,8 @@ interface UpdateUserData {
   novaSenha?: string;
 }
 
+const erroServidor = 'Encontramos problemas ao conectar com o servidor.';
+
 const showAlert = (message: string) => {
   if (Platform.OS === 'web') {
     window.alert(message);
@@ -46,9 +51,125 @@ const showAlert = (message: string) => {
   }
 };
 
-const erroServidor = 'Encontramos problemas ao conectar com o servidor.';
-
 export const userService = {
+  
+  async register(email: string, nome: string, apelido: string, senha: string) {
+    try {
+      const response = await fetch(ROUTES(PATHS.REGISTER_USER), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          nome,
+          apelido,
+          senha,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        await this.login(email, senha);
+      } else {
+        showAlert(data.message || 'Ocorreu um erro no cadastro.');
+      }
+    } catch (error) {
+      showAlert(erroServidor);
+    }
+  },
+
+  async login(email: string, senha: string) {
+    try {
+      const userCredential = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, senha);
+
+      if (userCredential.user) {
+        const token = await userCredential.user.getIdToken();
+        await AsyncStorage.setItem('jwt', token);
+        const loginDate = new Date().toISOString();
+        await AsyncStorage.setItem('loginDate', loginDate);
+
+        router.replace('/(tabs)/screens/home');
+      }
+    } catch (error) {
+      const err = error as { code?: string };
+      switch (err.code) {
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+        case 'auth/invalid-email':
+        case 'auth/invalid-credential':
+          showAlert('Informações incorretas.');
+          break;
+        default:
+          showAlert('Ocorreu um erro ao fazer login. Tente novamente.');
+      }
+    }
+  },
+
+  async forgotPassword(email: string) {
+    try {
+      await firebase.auth().sendPasswordResetEmail(email);
+      Alert.alert('Sucesso', 'Um e-mail de redefinição de senha foi enviado.');
+    } catch (error) {
+      const err = error as { code?: string };
+      if (err.code === 'auth/user-not-found') {
+        showAlert('Email inválido.');
+      } else {
+        showAlert('Ocorreu um erro ao enviar o e-mail de redefinição de senha.');
+      }
+    }
+  },
+
+  async logout() {
+    try {
+      await AsyncStorage.removeItem('jwt');
+      router.replace('/');
+    } catch (error) {
+      showAlert('Não foi possível sair da conta.');
+    }
+  },
+
+  async reauthenticateUser(senha: string) {
+    const user = firebase.auth().currentUser;
+    if (user) {
+      const credential = firebase.auth.EmailAuthProvider.credential(
+        user.email as string,
+        senha
+      );
+      try {
+        await user.reauthenticateWithCredential(credential);
+        router.navigate('/(tabs)/settings');
+      } catch (error) {
+        showAlert('Senha incorreta. Tente novamente.');
+      }
+    } else {
+      showAlert('Usuário não encontrado.');
+    }
+  },
+
+  async checkToken(setLoading: (value: boolean) => void) {
+    const token = await AsyncStorage.getItem('jwt');
+    const loginDate = await AsyncStorage.getItem('loginDate');
+
+    if (token && loginDate) {
+      const now = new Date();
+      const loginDateTime = new Date(loginDate);
+      const diffDays =
+        (Number(now) - Number(loginDateTime)) / (1000 * 60 * 60 * 24);
+
+      if (diffDays <= 3) {
+        router.replace('/(tabs)/screens/home');
+      } else {
+        await this.logout();
+      }
+    }
+    setLoading(false);
+  },
+
+  // User methods
   async carregarUsuario(setInformacoes: (informacoes: Informacoes) => void) {
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_USER));
@@ -58,7 +179,7 @@ export const userService = {
         setInformacoes({
           nome: data.dadosUsuario.nome,
           apelido: data.dadosUsuario.apelido,
-          anoRegistro: data.dadosUsuario.anoRegistro
+          anoRegistro: data.dadosUsuario.anoRegistro,
         });
       } else {
         showAlert('Erro ao buscar informações de usuário.');
@@ -170,7 +291,6 @@ export const userService = {
       );
 
       if (Object.keys(filteredData).length === 0) {
-        showAlert('Nenhum dado para atualizar.');
         return;
       }
 
@@ -182,10 +302,8 @@ export const userService = {
       const response = await fetchWithAuth(ROUTES(PATHS.UPDATE_USER), options);
       
       if (response.ok) {
-        showAlert('Dados atualizados com sucesso!');
         return true;
       } else {
-        showAlert('Erro ao atualizar dados.');
         return false;
       }
     } catch (error) {

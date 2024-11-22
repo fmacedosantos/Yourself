@@ -1,6 +1,5 @@
 import { Text, View } from "react-native";
 import { styles } from "./styles";
-import { logout } from '@/src/services/api/auth';
 import { Link, router } from "expo-router";
 import { useEffect, useState } from "react";
 import { userService } from "@/src/services/api/user";
@@ -56,7 +55,7 @@ export default function Profile() {
   }
 
   function handleLeaveAccount(){
-    logout();
+    userService.logout();
   }
 
   if (loading) {

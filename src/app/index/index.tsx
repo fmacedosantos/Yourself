@@ -8,8 +8,8 @@ import { BorderButton } from '../../components/borderButton';
 import { styles } from './styles';
 import { validateEmail, validateFields } from '@/src/utils/validators';
 import { LoadFont } from '@/src/utils/loadFont';
-import { checkToken, forgotPassword, login } from '@/src/services/api/auth';
 import LoadingScreen from '@/src/components/loadindScreen';
+import { userService } from '@/src/services/api/user';
 
 export default function Index() {
   const [email, setEmail] = useState('');
@@ -21,7 +21,7 @@ export default function Index() {
   useEffect(() => {
     async function initializeApp() {
       if (fontsLoaded) {
-        await checkToken(setLoading); 
+        await userService.checkToken(setLoading); 
       }
     }
 
@@ -34,13 +34,13 @@ export default function Index() {
 
   function handleEnter() {
     if (validateFields({email, senha}) && validateEmail(email)) {
-      login(email, senha);
+      userService.login(email, senha);
     }
   }
 
   function handleForgotPassword() {
     if (validateFields({email}) && validateEmail(email)) {
-      forgotPassword(email);
+      userService.forgotPassword(email);
     }
   }
 
