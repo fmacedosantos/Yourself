@@ -82,32 +82,32 @@ export const userService = {
 
   async login(email: string, senha: string) {
     try {
-      const userCredential = await firebase
-        .auth()
-        .signInWithEmailAndPassword(email, senha);
+        const userCredential = await firebase
+            .auth()
+            .signInWithEmailAndPassword(email, senha);
 
-      if (userCredential.user) {
-        const token = await userCredential.user.getIdToken();
-        await AsyncStorage.setItem('jwt', token);
-        const loginDate = new Date().toISOString();
-        await AsyncStorage.setItem('loginDate', loginDate);
+        if (userCredential.user) {
+            const token = await userCredential.user.getIdToken(true); // Gera um novo token válido
+            await AsyncStorage.setItem('jwt', token);
+            const loginDate = new Date().toISOString();
+            await AsyncStorage.setItem('loginDate', loginDate);
 
-        router.replace('/(tabs)/screens/home');
-      }
+            router.replace('/(tabs)/screens/home');
+        }
     } catch (error) {
-      const err = error as { code?: string };
-      switch (err.code) {
-        case 'auth/user-not-found':
-        case 'auth/wrong-password':
-        case 'auth/invalid-email':
-        case 'auth/invalid-credential':
-          showAlert('Informações incorretas.');
-          break;
-        default:
-          showAlert('Ocorreu um erro ao fazer login. Tente novamente.');
-      }
+        const err = error as { code?: string };
+        switch (err.code) {
+            case 'auth/user-not-found':
+            case 'auth/wrong-password':
+            case 'auth/invalid-email':
+            case 'auth/invalid-credential':
+                showAlert('Informações incorretas.');
+                break;
+            default:
+                showAlert('Ocorreu um erro ao fazer login. Tente novamente.');
+        }
     }
-  },
+},
 
   async forgotPassword(email: string) {
     try {
@@ -126,6 +126,7 @@ export const userService = {
   async logout() {
     try {
       await AsyncStorage.removeItem('jwt');
+      await AsyncStorage.removeItem('loginDate');
       router.replace('/');
     } catch (error) {
       showAlert('Não foi possível sair da conta.');
@@ -151,22 +152,43 @@ export const userService = {
   },
 
   async checkToken(setLoading: (value: boolean) => void) {
-    const token = await AsyncStorage.getItem('jwt');
-    const loginDate = await AsyncStorage.getItem('loginDate');
-
-    if (token && loginDate) {
-      const now = new Date();
-      const loginDateTime = new Date(loginDate);
-      const diffDays =
-        (Number(now) - Number(loginDateTime)) / (1000 * 60 * 60 * 24);
-
-      if (diffDays <= 3) {
-        router.replace('/(tabs)/screens/home');
+    try {
+      const user = firebase.auth().currentUser;
+  
+      if (user) {
+        const token = await AsyncStorage.getItem('jwt');
+        const loginDate = await AsyncStorage.getItem('loginDate');
+  
+        if (token && loginDate) {
+          const now = new Date();
+          const loginDateTime = new Date(loginDate);
+          const diffMinutes = (Number(now) - Number(loginDateTime)) / (1000 * 60);
+  
+          if (diffMinutes >= 50) {
+            try {
+              const newToken = await user.getIdToken(true); // Renova o token
+              await AsyncStorage.setItem('jwt', newToken);
+              await AsyncStorage.setItem('loginDate', new Date().toISOString());
+            } catch (renewError) {
+              console.error('Erro ao renovar token:', renewError);
+              await this.logout();
+              showAlert('Sua sessão expirou. Por favor, faça login novamente.');
+            }
+          } else {
+            router.replace('/(tabs)/screens/home'); // Navega para a tela inicial
+          }
+        } else {
+          console.log("Opa") // Remove dados inválidos e desconecta
+        }
       } else {
-        await this.logout();
+        console.log("Opa")
       }
+    } catch (error) {
+      console.error('Erro ao verificar token:', error);
+      showAlert('Erro ao verificar autenticação. Tente novamente.');
+    } finally {
+      setLoading(false); // Sempre desativa o estado de carregamento
     }
-    setLoading(false);
   },
 
   // User methods

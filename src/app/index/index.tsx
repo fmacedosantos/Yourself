@@ -20,12 +20,17 @@ export default function Index() {
 
   useEffect(() => {
     async function initializeApp() {
-      if (fontsLoaded) {
-        await userService.checkToken(setLoading); 
+      try {
+        await userService.checkToken(setLoading);
+      } catch (error) {
+        console.error('Erro na inicialização:', error);
+        setLoading(false); 
       }
     }
 
-    initializeApp();
+    if (fontsLoaded) { 
+      initializeApp();
+    }
   }, [fontsLoaded]); 
 
   if (!fontsLoaded || loading) {
@@ -33,13 +38,13 @@ export default function Index() {
   }
 
   function handleEnter() {
-    if (validateFields({email, senha}) && validateEmail(email)) {
+    if (validateFields({ email, senha }) && validateEmail(email)) {
       userService.login(email, senha);
     }
   }
 
   function handleForgotPassword() {
-    if (validateFields({email}) && validateEmail(email)) {
+    if (validateFields({ email }) && validateEmail(email)) {
       userService.forgotPassword(email);
     }
   }
@@ -71,7 +76,7 @@ export default function Index() {
 
       <Text
         style={styles.forget}
-        onPress={handleForgotPassword} 
+        onPress={handleForgotPassword}
       >
         Esqueceu a senha?
       </Text>
