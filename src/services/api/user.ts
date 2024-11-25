@@ -2,7 +2,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firebase from '../../../firebase-init.js';
 import { router } from 'expo-router';
-import { Alert, Platform } from 'react-native';
 import { PATHS, ROUTES } from '@/src/constants/Routes';
 import { fetchWithAuth } from '@/src/utils/fetchWithAuth';
 
@@ -43,83 +42,55 @@ interface UpdateUserData {
 
 const erroServidor = 'Encontramos problemas ao conectar com o servidor.';
 
-const showAlert = (message: string) => {
-  if (Platform.OS === 'web') {
-    window.alert(message);
-  } else {
-    Alert.alert('Erro', message);
-  }
-};
-
 export const userService = {
-  
   async register(email: string, nome: string, apelido: string, senha: string) {
     try {
       const response = await fetch(ROUTES(PATHS.REGISTER_USER), {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          nome,
-          apelido,
-          senha,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, nome, apelido, senha }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         await this.login(email, senha);
+        return { success: true, message: 'Cadastro realizado com sucesso!' };
       } else {
-        showAlert(data.message || 'Ocorreu um erro no cadastro.');
+        return { success: false, message: data.message || 'Erro ao realizar cadastro.' };
       }
-    } catch (error) {
-      showAlert(erroServidor);
+    } catch {
+      return { success: false, message: erroServidor };
     }
   },
 
   async login(email: string, senha: string) {
     try {
-        const userCredential = await firebase
-            .auth()
-            .signInWithEmailAndPassword(email, senha);
+      const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
 
-        if (userCredential.user) {
-            const token = await userCredential.user.getIdToken(true); // Gera um novo token válido
-            await AsyncStorage.setItem('jwt', token);
-            const loginDate = new Date().toISOString();
-            await AsyncStorage.setItem('loginDate', loginDate);
-
-            router.replace('/(tabs)/screens/home');
-        }
+      if (userCredential.user) {
+        const token = await userCredential.user.getIdToken(true);
+        await AsyncStorage.setItem('jwt', token);
+        await AsyncStorage.setItem('loginDate', new Date().toISOString());
+        router.replace('/(tabs)/screens/home');
+        return { success: true, message: 'Login realizado com sucesso!' };
+      }
     } catch (error) {
-        const err = error as { code?: string };
-        switch (err.code) {
-            case 'auth/user-not-found':
-            case 'auth/wrong-password':
-            case 'auth/invalid-email':
-            case 'auth/invalid-credential':
-                showAlert('Informações incorretas.');
-                break;
-            default:
-                showAlert('Ocorreu um erro ao fazer login. Tente novamente.');
-        }
+      const err = error as { code?: string };
+      const message =
+        err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password'
+          ? 'Usuário ou senha incorretos.'
+          : 'Erro ao realizar login.';
+      return { success: false, message };
     }
-},
+  },
 
   async forgotPassword(email: string) {
     try {
       await firebase.auth().sendPasswordResetEmail(email);
-      Alert.alert('Sucesso', 'Um e-mail de redefinição de senha foi enviado.');
-    } catch (error) {
-      const err = error as { code?: string };
-      if (err.code === 'auth/user-not-found') {
-        showAlert('Email inválido.');
-      } else {
-        showAlert('Ocorreu um erro ao enviar o e-mail de redefinição de senha.');
-      }
+      return { success: true, message: 'E-mail de redefinição de senha enviado.' };
+    } catch {
+      return { success: false, message: 'Erro ao enviar e-mail de redefinição de senha.' };
     }
   },
 
@@ -128,8 +99,9 @@ export const userService = {
       await AsyncStorage.removeItem('jwt');
       await AsyncStorage.removeItem('loginDate');
       router.replace('/');
-    } catch (error) {
-      showAlert('Não foi possível sair da conta.');
+      return { success: true, message: 'Logout realizado com sucesso!' };
+    } catch {
+      return { success: false, message: 'Erro ao realizar logout.' };
     }
   },
 
@@ -142,56 +114,81 @@ export const userService = {
       );
       try {
         await user.reauthenticateWithCredential(credential);
-        router.navigate('/(tabs)/settings');
-      } catch (error) {
-        showAlert('Senha incorreta. Tente novamente.');
+        return { success: true, message: 'Reautenticação realizada com sucesso!' };
+      } catch {
+        return { success: false, message: 'Senha incorreta. Tente novamente.' };
       }
     } else {
-      showAlert('Usuário não encontrado.');
+      return { success: false, message: 'Usuário não encontrado.' };
     }
   },
 
   async checkToken(setLoading: (value: boolean) => void) {
     try {
       const user = firebase.auth().currentUser;
-  
+
       if (user) {
         const token = await AsyncStorage.getItem('jwt');
         const loginDate = await AsyncStorage.getItem('loginDate');
-  
+
         if (token && loginDate) {
           const now = new Date();
           const loginDateTime = new Date(loginDate);
           const diffMinutes = (Number(now) - Number(loginDateTime)) / (1000 * 60);
-  
+
           if (diffMinutes >= 50) {
             try {
-              const newToken = await user.getIdToken(true); // Renova o token
+              const newToken = await user.getIdToken(true); 
               await AsyncStorage.setItem('jwt', newToken);
               await AsyncStorage.setItem('loginDate', new Date().toISOString());
-            } catch (renewError) {
-              console.error('Erro ao renovar token:', renewError);
+              return { success: true, message: 'Token renovado com sucesso!' };
+            } catch {
               await this.logout();
-              showAlert('Sua sessão expirou. Por favor, faça login novamente.');
+              return { success: false, message: 'Sua sessão expirou. Faça login novamente.' };
             }
           } else {
-            router.replace('/(tabs)/screens/home'); // Navega para a tela inicial
+            return { success: true, message: 'Token válido.' };
           }
         } else {
-          console.log("Opa") // Remove dados inválidos e desconecta
+          await this.logout();
+          return { success: false, message: 'Sessão inválida. Faça login novamente.' };
         }
       } else {
-        console.log("Opa")
+        return { success: false, message: 'Usuário não autenticado.' };
       }
-    } catch (error) {
-      console.error('Erro ao verificar token:', error);
-      showAlert('Erro ao verificar autenticação. Tente novamente.');
+    } catch {
+      return { success: false, message: erroServidor };
     } finally {
-      setLoading(false); // Sempre desativa o estado de carregamento
+      setLoading(false); 
     }
   },
 
-  // User methods
+  async atualizarUsuario(userData: UpdateUserData) {
+    try {
+      const filteredData = Object.fromEntries(
+        Object.entries(userData).filter(([_, value]) => value !== undefined && value !== '')
+      );
+
+      if (Object.keys(filteredData).length === 0) {
+        return { success: false, message: 'Nenhum dado fornecido para atualização.' };
+      }
+
+      const response = await fetchWithAuth(ROUTES(PATHS.UPDATE_USER), {
+        method: 'PATCH',
+        body: JSON.stringify(filteredData),
+      });
+
+      if (response.ok) {
+        return { success: true, message: 'Dados atualizados com sucesso!' };
+      } else {
+        const data = await response.json();
+        return { success: false, message: data.message || 'Erro ao atualizar dados.' };
+      }
+    } catch {
+      return { success: false, message: erroServidor };
+    }
+  },
+
   async carregarUsuario(setInformacoes: (informacoes: Informacoes) => void) {
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_USER));
@@ -203,11 +200,36 @@ export const userService = {
           apelido: data.dadosUsuario.apelido,
           anoRegistro: data.dadosUsuario.anoRegistro,
         });
+        return { success: true, message: 'Dados carregados com sucesso!' };
       } else {
-        showAlert('Erro ao buscar informações de usuário.');
+        return { success: false, message: 'Erro ao buscar informações do usuário.' };
       }
-    } catch (error) {
-      showAlert(erroServidor);
+    } catch {
+      return { success: false, message: erroServidor };
+    }
+  },
+
+  async cadastrarAtividade(
+    titulo: string,
+    descricao: string,
+    dificuldade: number,
+    categoria: string,
+    tempoConcentracao: number
+  ) {
+    try {
+      const response = await fetchWithAuth(ROUTES(PATHS.REGISTER_ACTIVITY), {
+        method: 'POST',
+        body: JSON.stringify({ titulo, descricao, dificuldade, categoria, tempoConcentracao }),
+      });
+
+      if (response.ok) {
+        return { success: true, message: 'Atividade cadastrada com sucesso!' };
+      } else {
+        const data = await response.json();
+        return { success: false, message: data.message || 'Erro ao cadastrar atividade.' };
+      }
+    } catch {
+      return { success: false, message: erroServidor };
     }
   },
 
@@ -215,122 +237,77 @@ export const userService = {
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_ACTIVITIES));
       const data = await response.json();
-
-      if (response.ok) {
+  
+      if (response.ok && data.dadosAtividades) {
         setAtividades(data.dadosAtividades as Atividade[]);
+        return { success: true, message: 'Atividades carregadas com sucesso!' };
       } else {
-        showAlert('Erro ao buscar atividades.');
+        return { success: false, message: 'Erro ao buscar atividades.' };
       }
-    } catch (error) {
-      showAlert(erroServidor);
+    } catch {
+      return { success: false, message: erroServidor };
     }
   },
-
-  async carregarResumoEstatisticas(setResumoEstatisticas: (resumo: ResumoEstatisticas) => void) {
+  
+  async carregarResumoEstatisticas(
+    setResumoEstatisticas: (resumo: ResumoEstatisticas) => void
+  ) {
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_STATS));
       const data = await response.json();
-
+  
       if (response.ok && data.dadosEstatisticas) {
         setResumoEstatisticas({
           ofensiva: data.dadosEstatisticas.ofensiva,
-          pontos: data.dadosEstatisticas.pontos
+          pontos: data.dadosEstatisticas.pontos,
         });
+        return { success: true, message: 'Resumo estatístico carregado com sucesso!' };
       } else {
-        showAlert('Erro ao buscar estatísticas.');
+        return { success: false, message: 'Erro ao buscar resumo estatístico.' };
       }
-    } catch (error) {
-      showAlert(erroServidor);
+    } catch {
+      return { success: false, message: erroServidor };
     }
   },
-
-  async carregarMelhoresEstatisticas(setMelhoresEstatisticas: (melhores: MelhoresEstatisticas) => void) {
+  
+  async carregarMelhoresEstatisticas(
+    setMelhoresEstatisticas: (melhores: MelhoresEstatisticas) => void
+  ) {
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_STATS));
       const data = await response.json();
-
+  
       if (response.ok && data.dadosEstatisticas) {
         setMelhoresEstatisticas({
           maiorOfensiva: data.dadosEstatisticas.maiorOfensiva,
-          totalPontos: data.dadosEstatisticas.totalPontos
+          totalPontos: data.dadosEstatisticas.totalPontos,
         });
+        return { success: true, message: 'Melhores estatísticas carregadas com sucesso!' };
       } else {
-        showAlert('Erro ao buscar estatísticas.');
+        return { success: false, message: 'Erro ao buscar melhores estatísticas.' };
       }
-    } catch (error) {
-      showAlert(erroServidor);
+    } catch {
+      return { success: false, message: erroServidor };
     }
   },
-
+  
   async carregarPreferencias(setPreferencias: (preferencias: Preferencias) => void) {
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_PREFERENCES));
       const data = await response.json();
-
+  
       if (response.ok && data.dadosPreferencias) {
         setPreferencias({
           preferenciaConcentracao: data.dadosPreferencias.preferenciaConcentracao,
-          preferenciaDescanso: data.dadosPreferencias.preferenciaDescanso
+          preferenciaDescanso: data.dadosPreferencias.preferenciaDescanso,
         });
+        return { success: true, message: 'Preferências carregadas com sucesso!' };
       } else {
-        showAlert('Erro ao buscar preferências de temporizador.');
+        return { success: false, message: 'Erro ao buscar preferências.' };
       }
-    } catch (error) {
-      showAlert(erroServidor);
+    } catch {
+      return { success: false, message: erroServidor };
     }
   },
-
-  async cadastrarAtividade(titulo: string, descricao: string, dificuldade: number, categoria: string, tempoConcentracao: number) {
-    try {
-      const options = {
-        method: 'POST',
-        body: JSON.stringify({
-          titulo,
-          descricao,
-          dificuldade,
-          categoria,
-          tempoConcentracao
-        })
-      };
-
-      const response = await fetchWithAuth(ROUTES(PATHS.REGISTER_ACTIVITY), options);
-
-      if (response.ok) {
-        router.replace('/(tabs)/screens/home');
-      } else {
-        showAlert('Erro ao cadastrar atividade.');
-      }
-    } catch (error) {
-      showAlert(erroServidor);
-    }
-  },
-
-  async atualizarUsuario(userData: UpdateUserData) {
-    try {
-      // Remove undefined values from the object
-      const filteredData = Object.fromEntries(
-        Object.entries(userData).filter(([_, value]) => value !== undefined && value !== '')
-      );
-
-      if (Object.keys(filteredData).length === 0) {
-        return;
-      }
-
-      const options = {
-        method: 'PATCH',
-        body: JSON.stringify(filteredData)
-      };
-
-      const response = await fetchWithAuth(ROUTES(PATHS.UPDATE_USER), options);
-      
-      if (response.ok) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      showAlert(erroServidor);
-      return false;
-    }
-  }
+  
 };
