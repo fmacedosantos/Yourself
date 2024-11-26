@@ -5,7 +5,7 @@ import { FormInput } from "../../components/formInput";
 import { BorderButton } from "../../components/borderButton";
 import { styles } from "../index/styles";
 import { passwordsMatch, validateEmail, validateFields, validatePasswordStrength } from "@/src/utils/validators";
-import { userService } from "@/src/services/api/user";
+import { register } from "@/src/services/api/user";
 
 export default function Cadastro() {
   const [email, setEmail] = useState('');
@@ -19,7 +19,7 @@ export default function Cadastro() {
     
     if (validateFields({email, nome, apelido, senha, confirmarSenha}) && validateEmail(email) && 
         passwordValidation.isValid && passwordsMatch(senha, confirmarSenha)) {
-      userService.register(email, nome, apelido, senha);
+      register(email, nome, apelido, senha);
     }
   }
 

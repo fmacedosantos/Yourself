@@ -3,7 +3,6 @@ import { styles } from "./styles";
 import { FormInput } from "@/src/components/formInput";
 import { useEffect, useState } from "react";
 import { Title } from "@/src/components/title";
-import { userService } from "@/src/services/api/user";
 import { SummaryStats } from "@/src/components/summaryStats";
 import { SolidButton } from "@/src/components/solidButton";
 import { router } from "expo-router";
@@ -11,6 +10,7 @@ import { SelectDifficulty } from "../../../../components/selectDifficulty";
 import { validateFields } from "@/src/utils/validators";
 import LoadingScreen from "@/src/components/loadindScreen";
 import { ListCategories } from "../../../../components/ListCategories";
+import { carregarResumoEstatisticas } from "@/src/services/api/user";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -31,7 +31,7 @@ export default function AddNewActivity() {
 
   useEffect(() => {
     async function carregarDados() {
-      userService.carregarResumoEstatisticas(setResumoEstatisticas);
+      carregarResumoEstatisticas(setResumoEstatisticas);
       setLoading(false)
     }
     carregarDados();

@@ -42,8 +42,7 @@ interface UpdateUserData {
 
 const erroServidor = 'Encontramos problemas ao conectar com o servidor.';
 
-export const userService = {
-  async register(email: string, nome: string, apelido: string, senha: string) {
+export async function register(email: string, nome: string, apelido: string, senha: string) {
     try {
       const response = await fetch(ROUTES(PATHS.REGISTER_USER), {
         method: 'POST',
@@ -54,7 +53,7 @@ export const userService = {
       const data = await response.json();
 
       if (response.ok) {
-        await this.login(email, senha);
+        await login(email, senha);
         return { success: true, message: 'Cadastro realizado com sucesso!' };
       } else {
         return { success: false, message: data.message || 'Erro ao realizar cadastro.' };
@@ -62,9 +61,9 @@ export const userService = {
     } catch {
       return { success: false, message: erroServidor };
     }
-  },
+  }
 
-  async login(email: string, senha: string) {
+  export async function login(email: string, senha: string) {
     try {
       const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
 
@@ -83,18 +82,18 @@ export const userService = {
           : 'Erro ao realizar login.';
       return { success: false, message };
     }
-  },
+  }
 
-  async forgotPassword(email: string) {
+  export async function forgotPassword(email: string) {
     try {
       await firebase.auth().sendPasswordResetEmail(email);
       return { success: true, message: 'E-mail de redefinição de senha enviado.' };
     } catch {
       return { success: false, message: 'Erro ao enviar e-mail de redefinição de senha.' };
     }
-  },
+  }
 
-  async logout() {
+  export async function logout() {
     try {
       await AsyncStorage.removeItem('jwt');
       await AsyncStorage.removeItem('loginDate');
@@ -103,9 +102,9 @@ export const userService = {
     } catch {
       return { success: false, message: 'Erro ao realizar logout.' };
     }
-  },
+  }
 
-  async reauthenticateUser(senha: string) {
+  export async function reauthenticateUser(senha: string) {
     const user = firebase.auth().currentUser;
     if (user) {
       const credential = firebase.auth.EmailAuthProvider.credential(
@@ -121,9 +120,9 @@ export const userService = {
     } else {
       return { success: false, message: 'Usuário não encontrado.' };
     }
-  },
+  }
 
-  async checkToken(setLoading: (value: boolean) => void) {
+  export async function checkToken(setLoading: (value: boolean) => void) {
     try {
       const user = firebase.auth().currentUser;
 
@@ -143,14 +142,14 @@ export const userService = {
               await AsyncStorage.setItem('loginDate', new Date().toISOString());
               return { success: true, message: 'Token renovado com sucesso!' };
             } catch {
-              await this.logout();
+              await logout();
               return { success: false, message: 'Sua sessão expirou. Faça login novamente.' };
             }
           } else {
             return { success: true, message: 'Token válido.' };
           }
         } else {
-          await this.logout();
+          await logout();
           return { success: false, message: 'Sessão inválida. Faça login novamente.' };
         }
       } else {
@@ -161,9 +160,9 @@ export const userService = {
     } finally {
       setLoading(false); 
     }
-  },
+  }
 
-  async atualizarUsuario(userData: UpdateUserData) {
+  export async function atualizarUsuario(userData: UpdateUserData) {
     try {
       const filteredData = Object.fromEntries(
         Object.entries(userData).filter(([_, value]) => value !== undefined && value !== '')
@@ -187,9 +186,9 @@ export const userService = {
     } catch {
       return { success: false, message: erroServidor };
     }
-  },
+  }
 
-  async carregarUsuario(setInformacoes: (informacoes: Informacoes) => void) {
+  export async function carregarUsuario(setInformacoes: (informacoes: Informacoes) => void) {
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_USER));
       const data = await response.json();
@@ -207,9 +206,9 @@ export const userService = {
     } catch {
       return { success: false, message: erroServidor };
     }
-  },
+  }
 
-  async cadastrarAtividade(
+  export async function cadastrarAtividade(
     titulo: string,
     descricao: string,
     dificuldade: number,
@@ -231,9 +230,9 @@ export const userService = {
     } catch {
       return { success: false, message: erroServidor };
     }
-  },
+  }
 
-  async carregarAtividades(setAtividades: (atividades: Atividade[]) => void) {
+  export async function carregarAtividades(setAtividades: (atividades: Atividade[]) => void) {
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_ACTIVITIES));
       const data = await response.json();
@@ -247,9 +246,9 @@ export const userService = {
     } catch {
       return { success: false, message: erroServidor };
     }
-  },
+  }
   
-  async carregarResumoEstatisticas(
+  export async function carregarResumoEstatisticas(
     setResumoEstatisticas: (resumo: ResumoEstatisticas) => void
   ) {
     try {
@@ -268,9 +267,9 @@ export const userService = {
     } catch {
       return { success: false, message: erroServidor };
     }
-  },
+  }
   
-  async carregarMelhoresEstatisticas(
+  export async function carregarMelhoresEstatisticas(
     setMelhoresEstatisticas: (melhores: MelhoresEstatisticas) => void
   ) {
     try {
@@ -289,9 +288,9 @@ export const userService = {
     } catch {
       return { success: false, message: erroServidor };
     }
-  },
+  }
   
-  async carregarPreferencias(setPreferencias: (preferencias: Preferencias) => void) {
+  export async function carregarPreferencias(setPreferencias: (preferencias: Preferencias) => void) {
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_PREFERENCES));
       const data = await response.json();
@@ -308,6 +307,6 @@ export const userService = {
     } catch {
       return { success: false, message: erroServidor };
     }
-  },
+  }
   
-};
+

@@ -7,8 +7,8 @@ import { PauseUnpauseButton } from '@/src/components/pauseUnpauseButton';
 import { FinishActivityButton } from '@/src/components/finishActivityButton';
 import { COLORS } from '@/src/constants/Colors';
 import Tomato from '../../../assets/images/tomato-icon.svg';
-import { userService } from '@/src/services/api/user';
 import { styles } from './styles';
+import { cadastrarAtividade, carregarPreferencias, carregarResumoEstatisticas } from '@/src/services/api/user';
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -40,8 +40,8 @@ export default function Pomodoro() {
   const difficultyLevel = Number(selectedDifficulty);
 
   useEffect(() => {
-    userService.carregarResumoEstatisticas(setResumoEstatisticas);
-    userService.carregarPreferencias(setPreferencias);
+    carregarResumoEstatisticas(setResumoEstatisticas);
+    carregarPreferencias(setPreferencias);
   }, []);
 
   useEffect(() => {
@@ -93,7 +93,7 @@ export default function Pomodoro() {
       }
       return;
     }
-    userService.cadastrarAtividade(
+    cadastrarAtividade(
       String(titulo),
       String(descricao),
       difficultyLevel,

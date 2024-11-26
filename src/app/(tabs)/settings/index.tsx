@@ -1,13 +1,13 @@
 import { Alert, View } from 'react-native';
 import { styles } from './styles';
 import { useEffect, useState } from 'react';
-import { userService } from '@/src/services/api/user';
 import LoadingScreen from '@/src/components/loadindScreen';
 import { SummaryStats } from '@/src/components/summaryStats';
 import { FormInput } from '@/src/components/formInput';
 import { SolidButton } from '@/src/components/solidButton';
 import { passwordsMatch } from '@/src/utils/validators';
 import { MessageAlert } from '@/src/components/messageAlert';
+import { atualizarUsuario, carregarResumoEstatisticas, carregarUsuario } from '@/src/services/api/user';
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -38,8 +38,8 @@ export default function Settings() {
   useEffect(() => {
     async function carregarDados() {
       await Promise.all([
-        userService.carregarResumoEstatisticas(setResumoEstatisticas),
-        userService.carregarUsuario(setInformacoes)
+        carregarResumoEstatisticas(setResumoEstatisticas),
+        carregarUsuario(setInformacoes)
       ]);
       setLoading(false);
     }
@@ -67,7 +67,7 @@ export default function Settings() {
       novaSenha: senha || undefined
     };
 
-    const success = await userService.atualizarUsuario(userData);
+    const success = await atualizarUsuario(userData);
     if (success) {
       setSenha('');
       setConfirmarSenha('');
@@ -77,7 +77,7 @@ export default function Settings() {
       message = "Dados atualizados com sucesso!"
       setVisible(true);
       
-      userService.carregarUsuario(setInformacoes);
+      carregarUsuario(setInformacoes);
     }
   }
 

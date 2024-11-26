@@ -9,7 +9,7 @@ import { styles } from './styles';
 import { validateEmail, validateFields } from '@/src/utils/validators';
 import { LoadFont } from '@/src/utils/loadFont';
 import LoadingScreen from '@/src/components/loadindScreen';
-import { userService } from '@/src/services/api/user';
+import { checkToken, forgotPassword, login } from '@/src/services/api/user';
 
 export default function Index() {
   const [email, setEmail] = useState('');
@@ -21,7 +21,7 @@ export default function Index() {
   useEffect(() => {
     async function initializeApp() {
       try {
-        await userService.checkToken(setLoading);
+        await checkToken(setLoading);
       } catch (error) {
         console.error('Erro na inicialização:', error);
         setLoading(false); 
@@ -39,13 +39,13 @@ export default function Index() {
 
   function handleEnter() {
     if (validateFields({ email, senha }) && validateEmail(email)) {
-      userService.login(email, senha);
+      login(email, senha);
     }
   }
 
   function handleForgotPassword() {
     if (validateFields({ email }) && validateEmail(email)) {
-      userService.forgotPassword(email);
+      forgotPassword(email);
     }
   }
 

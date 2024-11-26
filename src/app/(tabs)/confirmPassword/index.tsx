@@ -1,11 +1,11 @@
 import { Alert, View } from 'react-native';
 import { styles } from './styles';
 import { useEffect, useState } from 'react';
-import { userService } from '@/src/services/api/user';
 import LoadingScreen from '@/src/components/loadindScreen';
 import { SummaryStats } from '@/src/components/summaryStats';
 import { FormInput } from '@/src/components/formInput';
 import { SolidButton } from '@/src/components/solidButton';
+import { carregarResumoEstatisticas, reauthenticateUser } from '@/src/services/api/user';
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -22,7 +22,7 @@ export default function ConfirmPassword() {
 
   useEffect(() => {
     async function carregarDados() {
-      userService.carregarResumoEstatisticas(setResumoEstatisticas);
+      carregarResumoEstatisticas(setResumoEstatisticas);
       setLoading(false)
     }
     carregarDados();
@@ -33,7 +33,7 @@ export default function ConfirmPassword() {
   }
 
   function handleNext() {
-    userService.reauthenticateUser(senha);
+    reauthenticateUser(senha);
   }
 
  return (

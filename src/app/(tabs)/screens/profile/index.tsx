@@ -2,11 +2,11 @@ import { Text, View } from "react-native";
 import { styles } from "./styles";
 import { Link, router } from "expo-router";
 import { useEffect, useState } from "react";
-import { userService } from "@/src/services/api/user";
 import { SummaryStats } from "@/src/components/summaryStats";
 import { SolidButton } from "@/src/components/solidButton";
 import { BestStats } from "@/src/components/bestStats";
 import LoadingScreen from "@/src/components/loadindScreen";
+import { carregarMelhoresEstatisticas, carregarResumoEstatisticas, carregarUsuario, logout } from "@/src/services/api/user";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -42,9 +42,9 @@ export default function Profile() {
 
   useEffect(() => {
     async function carregarDados() {
-      userService.carregarResumoEstatisticas(setResumoEstatisticas);
-      userService.carregarUsuario(setInformacoes);
-      userService.carregarMelhoresEstatisticas(setMelhoresEstatisticas);
+      carregarResumoEstatisticas(setResumoEstatisticas);
+      carregarUsuario(setInformacoes);
+      carregarMelhoresEstatisticas(setMelhoresEstatisticas);
       setLoading(false)
     }
     carregarDados();
@@ -55,7 +55,7 @@ export default function Profile() {
   }
 
   function handleLeaveAccount(){
-    userService.logout();
+    logout();
   }
 
   if (loading) {

@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 import { styles } from "./styles";
 import { useEffect, useState } from "react";
-import { userService } from "@/src/services/api/user";
 import { SummaryStats } from "@/src/components/summaryStats";
 import LoadingScreen from "@/src/components/loadindScreen";
+import { carregarResumoEstatisticas } from "@/src/services/api/user";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -19,7 +19,7 @@ export default function Shop() {
 
   useEffect(() => {
     async function carregarDados() {
-      userService.carregarResumoEstatisticas(setResumoEstatisticas);
+      carregarResumoEstatisticas(setResumoEstatisticas);
       setLoading(false)
     }
     carregarDados();

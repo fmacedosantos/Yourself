@@ -4,8 +4,8 @@ import { Title } from '../../../../components/title';
 import { SummaryStats } from '../../../../components/summaryStats';
 import { Activity } from '../../../../components/activity';
 import { styles } from './styles';
-import { userService } from '@/src/services/api/user';
 import LoadingScreen from '@/src/components/loadindScreen';
+import { carregarAtividades, carregarResumoEstatisticas } from '@/src/services/api/user';
 
 interface Atividade {
   id: string;
@@ -33,8 +33,8 @@ export default function Home() {
 
   useEffect(() => {
     async function carregarDados() {
-      await userService.carregarAtividades(setAtividades);
-      await userService.carregarResumoEstatisticas(setResumoEstatisticas);
+      await carregarAtividades(setAtividades);
+      await carregarResumoEstatisticas(setResumoEstatisticas);
       setLoading(false); 
     }
 
