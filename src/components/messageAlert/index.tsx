@@ -4,7 +4,6 @@ import { styles } from './styles';
 
 type MessageAlertProps = {
   type: 1 | 2; 
-  title: string;
   message: string;
   visible: boolean;
   onConfirm?: () => void; 
@@ -13,7 +12,6 @@ type MessageAlertProps = {
 
 export function MessageAlert({
   type,
-  title,
   message,
   visible,
   onConfirm,
@@ -27,7 +25,7 @@ export function MessageAlert({
     >
       <View style={styles.overlay}>
         <View style={styles.alertBox}>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title}>Comunicado:</Text>
           <Text style={styles.message}>{message}</Text>
 
           <View

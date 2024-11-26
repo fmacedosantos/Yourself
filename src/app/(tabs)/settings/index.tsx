@@ -102,7 +102,6 @@ export default function Settings() {
       />
       <MessageAlert
         type={1}
-        title="Aviso:"
         message="Dados atualizados com sucesso!"
         visible={visible}
         onCancel={() => setVisible(false)}

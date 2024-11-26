@@ -6,6 +6,8 @@ import { SummaryStats } from '@/src/components/summaryStats';
 import { FormInput } from '@/src/components/formInput';
 import { SolidButton } from '@/src/components/solidButton';
 import { carregarResumoEstatisticas, reauthenticateUser } from '@/src/services/api/user';
+import { router } from 'expo-router';
+import { MessageAlert } from '@/src/components/messageAlert';
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -20,6 +22,9 @@ export default function ConfirmPassword() {
   const [loading, setLoading] = useState(true); 
   const [senha, setSenha] = useState('');
 
+  const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState('');
+
   useEffect(() => {
     async function carregarDados() {
       carregarResumoEstatisticas(setResumoEstatisticas);
@@ -32,8 +37,15 @@ export default function ConfirmPassword() {
     return <LoadingScreen />; 
   }
 
-  function handleNext() {
-    reauthenticateUser(senha);
+  async function handleNext() {
+    const { success, message } = await reauthenticateUser(senha);
+
+    if (success) {
+      router.replace('/(tabs)/settings');
+    } else {
+      setVisible(true);
+      setMessage(message);
+    }
   }
 
  return (
@@ -44,6 +56,12 @@ export default function ConfirmPassword() {
       ofensiva={resumoEstatisticas.ofensiva} 
       pontos={resumoEstatisticas.pontos}
     />
+    <MessageAlert
+        type={1}
+        message={message}
+        visible={visible}
+        onCancel={() => setVisible(false)}
+      />
 
     <FormInput value={senha} onChangeText={setSenha} placeholder='confirme sua identidade' label='Senha' isPassword={true}/>
     <SolidButton title='Avançar' action={handleNext}/>
