@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Alert, Platform, Text, View } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { SummaryStats } from '@/src/components/summaryStats';
 import { Title } from '@/src/components/title';
 import { PauseUnpauseButton } from '@/src/components/pauseUnpauseButton';
@@ -10,6 +10,7 @@ import Tomato from '../../../assets/images/tomato-icon.svg';
 import { styles } from './styles';
 import { cadastrarAtividade, carregarPreferencias, carregarResumoEstatisticas } from '@/src/services/api/user';
 import LoadingScreen from '@/src/components/loadindScreen';
+import { MessageAlert } from '@/src/components/messageAlert';
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -30,6 +31,8 @@ export default function Pomodoro() {
   const [isConcentracao, setIsConcentracao] = useState(true);
   const [timeLeft, setTimeLeft] = useState(0);
   const [tempoTotalConcentracao, setTempoTotalConcentracao] = useState(0);
+  const [message, setMessage] = useState('');
+  const [visible, setVisible] = useState(false);
 
   const difficultyLevel = Number(selectedDifficulty);
 
@@ -82,7 +85,7 @@ export default function Pomodoro() {
     setIsPaused((prev) => !prev);
   };
 
-  const handleFinishActivity = () => {
+  async function handleFinishActivity() {
     const minutosConcentradosNoCicloAtual = isConcentracao
       ? Math.floor((preferencias.preferenciaConcentracao * 60 - timeLeft) / 60)
       : 0;
@@ -90,21 +93,19 @@ export default function Pomodoro() {
     const tempoTotal = tempoTotalConcentracao + minutosConcentradosNoCicloAtual;
     
     if (tempoTotal < 1) {
-      const mensagemErro = 'É necessário um tempo de concentração de, no mínimo 1 minuto, para concluir uma atividade.';
-      if (Platform.OS === 'web') {
-        window.alert(mensagemErro);
-      } else {
-        Alert.alert('Erro', mensagemErro);
-      }
+      setIsPaused(true);
+      setMessage('É necessário um tempo de concentração de, no mínimo 1 minuto, para concluir uma atividade.');
+      setVisible(true);
       return;
     }
-    cadastrarAtividade(
-      String(titulo),
-      String(descricao),
-      difficultyLevel,
-      String(categoria),
-      tempoTotal 
-    );
+    const {success, message} = await cadastrarAtividade(String(titulo), String(descricao), difficultyLevel, String(categoria), tempoTotal);
+    if (success) {
+      router.replace('/(tabs)/screens/home');
+    } else {
+      setIsPaused(true);
+      setMessage(message);
+      setVisible(true);
+    }
   };
 
   const formatTime = (seconds: number) => {
@@ -138,6 +139,13 @@ export default function Pomodoro() {
       <Tomato 
         width={250} 
         height={250} 
+      />
+
+      <MessageAlert
+        type={1}
+        message={message}
+        visible={visible}
+        onCancel={() => setVisible(false)}
       />
       
       <View style={styles.buttonContainer}>
