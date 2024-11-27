@@ -23,16 +23,8 @@ interface Preferencias {
 
 export default function Pomodoro() {
   const { titulo, descricao, selectedDifficulty, categoria } = useLocalSearchParams();
-  const [resumoEstatisticas, setResumoEstatisticas] = useState<ResumoEstatisticas>({
-    ofensiva: 0,
-    pontos: 0,
-  });
-
-  const [preferencias, setPreferencias] = useState<Preferencias>({
-    preferenciaConcentracao: 0,
-    preferenciaDescanso: 0,
-  });
-
+  const [resumoEstatisticas, setResumoEstatisticas] = useState<ResumoEstatisticas>({ ofensiva: 0, pontos: 0 });
+  const [preferencias, setPreferencias] = useState<Preferencias>({ preferenciaConcentracao: 0, preferenciaDescanso: 0 });
   const [loading, setLoading] = useState(true); 
   const [isPaused, setIsPaused] = useState(false);
   const [isConcentracao, setIsConcentracao] = useState(true);
@@ -47,17 +39,14 @@ export default function Pomodoro() {
       await carregarPreferencias(setPreferencias);
       setLoading(false);
     }
-
     carregarDados();
   }, []);
 
-  if (loading) {
-    return <LoadingScreen />; 
-  }
-
   useEffect(() => {
-    setTimeLeft(preferencias.preferenciaConcentracao * 60);
-  }, [preferencias]);
+    if (!loading) {
+      setTimeLeft(preferencias.preferenciaConcentracao * 60);
+    }
+  }, [loading, preferencias.preferenciaConcentracao]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
@@ -118,6 +107,10 @@ export default function Pomodoro() {
     const secs = seconds % 60;
     return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   };
+
+  if (loading) {
+    return <LoadingScreen />; 
+  }
 
   return (
     <View style={styles.container}>
