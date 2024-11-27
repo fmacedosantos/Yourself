@@ -121,46 +121,41 @@ export async function register(email: string, nome: string, apelido: string, sen
     }
   }
 
-  export async function checkToken(setLoading: (value: boolean) => void) {
+  export async function checkToken() {
     try {
-      const user = firebase.auth().currentUser;
+      const token = await AsyncStorage.getItem('jwt');
+      const loginDate = await AsyncStorage.getItem('loginDate');
   
-      if (user) {
-        const token = await AsyncStorage.getItem('jwt');
-        const loginDate = await AsyncStorage.getItem('loginDate');
-  
-        if (token && loginDate) {
-          const now = new Date();
-          const loginDateTime = new Date(loginDate);
-          const diffMinutes = (Number(now) - Number(loginDateTime)) / (1000 * 60);
-  
-          if (diffMinutes >= 50) {
-            try {
-              const newToken = await user.getIdToken(true); 
-              await AsyncStorage.setItem('jwt', newToken);
-              await AsyncStorage.setItem('loginDate', new Date().toISOString());
-              return { success: true, message: 'Token renovado com sucesso!' };
-            } catch {
-              await logout();
-              router.replace('/'); // Adicione navegação aqui
-              return { success: false, message: 'Sua sessão expirou. Faça login novamente.' };
-            }
-          } else {
-            router.replace('/(tabs)/screens/home'); // Navegue automaticamente se o token for válido
-            return { success: true, message: 'Token válido.' };
-          }
-        } else {
-          await logout();
-          router.replace('/');
-          return { success: false, message: 'Sessão inválida. Faça login novamente.' };
-        }
-      } else {
-        return { success: false, message: 'Usuário não autenticado.' };
+      if (!token || !loginDate) {
+        return { success: false, message: 'Sessão inválida. Faça login novamente.' };
       }
-    } catch {
-      return { success: false, message: erroServidor };
-    } finally {
-      setLoading(false); 
+  
+      const now = new Date();
+      const loginDateTime = new Date(loginDate);
+      const diffMinutes = (Number(now) - Number(loginDateTime)) / (1000 * 60);
+  
+      if (diffMinutes >= 50) {
+        try {
+          const user = firebase.auth().currentUser;
+          if (!user) {
+            await logout();
+            return { success: false, message: 'Usuário não autenticado.' };
+          }
+  
+          const newToken = await user.getIdToken(true);
+          await AsyncStorage.setItem('jwt', newToken);
+          await AsyncStorage.setItem('loginDate', new Date().toISOString());
+          return { success: true, message: 'Token renovado com sucesso!' };
+        } catch (error) {
+          await logout();
+          return { success: false, message: 'Não foi possível renovar a sessão.' };
+        }
+      }
+  
+      return { success: true, message: 'Token válido.' };
+    } catch (error) {
+      await logout();
+      return { success: false, message: 'Erro na verificação da sessão.' };
     }
   }
 

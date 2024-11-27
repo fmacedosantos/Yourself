@@ -21,9 +21,11 @@ export default function Index() {
   useEffect(() => {
     const initializeApp = async () => {
       try {
-        const result = await checkToken(setLoading);
-        if (!result.success) {
-          // Se o token for inválido, deixe na tela de login
+        const token = await checkToken();
+        
+        if (token.success) {
+          router.replace('/(tabs)/screens/home');
+        } else {
           setLoading(false);
         }
       } catch (error) {
@@ -32,7 +34,7 @@ export default function Index() {
       }
     };
   
-    if (fontsLoaded) { 
+    if (fontsLoaded) {
       initializeApp();
     }
   }, [fontsLoaded]);
