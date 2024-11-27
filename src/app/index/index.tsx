@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { LogBox, Text, View } from 'react-native';
 import { FormInput } from "../../components/formInput";
 import YourselfTitle from '../../assets/images/yourself-title.svg';
 import { router } from "expo-router";
@@ -42,6 +42,13 @@ export default function Index() {
   if (!fontsLoaded || loading) {
     return <LoadingScreen />;
   }
+
+  LogBox.ignoreLogs([
+    'await in (anonymous)',
+    'performFetchWithErrorHandling',
+    'signInWithPassword',
+    'VirtualizedList',
+  ]);
 
   function handleEnter() {
     if (validateFields({ email, senha }) && validateEmail(email)) {

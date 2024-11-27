@@ -66,7 +66,7 @@ export async function register(email: string, nome: string, apelido: string, sen
   export async function login(email: string, senha: string) {
     try {
       const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
-
+  
       if (userCredential.user) {
         const token = await userCredential.user.getIdToken(true);
         await AsyncStorage.setItem('jwt', token);
@@ -75,11 +75,15 @@ export async function register(email: string, nome: string, apelido: string, sen
         return { success: true, message: 'Login realizado com sucesso!' };
       }
     } catch (error) {
-      const err = error as { code?: string };
+      const err = error as { code?: string }; 
+      
+      console.error('Login Error:', error);
+  
       const message =
         err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password'
           ? 'Usuário ou senha incorretos.'
           : 'Erro ao realizar login.';
+      
       return { success: false, message };
     }
   }
@@ -104,20 +108,37 @@ export async function register(email: string, nome: string, apelido: string, sen
   }
 
   export async function reauthenticateUser(senha: string) {
-    const user = firebase.auth().currentUser;
-    if (user) {
-      const credential = firebase.auth.EmailAuthProvider.credential(
-        user.email as string,
-        senha
-      );
-      try {
-        await user.reauthenticateWithCredential(credential);
-        return { success: true, message: 'Reautenticação realizada com sucesso!' };
-      } catch {
-        return { success: false, message: 'Senha incorreta. Tente novamente.' };
+    try {
+      const user = firebase.auth().currentUser;
+      
+      if (!user || !user.email) {
+        return { success: false, message: 'Usuário não encontrado.' };
       }
-    } else {
-      return { success: false, message: 'Usuário não encontrado.' };
+  
+      await firebase.auth().signInWithEmailAndPassword(user.email, senha);
+
+      console.log('Tentando reautenticação com email:', user.email);
+      
+      return { success: true, message: 'Reautenticação realizada com sucesso!' };
+    } catch (error: any) {
+      
+      
+    console.log('Erro:', error);
+    console.log('Detalhes do erro:', error.code, error.message);
+      if (error.code) {
+        switch (error.code) {
+          case 'auth/wrong-password':
+            return { success: false, message: 'Senha incorreta. Tente novamente.' };
+          case 'auth/user-not-found':
+            return { success: false, message: 'Usuário não encontrado.' };
+          case 'auth/invalid-credential':
+            return { success: false, message: 'Credenciais inválidas.' };
+          default:
+            return { success: false, message: 'Erro na autenticação. Tente novamente.' };
+        }
+      }
+  
+      return { success: false, message: 'Erro desconhecido na autenticação.' };
     }
   }
 

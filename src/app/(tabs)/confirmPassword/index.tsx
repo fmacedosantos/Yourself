@@ -38,6 +38,11 @@ export default function ConfirmPassword() {
   }
 
   async function handleNext() {
+    if (!senha) {
+      setVisible(true);
+      setMessage('Insira a senha para prosseguir!');
+      return;
+    }
     const { success, message } = await reauthenticateUser(senha);
 
     if (success) {
