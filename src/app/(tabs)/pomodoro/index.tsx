@@ -35,9 +35,14 @@ export default function Pomodoro() {
 
   useEffect(() => {
     async function carregarDados() {
-      await carregarResumoEstatisticas(setResumoEstatisticas);
-      await carregarPreferencias(setPreferencias);
-      setLoading(false);
+      try {
+        await carregarResumoEstatisticas(setResumoEstatisticas);
+        await carregarPreferencias(setPreferencias);
+      } catch (error) {
+        console.error('Erro ao carregar dados:', error);
+      } finally {
+        setLoading(false);
+      }
     }
     carregarDados();
   }, []);
