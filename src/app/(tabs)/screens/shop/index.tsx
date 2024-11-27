@@ -19,7 +19,7 @@ export default function Shop() {
 
   useEffect(() => {
     async function carregarDados() {
-      carregarResumoEstatisticas(setResumoEstatisticas);
+      await carregarResumoEstatisticas(setResumoEstatisticas);
       setLoading(false)
     }
     carregarDados();

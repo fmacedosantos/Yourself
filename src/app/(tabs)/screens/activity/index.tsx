@@ -31,7 +31,7 @@ export default function AddNewActivity() {
 
   useEffect(() => {
     async function carregarDados() {
-      carregarResumoEstatisticas(setResumoEstatisticas);
+      await carregarResumoEstatisticas(setResumoEstatisticas);
       setLoading(false)
     }
     carregarDados();

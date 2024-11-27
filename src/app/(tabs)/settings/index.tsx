@@ -37,10 +37,8 @@ export default function Settings() {
 
   useEffect(() => {
     async function carregarDados() {
-      await Promise.all([
-        carregarResumoEstatisticas(setResumoEstatisticas),
-        carregarUsuario(setInformacoes)
-      ]);
+      await carregarResumoEstatisticas(setResumoEstatisticas);
+      await carregarUsuario(setInformacoes);
       setLoading(false);
     }
     carregarDados();

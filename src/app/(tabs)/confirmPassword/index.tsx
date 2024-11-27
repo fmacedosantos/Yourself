@@ -27,8 +27,8 @@ export default function ConfirmPassword() {
 
   useEffect(() => {
     async function carregarDados() {
-      carregarResumoEstatisticas(setResumoEstatisticas);
-      setLoading(false)
+      await carregarResumoEstatisticas(setResumoEstatisticas);
+      setLoading(false);
     }
     carregarDados();
   }, []);  

@@ -9,6 +9,7 @@ import { COLORS } from '@/src/constants/Colors';
 import Tomato from '../../../assets/images/tomato-icon.svg';
 import { styles } from './styles';
 import { cadastrarAtividade, carregarPreferencias, carregarResumoEstatisticas } from '@/src/services/api/user';
+import LoadingScreen from '@/src/components/loadindScreen';
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -32,6 +33,7 @@ export default function Pomodoro() {
     preferenciaDescanso: 0,
   });
 
+  const [loading, setLoading] = useState(true); 
   const [isPaused, setIsPaused] = useState(false);
   const [isConcentracao, setIsConcentracao] = useState(true);
   const [timeLeft, setTimeLeft] = useState(0);
@@ -40,9 +42,18 @@ export default function Pomodoro() {
   const difficultyLevel = Number(selectedDifficulty);
 
   useEffect(() => {
-    carregarResumoEstatisticas(setResumoEstatisticas);
-    carregarPreferencias(setPreferencias);
+    async function carregarDados() {
+      await carregarResumoEstatisticas(setResumoEstatisticas);
+      await carregarPreferencias(setPreferencias);
+      setLoading(false);
+    }
+
+    carregarDados();
   }, []);
+
+  if (loading) {
+    return <LoadingScreen />; 
+  }
 
   useEffect(() => {
     setTimeLeft(preferencias.preferenciaConcentracao * 60);
