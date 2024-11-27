@@ -95,12 +95,11 @@ export async function register(email: string, nome: string, apelido: string, sen
 
   export async function logout() {
     try {
-      await AsyncStorage.removeItem('jwt');
-      await AsyncStorage.removeItem('loginDate');
+      await AsyncStorage.multiRemove(['jwt', 'loginDate']);
+      await firebase.auth().signOut(); 
       router.replace('/');
-      return { success: true, message: 'Logout realizado com sucesso!' };
-    } catch {
-      return { success: false, message: 'Erro ao realizar logout.' };
+    } catch (error) {
+      console.error('Erro ao realizar logout:', error);
     }
   }
 
@@ -125,16 +124,16 @@ export async function register(email: string, nome: string, apelido: string, sen
   export async function checkToken(setLoading: (value: boolean) => void) {
     try {
       const user = firebase.auth().currentUser;
-
+  
       if (user) {
         const token = await AsyncStorage.getItem('jwt');
         const loginDate = await AsyncStorage.getItem('loginDate');
-
+  
         if (token && loginDate) {
           const now = new Date();
           const loginDateTime = new Date(loginDate);
           const diffMinutes = (Number(now) - Number(loginDateTime)) / (1000 * 60);
-
+  
           if (diffMinutes >= 50) {
             try {
               const newToken = await user.getIdToken(true); 
@@ -143,13 +142,16 @@ export async function register(email: string, nome: string, apelido: string, sen
               return { success: true, message: 'Token renovado com sucesso!' };
             } catch {
               await logout();
+              router.replace('/'); // Adicione navegação aqui
               return { success: false, message: 'Sua sessão expirou. Faça login novamente.' };
             }
           } else {
+            router.replace('/(tabs)/screens/home'); // Navegue automaticamente se o token for válido
             return { success: true, message: 'Token válido.' };
           }
         } else {
           await logout();
+          router.replace('/');
           return { success: false, message: 'Sessão inválida. Faça login novamente.' };
         }
       } else {
@@ -201,7 +203,7 @@ export async function register(email: string, nome: string, apelido: string, sen
         });
         return { success: true, message: 'Dados carregados com sucesso!' };
       } else {
-        return { success: false, message: 'Erro ao buscar informações do usuário.' };
+        return { success: false, message: data.message || 'Erro ao buscar informações do usuário.' };
       }
     } catch {
       return { success: false, message: erroServidor };

@@ -42,10 +42,10 @@ export default function Profile() {
 
   useEffect(() => {
     async function carregarDados() {
-      carregarResumoEstatisticas(setResumoEstatisticas);
-      carregarUsuario(setInformacoes);
-      carregarMelhoresEstatisticas(setMelhoresEstatisticas);
-      setLoading(false)
+       await carregarResumoEstatisticas(setResumoEstatisticas);
+       await carregarUsuario(setInformacoes);
+       await carregarMelhoresEstatisticas(setMelhoresEstatisticas);
+      setLoading(false);
     }
     carregarDados();
   }, []);  
@@ -54,8 +54,8 @@ export default function Profile() {
     router.navigate('/(tabs)/confirmPassword');
   }
 
-  function handleLeaveAccount(){
-    logout();
+  async function handleLeaveAccount(){
+    await logout();
   }
 
   if (loading) {

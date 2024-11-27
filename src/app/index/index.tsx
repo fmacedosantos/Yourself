@@ -19,19 +19,23 @@ export default function Index() {
   const fontsLoaded = LoadFont();
 
   useEffect(() => {
-    async function initializeApp() {
+    const initializeApp = async () => {
       try {
-        await checkToken(setLoading);
+        const result = await checkToken(setLoading);
+        if (!result.success) {
+          // Se o token for inválido, deixe na tela de login
+          setLoading(false);
+        }
       } catch (error) {
         console.error('Erro na inicialização:', error);
-        setLoading(false); 
+        setLoading(false);
       }
-    }
-
+    };
+  
     if (fontsLoaded) { 
       initializeApp();
     }
-  }, [fontsLoaded]); 
+  }, [fontsLoaded]);
 
   if (!fontsLoaded || loading) {
     return <LoadingScreen />;
