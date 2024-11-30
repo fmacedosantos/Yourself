@@ -52,9 +52,10 @@ export async function register(email: string, nome: string, apelido: string, sen
 
       const data = await response.json();
 
-      if (response.ok) {
-        await login(email, senha);
-        return { success: true, message: 'Cadastro realizado com sucesso!' };
+      if (response.ok && data.success) {
+        const { success, message } = await login(email, senha);
+        router.replace('/(tabs)/screens/home');
+        return { success: success, message: message };
       } else {
         return { success: false, message: data.message || 'Erro ao realizar cadastro.' };
       }
@@ -65,26 +66,40 @@ export async function register(email: string, nome: string, apelido: string, sen
 
   export async function login(email: string, senha: string) {
     try {
-      const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
+      const response = await fetch(ROUTES(PATHS.AUTHENTICATE), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha }),
+      });
+
+      const data = await response.json();
+      const success = data.success;
+      const message = data.message;
+
+      if (response.ok) {
+
+        if (success) {
+          const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
   
-      if (userCredential.user) {
-        const token = await userCredential.user.getIdToken(true);
-        await AsyncStorage.setItem('jwt', token);
-        await AsyncStorage.setItem('loginDate', new Date().toISOString());
-        router.replace('/(tabs)/screens/home');
-        return { success: true, message: 'Login realizado com sucesso!' };
+          if (userCredential.user) {
+            const token = await userCredential.user.getIdToken(true);
+            await AsyncStorage.setItem('jwt', token);
+            await AsyncStorage.setItem('loginDate', new Date().toISOString());
+            
+            return { success: success, message: message };
+          } else {
+            return { success: false, message: message || 'Erro ao autenticar usuário.' };
+          }
+        }  else {
+          return { success: false, message: message || 'Erro ao autenticar usuário.' };
+        }
+        
+      } else {
+        return { success: false, message: message || 'Erro ao autenticar usuário.' };
       }
-    } catch (error) {
-      const err = error as { code?: string }; 
       
-      console.error('Login Error:', error);
-  
-      const message =
-        err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password'
-          ? 'Usuário ou senha incorretos.'
-          : 'Erro ao realizar login.';
-      
-      return { success: false, message };
+    } catch {
+      return { success: false, message: erroServidor };
     }
   }
 
@@ -211,11 +226,11 @@ export async function register(email: string, nome: string, apelido: string, sen
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_USER));
       const data = await response.json();
 
-      if (response.ok && data.dadosUsuario) {
+      if (response.ok && data.data) {
         setInformacoes({
-          nome: data.dadosUsuario.nome,
-          apelido: data.dadosUsuario.apelido,
-          anoRegistro: data.dadosUsuario.anoRegistro,
+          nome: data.data.nome,
+          apelido: data.data.apelido,
+          anoRegistro: data.data.anoRegistro,
         });
         return { success: true, message: 'Dados carregados com sucesso!' };
       } else {
@@ -255,8 +270,8 @@ export async function register(email: string, nome: string, apelido: string, sen
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_ACTIVITIES));
       const data = await response.json();
   
-      if (response.ok && data.dadosAtividades) {
-        setAtividades(data.dadosAtividades as Atividade[]);
+      if (response.ok && data.data) {
+        setAtividades(data.data as Atividade[]);
         return { success: true, message: 'Atividades carregadas com sucesso!' };
       } else {
         return { success: false, message: 'Erro ao buscar atividades.' };
@@ -273,10 +288,10 @@ export async function register(email: string, nome: string, apelido: string, sen
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_STATS));
       const data = await response.json();
   
-      if (response.ok && data.dadosEstatisticas) {
+      if (response.ok && data.data) {
         setResumoEstatisticas({
-          ofensiva: data.dadosEstatisticas.ofensiva,
-          pontos: data.dadosEstatisticas.pontos,
+          ofensiva: data.data.ofensiva,
+          pontos: data.data.pontos,
         });
         return { success: true, message: 'Resumo estatístico carregado com sucesso!' };
       } else {
@@ -294,10 +309,10 @@ export async function register(email: string, nome: string, apelido: string, sen
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_STATS));
       const data = await response.json();
   
-      if (response.ok && data.dadosEstatisticas) {
+      if (response.ok && data.data) {
         setMelhoresEstatisticas({
-          maiorOfensiva: data.dadosEstatisticas.maiorOfensiva,
-          totalPontos: data.dadosEstatisticas.totalPontos,
+          maiorOfensiva: data.data.maiorOfensiva,
+          totalPontos: data.data.totalPontos,
         });
         return { success: true, message: 'Melhores estatísticas carregadas com sucesso!' };
       } else {
@@ -313,10 +328,10 @@ export async function register(email: string, nome: string, apelido: string, sen
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_PREFERENCES));
       const data = await response.json();
   
-      if (response.ok && data.dadosPreferencias) {
+      if (response.ok && data.data) {
         setPreferencias({
-          preferenciaConcentracao: data.dadosPreferencias.preferenciaConcentracao,
-          preferenciaDescanso: data.dadosPreferencias.preferenciaDescanso,
+          preferenciaConcentracao: data.data.preferenciaConcentracao,
+          preferenciaDescanso: data.data.preferenciaDescanso,
         });
         return { success: true, message: 'Preferências carregadas com sucesso!' };
       } else {
