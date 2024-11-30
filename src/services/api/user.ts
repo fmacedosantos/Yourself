@@ -42,7 +42,7 @@ interface UpdateUserData {
 
 const erroServidor = 'Encontramos problemas ao conectar com o servidor.';
 
-export async function register(email: string, nome: string, apelido: string, senha: string) {
+export async function register(email: string, nome: string, apelido: string, senha: string) { // ok
     try {
       const response = await fetch(ROUTES(PATHS.REGISTER_USER), {
         method: 'POST',
@@ -64,7 +64,7 @@ export async function register(email: string, nome: string, apelido: string, sen
     }
   }
 
-  export async function login(email: string, senha: string) {
+  export async function login(email: string, senha: string) { // ok
     try {
       const response = await fetch(ROUTES(PATHS.AUTHENTICATE), {
         method: 'POST',
@@ -103,7 +103,7 @@ export async function register(email: string, nome: string, apelido: string, sen
     }
   }
 
-  export async function forgotPassword(email: string) {
+  export async function forgotPassword(email: string) { // ok
     try {
       await firebase.auth().sendPasswordResetEmail(email);
       return { success: true, message: 'E-mail de redefinição de senha enviado.' };
@@ -122,38 +122,37 @@ export async function register(email: string, nome: string, apelido: string, sen
     }
   }
 
-  export async function reauthenticateUser(senha: string) {
+  export async function reauthenticateUser(senha: string) { // ok
     try {
-      const user = firebase.auth().currentUser;
-      
-      if (!user || !user.email) {
-        return { success: false, message: 'Usuário não encontrado.' };
-      }
-  
-      await firebase.auth().signInWithEmailAndPassword(user.email, senha);
 
-      console.log('Tentando reautenticação com email:', user.email);
+      const response = await fetchWithAuth(ROUTES(PATHS.REAUTHENTICATE), {
+        method: 'POST',
+        body: JSON.stringify({ senha }),
+      });
+
+      const data = await response.json();
+      const success = data.success;
+      const message = data.message;
+
+      if (response.ok) {
+        if (success) {
+          const user = firebase.auth().currentUser;
       
-      return { success: true, message: 'Reautenticação realizada com sucesso!' };
-    } catch (error: any) {
-      
-      
-    console.log('Erro:', error);
-    console.log('Detalhes do erro:', error.code, error.message);
-      if (error.code) {
-        switch (error.code) {
-          case 'auth/wrong-password':
-            return { success: false, message: 'Senha incorreta. Tente novamente.' };
-          case 'auth/user-not-found':
+          if (!user || !user.email) {
             return { success: false, message: 'Usuário não encontrado.' };
-          case 'auth/invalid-credential':
-            return { success: false, message: 'Credenciais inválidas.' };
-          default:
-            return { success: false, message: 'Erro na autenticação. Tente novamente.' };
-        }
-      }
+          }
   
-      return { success: false, message: 'Erro desconhecido na autenticação.' };
+          await firebase.auth().signInWithEmailAndPassword(user.email, senha);
+      
+          return { success: true, message: 'Reautenticação realizada com sucesso!' };
+        } else {
+          return { success: false, message: message || 'Erro ao autenticar usuário.' };
+        }
+      } else {
+        return { success: false, message: message || 'Erro ao reautenticar usuário.' };
+      }
+    } catch {
+        return { success: false, message: erroServidor };
     }
   }
 

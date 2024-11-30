@@ -8,6 +8,7 @@ import { SolidButton } from '@/src/components/solidButton';
 import { carregarResumoEstatisticas, reauthenticateUser } from '@/src/services/api/user';
 import { router } from 'expo-router';
 import { MessageAlert } from '@/src/components/messageAlert';
+import { validateFields } from '@/src/utils/validators';
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -38,18 +39,21 @@ export default function ConfirmPassword() {
   }
 
   async function handleNext() {
-    if (!senha) {
+    
+    const fieldsValidate = validateFields({senha});
+
+    if (!fieldsValidate.success) {
       setVisible(true);
       setMessage('Insira a senha para prosseguir!');
-      return;
-    }
-    const { success, message } = await reauthenticateUser(senha);
-
-    if (success) {
-      router.replace('/(tabs)/settings');
     } else {
-      setVisible(true);
-      setMessage(message);
+      const { success, message } = await reauthenticateUser(senha);
+
+      if (success) {
+        router.replace('/(tabs)/settings');
+      } else {
+        setVisible(true);
+        setMessage(message);
+      }
     }
   }
 
