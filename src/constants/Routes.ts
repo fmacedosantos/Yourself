@@ -7,8 +7,14 @@ export enum PATHS {
     REGISTER_USER = 'usuario/cadastrar',
     REGISTER_ACTIVITY = 'atividade/cadastrar',
     SHOW_ITEMS = 'item/mostrar-todos',
+    SHOW_ITEMS_USER = 'item/mostrar',
     SHOW_USER = 'usuario/mostrar',
-    UPDATE_USER = 'usuario/atualizar'
+    UPDATE_USER = 'usuario/atualizar',
+    UPDATE_PREFERENCES = 'usuario/atualizar-preferencias',
+    AUTHENTICATE = 'usuario/autenticar',
+    REAUTHENTICATE = 'usuario/reautenticar',
+    AUTHENTICATE_JWT = 'usuario/autenticar-jwt',
+    BUY_ITEM = 'item/comprar',
 }
 
 export const ROUTES = (route: PATHS) => {
