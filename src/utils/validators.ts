@@ -1,42 +1,27 @@
 import { Alert, Platform } from "react-native";
 
-export function validateEmail(email: string): boolean {
+export function validateEmail(email: string) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
-    if (Platform.OS === 'web') {
-      window.alert('O formato do email está incorreto.');
-    } else {
-      Alert.alert("Erro", "O formato do email está incorreto.");
-    }
-    return false;
+    return {success: false, message: 'O formato do email está incorreto.'};
   }
-  return true;
+  return {success: true, message: 'O formato do email está correto.'};
 }
 
-export function validateFields(fields: { [key: string]: string | number | null }): boolean {
+export function validateFields(fields: { [key: string]: string | number | null }) {
   for (const [fieldName, fieldValue] of Object.entries(fields)) {
     if (fieldValue === "" || fieldValue === null || fieldValue === undefined) {
-      if (Platform.OS === 'web') {
-        window.alert(`Por favor, preencha o campo ${fieldName}.`);
-      } else {
-        Alert.alert("Erro", `Por favor, preencha o campo ${fieldName}.`);
-      }
-      return false;
+      return {success: false, message: `Por favor, preencha o campo ${fieldName}.`};
     }
   }
-  return true;
+  return {success: true, message: `Todos os campos estão preenchidos.`};;
 }
 
-export function passwordsMatch(senha: string, confirmarSenha: string): boolean{
+export function passwordsMatch(senha: string, confirmarSenha: string){
   if (senha !== confirmarSenha) {
-    if (Platform.OS === 'web') {
-      window.alert('As senhas não conferem!');
-    }  else {
-      Alert.alert('Erro', 'As senhas não conferem!');
-    }
-    return false;
+    return {success: false, message: `As senhas não conferem!`};
   }
-  return true;
+  return {success: true, message: 'As senhas conferem!'};
 }
 
 interface PasswordRequirement {
@@ -45,8 +30,8 @@ interface PasswordRequirement {
 }
 
 interface PasswordValidationResult {
-  isValid: boolean;
-  missingRequirements: string[];
+  success: boolean;
+  message: string;
 }
 
 const PASSWORD_REQUIREMENTS: PasswordRequirement[] = [
@@ -81,19 +66,8 @@ export function validatePasswordStrength(password: string): PasswordValidationRe
     }
   }
 
-  if (missingRequirements.length > 0) {
-    if (Platform.OS === 'web') {
-      window.alert("Sua senha deve conter:\n\n" + missingRequirements.map(req => "• " + req).join("\n"));
-    } else {
-      Alert.alert(
-        "Senha fraca",
-        "Sua senha deve conter:\n\n" + missingRequirements.map(req => "• " + req).join("\n")
-      );
-    }
-  }
-
   return {
-    isValid: missingRequirements.length === 0,
-    missingRequirements
+    success: missingRequirements.length === 0,
+    message: "Sua senha deve conter:\n\n" + missingRequirements.map(req => "• " + req).join("\n")
   };
 }
