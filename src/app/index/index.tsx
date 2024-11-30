@@ -10,11 +10,16 @@ import { validateEmail, validateFields } from '@/src/utils/validators';
 import { LoadFont } from '@/src/utils/loadFont';
 import LoadingScreen from '@/src/components/loadindScreen';
 import { checkToken, forgotPassword, login } from '@/src/services/api/user';
+import { MessageAlert } from '@/src/components/messageAlert';
 
 export default function Index() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(true);
+
+  // Alerta
+  const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState('');
 
   const fontsLoaded = LoadFont();
 
@@ -50,15 +55,46 @@ export default function Index() {
     'VirtualizedList',
   ]);
 
-  function handleEnter() {
-    if (validateFields({ email, senha }) && validateEmail(email)) {
-      login(email, senha);
+  async function handleEnter() {
+    const fieldsValidate = validateFields({email, senha});
+    const emailValidate = validateEmail(email);
+
+    if (!fieldsValidate.success) {
+      setVisible(true);
+      setMessage(fieldsValidate.message);
+    } else if (!emailValidate.success) {
+      setVisible(true);
+      setMessage(emailValidate.message);
+    } else {
+      const {success, message} = await login(email, senha);
+      if (success) {
+        router.replace('/(tabs)/screens/home');
+      } else {
+        setMessage(message);
+        setVisible(true);
+      }
     }
   }
 
-  function handleForgotPassword() {
-    if (validateFields({ email }) && validateEmail(email)) {
-      forgotPassword(email);
+  async function handleForgotPassword() {
+    const fieldsValidate = validateFields({email});
+    const emailValidate = validateEmail(email);
+
+    if (!fieldsValidate.success) {
+      setVisible(true);
+      setMessage(fieldsValidate.message);
+    } else if (!emailValidate.success) {
+      setVisible(true);
+      setMessage(emailValidate.message);
+    } else {
+      const {success, message} = await forgotPassword(email);
+      if (success) {
+        setMessage(message);
+        setVisible(true);
+      } else {
+        setMessage(message);
+        setVisible(true);
+      }
     }
   }
 
@@ -82,6 +118,12 @@ export default function Index() {
         isPassword={true}
         value={senha}
         onChangeText={setSenha}
+      />
+      <MessageAlert
+        type={1}
+        message={message}
+        visible={visible}
+        onCancel={() => setVisible(false)}
       />
 
       <SolidButton title='Entrar' action={handleEnter} />
