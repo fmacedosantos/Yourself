@@ -9,8 +9,9 @@ import { router } from "expo-router";
 import { SelectDifficulty } from "../../../../components/selectDifficulty";
 import { validateFields } from "@/src/utils/validators";
 import LoadingScreen from "@/src/components/loadindScreen";
-import { ListCategories } from "../../../../components/ListCategories";
 import { carregarResumoEstatisticas } from "@/src/services/api/user";
+import { ListCategories } from "@/src/components/listCategories";
+import { MessageAlert } from "@/src/components/messageAlert";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -29,6 +30,9 @@ export default function AddNewActivity() {
   });
   const [loading, setLoading] = useState(true); 
 
+  const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState('');
+
   useEffect(() => {
     async function carregarDados() {
       await carregarResumoEstatisticas(setResumoEstatisticas);
@@ -38,7 +42,12 @@ export default function AddNewActivity() {
   }, []);
 
   function handleStartActivity() {
-    if (validateFields({ titulo, categoria, dificuldade: selectedDifficulty })) {
+    const fieldsValidate = validateFields({titulo, categoria, dificuldade: selectedDifficulty});
+
+    if (!fieldsValidate.success) {
+      setVisible(true);
+      setMessage('Os seguintes campos são obrigatórios:\nTítulo, categoria e nível de dificuldade.');
+    } else {
       router.replace({
         pathname: '/(tabs)/pomodoro',
         params: {
@@ -48,7 +57,7 @@ export default function AddNewActivity() {
           categoria
         },
       });
-    } 
+    }
   }
 
   if (loading) {
@@ -69,6 +78,12 @@ export default function AddNewActivity() {
         <SummaryStats
           ofensiva={resumoEstatisticas.ofensiva}
           pontos={resumoEstatisticas.pontos}
+        />
+        <MessageAlert
+          type={1}
+          message={message}
+          visible={visible}
+          onCancel={() => setVisible(false)}
         />
         <Title title="Nova tarefa" />
         <FormInput label="Titulo" value={titulo} onChangeText={setTitulo} />
