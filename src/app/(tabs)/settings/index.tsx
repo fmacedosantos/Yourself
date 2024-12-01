@@ -8,6 +8,7 @@ import { SolidButton } from '@/src/components/solidButton';
 import { MessageAlert } from '@/src/components/messageAlert';
 import { atualizarUsuario, carregarResumoEstatisticas, carregarUsuario } from '@/src/services/api/user';
 import { passwordsMatch, validatePasswordStrength } from '@/src/utils/validators';
+import { BackButton } from '@/src/components/backButton/indes';
 
 export default function Settings() {
     const [resumoEstatisticas, setResumoEstatisticas] = useState({ ofensiva: 0, pontos: 0 });
@@ -84,6 +85,7 @@ export default function Settings() {
 
     return (
         <View style={styles.container}>
+            <BackButton/>
             <SummaryStats ofensiva={resumoEstatisticas.ofensiva} pontos={resumoEstatisticas.pontos} />
             <FormInput value={nome} onChangeText={setNome} placeholder={informacoes.nome} label="Nome" />
             <FormInput value={apelido} onChangeText={setApelido} placeholder={informacoes.apelido} label="Apelido" />

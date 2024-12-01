@@ -9,6 +9,7 @@ import { carregarResumoEstatisticas, reauthenticateUser } from '@/src/services/a
 import { router } from 'expo-router';
 import { MessageAlert } from '@/src/components/messageAlert';
 import { validateFields } from '@/src/utils/validators';
+import { BackButton } from '@/src/components/backButton/indes';
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -49,7 +50,7 @@ export default function ConfirmPassword() {
       const { success, message } = await reauthenticateUser(senha);
 
       if (success) {
-        router.replace('/(tabs)/settings');
+        router.navigate('/(tabs)/settings');
       } else {
         setVisible(true);
         setMessage(message);
@@ -65,6 +66,7 @@ export default function ConfirmPassword() {
       ofensiva={resumoEstatisticas.ofensiva} 
       pontos={resumoEstatisticas.pontos}
     />
+    <BackButton/>
     <MessageAlert
         type={1}
         message={message}

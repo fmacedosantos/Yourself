@@ -11,6 +11,7 @@ import { styles } from './styles';
 import { cadastrarAtividade, carregarPreferencias, carregarResumoEstatisticas } from '@/src/services/api/user';
 import LoadingScreen from '@/src/components/loadindScreen';
 import { MessageAlert } from '@/src/components/messageAlert';
+import { BackButton } from '@/src/components/backButton/indes';
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -124,7 +125,7 @@ export default function Pomodoro() {
         ofensiva={resumoEstatisticas.ofensiva} 
         pontos={resumoEstatisticas.pontos}
       />
-      
+      <BackButton/>
       <Title 
         style={{ color: isConcentracao ? COLORS.RED : COLORS.GREEN }} 
         title={isConcentracao ? 'Concentração' : 'Descanso'} 
