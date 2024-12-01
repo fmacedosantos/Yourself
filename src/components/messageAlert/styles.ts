@@ -52,7 +52,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   dualButton: {
-    backgroundColor: COLORS.BLUE,
+    backgroundColor: COLORS.RED,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,

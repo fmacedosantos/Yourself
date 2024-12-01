@@ -209,7 +209,36 @@ export async function register(email: string, nome: string, apelido: string, sen
         await logout();
         return { success: false, message: 'Erro na verificação da sessão.' };
     }
-}
+  }
+
+  export async function deleteActivity(id: string) {
+    const { success, message } = await checkToken();
+  
+    if (!success) {
+      await logout();
+      return { success: false, message: message };
+    }
+  
+    try {
+      const response = await fetch(ROUTES(PATHS.DELETE_ACTIVITY), {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify({ id }), 
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok && data.success) {
+        return { success: true, message: 'Atividade deletada com sucesso!' };
+      } else {
+        return { success: false, message: data.message };
+      }
+    } catch {
+      return { success: false, message: erroServidor };
+    }
+  }  
 
   export async function atualizarUsuario(userData: UpdateUserData) {
     const {success, message} = await checkToken();

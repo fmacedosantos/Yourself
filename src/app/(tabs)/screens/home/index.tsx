@@ -5,7 +5,8 @@ import { SummaryStats } from '../../../../components/summaryStats';
 import { Activity } from '../../../../components/activity';
 import { styles } from './styles';
 import LoadingScreen from '@/src/components/loadindScreen';
-import { carregarAtividades, carregarResumoEstatisticas } from '@/src/services/api/user';
+import { carregarAtividades, carregarResumoEstatisticas, deleteActivity } from '@/src/services/api/user';
+import { MessageAlert } from '@/src/components/messageAlert';
 
 interface Atividade {
   id: string;
@@ -31,6 +32,12 @@ export default function Home() {
   });
   const [loading, setLoading] = useState(true); 
 
+  const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState('');
+  const [type, setType] = useState<1 | 2>(2);
+  
+  const [activityIdToDelete, setActivityIdToDelete] = useState<string | null>(null);
+
   useEffect(() => {
     async function carregarDados() {
       await carregarAtividades(setAtividades);
@@ -45,6 +52,30 @@ export default function Home() {
     setShowMore(!showMore);
     setTitle(!title);
   } 
+
+  function handleTouchActivity(id: string, titulo: string) {
+    setType(2);
+    setActivityIdToDelete(id);
+    setVisible(true);
+    setMessage(`Deseja excluir a atividade \"${titulo}\"?`); 
+  }
+  
+
+
+async function handleDeleteActivity() {
+  if (activityIdToDelete) {
+    const response = await deleteActivity(activityIdToDelete);
+    if (response.success) {
+      setAtividades(atividades.filter((atividade) => atividade.id !== activityIdToDelete)); 
+      setVisible(false);
+    } else {
+      setType(1);
+      setMessage(response.message || "Erro ao deletar a atividade.");
+    }
+    setActivityIdToDelete(null); 
+  }
+}
+
 
   if (loading) {
     return <LoadingScreen />; 
@@ -71,6 +102,7 @@ export default function Home() {
                 categoria={atividade.categoria}
                 pontos={atividade.pontos}
                 dificuldade={atividade.dificuldade}
+                acao={() => handleTouchActivity(atividade.id, atividade.titulo)}
               />
             ))}
             {atividades.length > 5 && (
@@ -80,6 +112,14 @@ export default function Home() {
             )}
           </>
         )}
+        <MessageAlert
+          type={type}
+          message={message}
+          visible={visible}
+          onCancel={() => setVisible(false)}
+          onConfirm={() => handleDeleteActivity()}
+        />
+
       </ScrollView>
     </View>
   );

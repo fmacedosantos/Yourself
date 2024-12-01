@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { styles } from './styles';
 
 interface ActivityProps {
@@ -7,13 +7,15 @@ interface ActivityProps {
   categoria: string
   pontos: number;
   dificuldade: number;
+  acao: () => void;
 }
 
 export const Activity = ({
   titulo,
   categoria,
   pontos,
-  dificuldade
+  dificuldade,
+  acao
 }: ActivityProps) => {
   
   const getLevelColor = (dificuldade: number) => {
@@ -35,7 +37,7 @@ export const Activity = ({
   }
 
   return (
-    <View style={styles.atividadeContainer}>
+    <Pressable onPress={acao} style={styles.atividadeContainer}>
       <View style={styles.pontosContainer}>
         <Text style={styles.pontosText}>{pontos}</Text>
       </View>
@@ -48,7 +50,7 @@ export const Activity = ({
       <View style={[styles.nivelContainer, { backgroundColor: getLevelColor(dificuldade) }]}>
         <Text style={styles.nivelText}>{getTextLevel(dificuldade)}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
