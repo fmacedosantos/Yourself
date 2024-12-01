@@ -42,6 +42,8 @@ interface UpdateUserData {
 
 const erroServidor = 'Encontramos problemas ao conectar com o servidor.';
 
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+
 export async function register(email: string, nome: string, apelido: string, senha: string) { // ok
     try {
       const response = await fetch(ROUTES(PATHS.REGISTER_USER), {
@@ -164,61 +166,50 @@ export async function register(email: string, nome: string, apelido: string, sen
     }
   }
 
-  export async function checkToken() { //ok
-    try {
-      const lastLoginDateString = await AsyncStorage.getItem('loginDate');
-      const lastLoginDate = lastLoginDateString ? new Date(lastLoginDateString) : null;
+  export async function checkToken() {
+    const jwt = await AsyncStorage.getItem('jwt');
+    const loginDate = await AsyncStorage.getItem('loginDate');
 
-      const currentDate = new Date();
-      const daysSinceLastLogin = lastLoginDate 
-        ? Math.floor((currentDate.getTime() - lastLoginDate.getTime()) / (1000 * 60 * 60 * 24))
-        : null;
-
-      const response = await fetchWithAuth(ROUTES(PATHS.AUTHENTICATE_JWT), {
-        method: 'POST',
-      });
-
-      const data = await response.json();
-      const success = data.success;
-      const message = data.message;
-
-      if (response.ok) {
-        if (!success) {
-          console.log(message);
-          if (message === "Sessão expirada. Faça login novamente.") {
-            if (daysSinceLastLogin !== null && daysSinceLastLogin < 5) {
-              try {
-                const user = firebase.auth().currentUser;
-                if (!user) {
-                  await logout();
-                  return { success: false, message: 'Usuário não autenticado.' };
-                }
-    
-                const newToken = await user.getIdToken(true);
-                await AsyncStorage.setItem('jwt', newToken);
-                return { success: true, message: 'Token renovado com sucesso!' };
-              } catch {
-                  await logout();
-                  return { success: false, message: 'Não foi possível renovar a sessão.' };
-              }
-            } else {
-              await logout();
-              return { success: false, message: 'Sessão expirada. Faça login novamente.' };
-            }
-          } else {
-            return { success: false, message: 'Usuário não autenticado!' };
-          }
-        } else {
-          return { success: true, message: 'Usuário autenticado com sucesso!' };
-        }
-      } else {
-        return { success: false, message: message || 'Erro ao autenticar usuário.' };
-      }
-    } catch {
-      await logout();
-      return { success: false, message: 'Erro na verificação da sessão.' };
+    if (!jwt || !loginDate) {
+      return { success: false, message: 'Usuário não autenticado!' };
     }
-  }
+    try {
+        const response = await fetchWithAuth(ROUTES(PATHS.AUTHENTICATE_JWT), {
+            method: 'POST',
+        });
+
+        const data = await response.json();
+
+        
+        if (response.ok && data.success) {
+            return { success: true, message: 'Usuário autenticado com sucesso!' };
+        }
+
+        if (data.message === 'Sessão expirada. Faça login novamente.') {
+            const user = firebase.auth().currentUser;
+            
+            if (user) {
+                try {
+                    const newToken = await user.getIdToken(true);
+                    await AsyncStorage.setItem('jwt', newToken);
+                    
+                    return { success: true, message: 'Token renovado com sucesso!' };
+                } catch {
+                    await logout();
+                    return { success: false, message: 'Não foi possível renovar a sessão.' };
+                }
+            } else {
+                await logout();
+                return { success: false, message: 'Sessão expirada. Faça login novamente.' };
+            }
+        }
+
+        return { success: false, message: 'Usuário não autenticado!' };
+    } catch {
+        await logout();
+        return { success: false, message: 'Erro na verificação da sessão.' };
+    }
+}
 
   export async function atualizarUsuario(userData: UpdateUserData) {
     const {success, message} = await checkToken();
