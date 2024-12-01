@@ -26,9 +26,9 @@ export default function Index() {
   useEffect(() => {
     const initializeApp = async () => {
       try {
-        const token = await checkToken();
+        const {success, message} = await checkToken();
         
-        if (token.success) {
+        if (success) {
           router.replace('/(tabs)/screens/home');
         } else {
           setLoading(false);

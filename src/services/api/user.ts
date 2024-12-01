@@ -221,6 +221,13 @@ export async function register(email: string, nome: string, apelido: string, sen
   }
 
   export async function atualizarUsuario(userData: UpdateUserData) {
+    const {success, message} = await checkToken();
+  
+    if (!success) {
+      await logout();
+      return { success: false, message: message };
+    }
+
     try {
       const filteredData = Object.fromEntries(
         Object.entries(userData).filter(([_, value]) => value !== undefined && value !== '')
@@ -247,6 +254,13 @@ export async function register(email: string, nome: string, apelido: string, sen
   }
 
   export async function carregarUsuario(setInformacoes: (informacoes: Informacoes) => void) {
+    const {success, message} = await checkToken();
+  
+    if (!success) {
+      await logout();
+      return { success: false, message: message };
+    }
+
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_USER));
       const data = await response.json();
@@ -266,13 +280,14 @@ export async function register(email: string, nome: string, apelido: string, sen
     }
   }
 
-  export async function cadastrarAtividade(
-    titulo: string,
-    descricao: string,
-    dificuldade: number,
-    categoria: string,
-    tempoConcentracao: number
-  ) {
+  export async function cadastrarAtividade(titulo: string, descricao: string, dificuldade: number, categoria: string, tempoConcentracao: number) {
+    const {success, message} = await checkToken();
+  
+    if (!success) {
+      await logout();
+      return { success: false, message: message };
+    }
+
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.REGISTER_ACTIVITY), {
         method: 'POST',
@@ -291,6 +306,13 @@ export async function register(email: string, nome: string, apelido: string, sen
   }
 
   export async function carregarAtividades(setAtividades: (atividades: Atividade[]) => void) {
+    const {success, message} = await checkToken();
+  
+    if (!success) {
+      await logout();
+      return { success: false, message: message };
+    }
+
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_ACTIVITIES));
       const data = await response.json();
@@ -306,9 +328,14 @@ export async function register(email: string, nome: string, apelido: string, sen
     }
   }
   
-  export async function carregarResumoEstatisticas(
-    setResumoEstatisticas: (resumo: ResumoEstatisticas) => void
-  ) {
+  export async function carregarResumoEstatisticas(setResumoEstatisticas: (resumo: ResumoEstatisticas) => void) {
+    const {success, message} = await checkToken();
+  
+    if (!success) {
+      await logout();
+      return { success: false, message: message };
+    }
+
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_STATS));
       const data = await response.json();
@@ -327,9 +354,14 @@ export async function register(email: string, nome: string, apelido: string, sen
     }
   }
   
-  export async function carregarMelhoresEstatisticas(
-    setMelhoresEstatisticas: (melhores: MelhoresEstatisticas) => void
-  ) {
+  export async function carregarMelhoresEstatisticas(setMelhoresEstatisticas: (melhores: MelhoresEstatisticas) => void) {
+    const {success, message} = await checkToken();
+  
+    if (!success) {
+      await logout();
+      return { success: false, message: message };
+    }
+
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_STATS));
       const data = await response.json();
@@ -349,6 +381,13 @@ export async function register(email: string, nome: string, apelido: string, sen
   }
   
   export async function carregarPreferencias(setPreferencias: (preferencias: Preferencias) => void) {
+    const {success, message} = await checkToken();
+  
+    if (!success) {
+      await logout();
+      return { success: false, message: message };
+    }
+
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.SHOW_PREFERENCES));
       const data = await response.json();
@@ -367,4 +406,3 @@ export async function register(email: string, nome: string, apelido: string, sen
     }
   }
   
-
