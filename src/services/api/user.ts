@@ -133,7 +133,6 @@ export async function register(email: string, nome: string, apelido: string, sen
 
   export async function reauthenticateUser(senha: string) { // ok
     try {
-
       const response = await fetchWithAuth(ROUTES(PATHS.REAUTHENTICATE), {
         method: 'POST',
         body: JSON.stringify({ senha }),
@@ -165,39 +164,57 @@ export async function register(email: string, nome: string, apelido: string, sen
     }
   }
 
-  export async function checkToken() {
+  export async function checkToken() { //ok
     try {
-      const token = await AsyncStorage.getItem('jwt');
-      const loginDate = await AsyncStorage.getItem('loginDate');
-  
-      if (!token || !loginDate) {
-        return { success: false, message: 'Sessão inválida. Faça login novamente.' };
-      }
-  
-      const now = new Date();
-      const loginDateTime = new Date(loginDate);
-      const diffMinutes = (Number(now) - Number(loginDateTime)) / (1000 * 60);
-  
-      if (diffMinutes >= 50) {
-        try {
-          const user = firebase.auth().currentUser;
-          if (!user) {
-            await logout();
-            return { success: false, message: 'Usuário não autenticado.' };
+      const lastLoginDateString = await AsyncStorage.getItem('loginDate');
+      const lastLoginDate = lastLoginDateString ? new Date(lastLoginDateString) : null;
+
+      const currentDate = new Date();
+      const daysSinceLastLogin = lastLoginDate 
+        ? Math.floor((currentDate.getTime() - lastLoginDate.getTime()) / (1000 * 60 * 60 * 24))
+        : null;
+
+      const response = await fetchWithAuth(ROUTES(PATHS.AUTHENTICATE_JWT), {
+        method: 'POST',
+      });
+
+      const data = await response.json();
+      const success = data.success;
+      const message = data.message;
+
+      if (response.ok) {
+        if (!success) {
+          console.log(message);
+          if (message === "Sessão expirada. Faça login novamente.") {
+            if (daysSinceLastLogin !== null && daysSinceLastLogin < 5) {
+              try {
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                  await logout();
+                  return { success: false, message: 'Usuário não autenticado.' };
+                }
+    
+                const newToken = await user.getIdToken(true);
+                await AsyncStorage.setItem('jwt', newToken);
+                return { success: true, message: 'Token renovado com sucesso!' };
+              } catch {
+                  await logout();
+                  return { success: false, message: 'Não foi possível renovar a sessão.' };
+              }
+            } else {
+              await logout();
+              return { success: false, message: 'Sessão expirada. Faça login novamente.' };
+            }
+          } else {
+            return { success: false, message: 'Usuário não autenticado!' };
           }
-  
-          const newToken = await user.getIdToken(true);
-          await AsyncStorage.setItem('jwt', newToken);
-          await AsyncStorage.setItem('loginDate', new Date().toISOString());
-          return { success: true, message: 'Token renovado com sucesso!' };
-        } catch (error) {
-          await logout();
-          return { success: false, message: 'Não foi possível renovar a sessão.' };
+        } else {
+          return { success: true, message: 'Usuário autenticado com sucesso!' };
         }
+      } else {
+        return { success: false, message: message || 'Erro ao autenticar usuário.' };
       }
-  
-      return { success: true, message: 'Token válido.' };
-    } catch (error) {
+    } catch {
       await logout();
       return { success: false, message: 'Erro na verificação da sessão.' };
     }
