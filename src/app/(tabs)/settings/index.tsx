@@ -5,7 +5,7 @@ import LoadingScreen from '@/src/components/loadindScreen';
 import { SummaryStats } from '@/src/components/summaryStats';
 import { FormInput } from '@/src/components/formInput';
 import { SolidButton } from '@/src/components/solidButton';
-import { passwordsMatch } from '@/src/utils/validators';
+import { passwordsMatch, validatePasswordStrength } from '@/src/utils/validators';
 import { MessageAlert } from '@/src/components/messageAlert';
 import { atualizarUsuario, carregarResumoEstatisticas, carregarUsuario } from '@/src/services/api/user';
 
@@ -25,7 +25,6 @@ export default function Settings() {
     pontos: 0
   });
   const [loading, setLoading] = useState(true);
-  const [visible, setVisible] = useState(false);
   const [senha, setSenha] = useState('');
   const [nome, setNome] = useState('');
   const [apelido, setApelido] = useState('');
@@ -34,6 +33,8 @@ export default function Settings() {
     nome: '',
     apelido: ''
   });
+  const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     async function carregarDados() {
@@ -48,15 +49,22 @@ export default function Settings() {
     return <LoadingScreen />;
   }
 
-  let message;
 
   async function handleUpdate() {
     if (senha || confirmarSenha) {
-      if (!passwordsMatch(senha, confirmarSenha)) {
-        message = "As senhas não coincidem!";
+      const passwordMatch = passwordsMatch(senha, confirmarSenha);
+      if (!passwordMatch.success) {
+        setMessage(passwordMatch.message);
         setVisible(true);
         return;
       }
+      const passwordStrength = validatePasswordStrength(senha);
+      if (!passwordStrength.success) {
+        setMessage(passwordStrength.message);
+        setVisible(true);
+        return;
+      }
+      
     }
 
     const userData = {
@@ -64,18 +72,26 @@ export default function Settings() {
       apelido: apelido || undefined,
       novaSenha: senha || undefined
     };
+    if (!nome.trim() && !apelido.trim() && !senha.trim()) {
+      setMessage('Preencha, pelo menos, um campo!');
+      setVisible(true);
+      return;
+    }
 
-    const success = await atualizarUsuario(userData);
+    const {success, message} = await atualizarUsuario(userData);
     if (success) {
       setSenha('');
       setConfirmarSenha('');
       setNome('');
       setApelido('');
       
-      message = "Dados atualizados com sucesso!"
+      setMessage("Dados atualizados com sucesso!")
       setVisible(true);
       
       carregarUsuario(setInformacoes);
+    } else {
+      setMessage(message);
+      setVisible(true);
     }
   }
 
@@ -100,7 +116,7 @@ export default function Settings() {
       />
       <MessageAlert
         type={1}
-        message="Dados atualizados com sucesso!"
+        message={message}
         visible={visible}
         onCancel={() => setVisible(false)}
       />

@@ -261,11 +261,12 @@ export async function register(email: string, nome: string, apelido: string, sen
         method: 'PATCH',
         body: JSON.stringify(filteredData),
       });
+      
+      const data = await response.json();
 
-      if (response.ok) {
+      if (response.ok && data.success) {
         return { success: true, message: 'Dados atualizados com sucesso!' };
       } else {
-        const data = await response.json();
         return { success: false, message: data.message || 'Erro ao atualizar dados.' };
       }
     } catch {
