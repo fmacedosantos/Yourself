@@ -114,7 +114,16 @@ export async function register(email: string, nome: string, apelido: string, sen
 
   export async function logout() {
     try {
-      await AsyncStorage.multiRemove(['jwt', 'loginDate']);
+      const jwt = await AsyncStorage.getItem('jwt');
+      if (jwt) {
+        await AsyncStorage.removeItem('jwt');
+      }
+  
+      const loginDate = await AsyncStorage.getItem('loginDate');
+      if (loginDate) {
+        await AsyncStorage.removeItem('loginDate');
+      }
+  
       await firebase.auth().signOut(); 
       router.replace('/');
     } catch (error) {
