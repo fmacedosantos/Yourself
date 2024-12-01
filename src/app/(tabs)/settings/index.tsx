@@ -1,138 +1,96 @@
+import { useState, useEffect } from 'react';
 import { Alert, View } from 'react-native';
 import { styles } from './styles';
-import { useEffect, useState } from 'react';
 import LoadingScreen from '@/src/components/loadindScreen';
 import { SummaryStats } from '@/src/components/summaryStats';
 import { FormInput } from '@/src/components/formInput';
 import { SolidButton } from '@/src/components/solidButton';
-import { passwordsMatch, validatePasswordStrength } from '@/src/utils/validators';
 import { MessageAlert } from '@/src/components/messageAlert';
 import { atualizarUsuario, carregarResumoEstatisticas, carregarUsuario } from '@/src/services/api/user';
-
-interface ResumoEstatisticas {
-  ofensiva: number;
-  pontos: number;
-}
-
-interface Informacoes {
-  nome: string;
-  apelido: string;
-}
+import { passwordsMatch, validatePasswordStrength } from '@/src/utils/validators';
 
 export default function Settings() {
-  const [resumoEstatisticas, setResumoEstatisticas] = useState<ResumoEstatisticas>({
-    ofensiva: 0,
-    pontos: 0
-  });
-  const [loading, setLoading] = useState(true);
-  const [senha, setSenha] = useState('');
-  const [nome, setNome] = useState('');
-  const [apelido, setApelido] = useState('');
-  const [confirmarSenha, setConfirmarSenha] = useState('');
-  const [informacoes, setInformacoes] = useState<Informacoes>({
-    nome: '',
-    apelido: ''
-  });
-  const [visible, setVisible] = useState(false);
-  const [message, setMessage] = useState('');
+    const [resumoEstatisticas, setResumoEstatisticas] = useState({ ofensiva: 0, pontos: 0 });
+    const [loading, setLoading] = useState(true);
+    const [senha, setSenha] = useState('');
+    const [nome, setNome] = useState('');
+    const [apelido, setApelido] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
+    const [informacoes, setInformacoes] = useState({ nome: '', apelido: '' });
+    const [message, setMessage] = useState('');
+    const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
-    async function carregarDados() {
-      await carregarResumoEstatisticas(setResumoEstatisticas);
-      await carregarUsuario(setInformacoes);
-      setLoading(false);
-    }
-    carregarDados();
-  }, []);
+    useEffect(() => {
+        const carregarDados = async () => {
+            try {
+                await carregarResumoEstatisticas(setResumoEstatisticas);
+                await carregarUsuario(setInformacoes);
+            } catch {
+                setMessage('Erro ao carregar informações.');
+                setVisible(true);
+            } finally {
+                setLoading(false);
+            }
+        };
+        carregarDados();
+    }, []);
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
+    const validarDados = () => {
+        if (senha || confirmarSenha) {
+            const passwordMatch = passwordsMatch(senha, confirmarSenha);
+            if (!passwordMatch.success) return passwordMatch.message;
 
+            const passwordStrength = validatePasswordStrength(senha);
+            if (!passwordStrength.success) return passwordStrength.message;
+        }
 
-  async function handleUpdate() {
-    if (senha || confirmarSenha) {
-      const passwordMatch = passwordsMatch(senha, confirmarSenha);
-      if (!passwordMatch.success) {
-        setMessage(passwordMatch.message);
-        setVisible(true);
-        return;
-      }
-      const passwordStrength = validatePasswordStrength(senha);
-      if (!passwordStrength.success) {
-        setMessage(passwordStrength.message);
-        setVisible(true);
-        return;
-      }
-      
-    }
+        if (!nome.trim() && !apelido.trim() && !senha.trim()) {
+            return 'Preencha, pelo menos, um campo!';
+        }
 
-    const userData = {
-      nome: nome || undefined,
-      apelido: apelido || undefined,
-      novaSenha: senha || undefined
+        return null;
     };
-    if (!nome.trim() && !apelido.trim() && !senha.trim()) {
-      setMessage('Preencha, pelo menos, um campo!');
-      setVisible(true);
-      return;
-    }
 
-    const {success, message} = await atualizarUsuario(userData);
-    if (success) {
-      setSenha('');
-      setConfirmarSenha('');
-      setNome('');
-      setApelido('');
-      
-      setMessage("Dados atualizados com sucesso!")
-      setVisible(true);
-      
-      carregarUsuario(setInformacoes);
-    } else {
-      setMessage(message);
-      setVisible(true);
-    }
-  }
+    const handleUpdate = async () => {
+        const mensagemErro = validarDados();
+        if (mensagemErro) {
+            setMessage(mensagemErro);
+            setVisible(true);
+            return;
+        }
 
-  return (
-    <View style={styles.container}>
-      <SummaryStats
-        ofensiva={resumoEstatisticas.ofensiva}
-        pontos={resumoEstatisticas.pontos}
-      />
+        const userData = { nome: nome || undefined, apelido: apelido || undefined, novaSenha: senha || undefined };
 
-      <FormInput
-        value={nome}
-        onChangeText={setNome}
-        placeholder={informacoes.nome}
-        label='Nome'
-      />
-      <FormInput
-        value={apelido}
-        onChangeText={setApelido}
-        placeholder={informacoes.apelido}
-        label='Apelido'
-      />
-      <MessageAlert
-        type={1}
-        message={message}
-        visible={visible}
-        onCancel={() => setVisible(false)}
-      />
-      <FormInput
-        value={senha}
-        onChangeText={setSenha}
-        label='Nova senha'
-        isPassword={true}
-      />
-      <FormInput
-        value={confirmarSenha}
-        onChangeText={setConfirmarSenha}
-        label='Confirmar senha'
-        isPassword={true}
-      />
-      <SolidButton title='Atualizar' action={handleUpdate} />
-    </View>
-  );
+        try {
+            const { success, message } = await atualizarUsuario(userData);
+            if (success) {
+                setSenha('');
+                setConfirmarSenha('');
+                setNome('');
+                setApelido('');
+                setMessage('Dados atualizados com sucesso!');
+                carregarUsuario(setInformacoes);
+            } else {
+                setMessage(message);
+            }
+        } catch {
+            setMessage('Erro ao atualizar informações.');
+        } finally {
+            setVisible(true);
+        }
+    };
+
+    if (loading) return <LoadingScreen />;
+
+    return (
+        <View style={styles.container}>
+            <SummaryStats ofensiva={resumoEstatisticas.ofensiva} pontos={resumoEstatisticas.pontos} />
+            <FormInput value={nome} onChangeText={setNome} placeholder={informacoes.nome} label="Nome" />
+            <FormInput value={apelido} onChangeText={setApelido} placeholder={informacoes.apelido} label="Apelido" />
+            <MessageAlert type={1} message={message} visible={visible} onCancel={() => setVisible(false)} />
+            <FormInput value={senha} onChangeText={setSenha} label="Nova senha" isPassword />
+            <FormInput value={confirmarSenha} onChangeText={setConfirmarSenha} label="Confirmar senha" isPassword />
+            <SolidButton title="Atualizar" action={handleUpdate} />
+        </View>
+    );
 }
