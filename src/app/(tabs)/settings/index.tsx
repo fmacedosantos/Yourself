@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Alert, View } from 'react-native';
+import { View } from 'react-native';
 import { styles } from './styles';
 import LoadingScreen from '@/src/components/loadindScreen';
 import { SummaryStats } from '@/src/components/summaryStats';
 import { FormInput } from '@/src/components/formInput';
 import { SolidButton } from '@/src/components/solidButton';
 import { MessageAlert } from '@/src/components/messageAlert';
-import { atualizarUsuario, carregarResumoEstatisticas, carregarUsuario } from '@/src/services/api/user';
+import { atualizarUsuario, carregarResumoEstatisticas, carregarUsuario, logout } from '@/src/services/api/user';
 import { passwordsMatch, validatePasswordStrength } from '@/src/utils/validators';
 import { BackButton } from '@/src/components/backButton/indes';
 
@@ -20,6 +20,7 @@ export default function Settings() {
     const [informacoes, setInformacoes] = useState({ nome: '', apelido: '' });
     const [message, setMessage] = useState('');
     const [visible, setVisible] = useState(false);
+    const [logoutAlertVisible, setLogoutAlertVisible] = useState(false); // Novo estado para o alerta de logout
 
     useEffect(() => {
         const carregarDados = async () => {
@@ -70,26 +71,50 @@ export default function Settings() {
                 setNome('');
                 setApelido('');
                 setMessage('Dados atualizados com sucesso!');
+                setVisible(true);
                 carregarUsuario(setInformacoes);
+
+                if (senha) {
+                    setTimeout(() => {
+                        setVisible(false);
+                        setLogoutAlertVisible(true);
+                    }, 2000); 
+                }
             } else {
                 setMessage(message);
+                setVisible(true);
             }
         } catch {
             setMessage('Erro ao atualizar informações.');
-        } finally {
             setVisible(true);
         }
+    };
+
+    async function handleLogout () {
+        setLogoutAlertVisible(false);
+        await logout();
     };
 
     if (loading) return <LoadingScreen />;
 
     return (
         <View style={styles.container}>
-            <BackButton/>
+            <BackButton />
             <SummaryStats ofensiva={resumoEstatisticas.ofensiva} pontos={resumoEstatisticas.pontos} />
             <FormInput value={nome} onChangeText={setNome} placeholder={informacoes.nome} label="Nome" />
             <FormInput value={apelido} onChangeText={setApelido} placeholder={informacoes.apelido} label="Apelido" />
-            <MessageAlert type={1} message={message} visible={visible} onCancel={() => setVisible(false)} />
+            <MessageAlert
+                type={1}
+                message={message}
+                visible={visible}
+                onCancel={() => setVisible(false)}
+            />
+            <MessageAlert
+                type={1}
+                message="Você precisará se logar novamente."
+                visible={logoutAlertVisible}
+                onCancel={handleLogout}
+            />
             <FormInput value={senha} onChangeText={setSenha} label="Nova senha" isPassword />
             <FormInput value={confirmarSenha} onChangeText={setConfirmarSenha} label="Confirmar senha" isPassword />
             <SolidButton title="Atualizar" action={handleUpdate} />
