@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { styles } from './styles';
 import AddCategory from '../../assets/images/add-category-icon.svg';
 
@@ -22,17 +22,17 @@ export function ListCategories({ setCategoria, style }: any) {
     return (
         <View style={[styles.listaContainer, style]}>
             <Text style={styles.text}>Categoria</Text>
-            <TouchableOpacity onPress={handlePress} style={styles.customButton}>
+            <Pressable onPress={handlePress} style={styles.customButton}>
                 {titleList === '' ? (
                     <AddCategory width={25} height={25} /> 
                 ) : (
                     <Text style={styles.customButtonText}>{titleList}</Text>
                 )}
-            </TouchableOpacity>
+            </Pressable>
             {expanded && (
                 <View style={styles.dropdown}>
                     {categories.map((category, index) => (
-                        <TouchableOpacity
+                        <Pressable
                             key={index}
                             onPress={() => {
                                 setTitleList(category);
@@ -42,7 +42,7 @@ export function ListCategories({ setCategoria, style }: any) {
                             style={styles.dropdownItem}
                         >
                             <Text style={styles.dropdownText}>{category}</Text>
-                        </TouchableOpacity>
+                        </Pressable>
                     ))}
                 </View>
             )}
