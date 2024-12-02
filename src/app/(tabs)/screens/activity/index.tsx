@@ -10,8 +10,8 @@ import { SelectDifficulty } from "../../../../components/selectDifficulty";
 import { validateFields } from "@/src/utils/validators";
 import LoadingScreen from "@/src/components/loadindScreen";
 import { carregarResumoEstatisticas } from "@/src/services/api/user";
-import { ListCategories } from "../../../../components/listCategories/index";
 import { MessageAlert } from "@/src/components/messageAlert";
+import { ListCategories } from "@/src/components/ListCategories";
 
 interface ResumoEstatisticas {
   ofensiva: number;
