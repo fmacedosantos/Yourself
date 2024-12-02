@@ -11,7 +11,8 @@
     "test": "jest --watchAll",
     "lint": "expo lint",
     "decrypt": "gpg --decrypt --output .env .env.gpg",
-    "delete": "del /f .env"
+    "delete": "del /f .env",
+    "encrypt": "gpg --output .env.gpg --symmetric .env"
   },
   "jest": {
     "preset": "jest-expo"
