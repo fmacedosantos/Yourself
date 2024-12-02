@@ -1,20 +1,57 @@
-# Rode o projeto 'Yourself':
+# Yourself 
 
-- Instale as dependências:
+## 📋 Descrição do Projeto
+Bem-vindo ao projeto Yourself! Este guia irá auxiliá-lo na configuração e inicialização da aplicação de forma rápida e simples.
 
+## 🚀 Pré-requisitos
+- Node.js (versão recomendada: 18.x ou superior)
+- npm (geralmente instalado com Node.js)
+- Conexão com a internet para instalação de dependências
+- Acesso à linha de comando/terminal
+
+## 🔧 Configuração Inicial
+
+### 1. Clonar o Repositório
 ```bash
-npm i
+git clone https://github.com/fmacedosantos/yourself.git
+cd yourself
 ```
 
-- Acesse as variáveis de ambiente:
+### 2. Instalação de Dependências
+Instale todas as dependências do projeto com:
+```bash
+npm install
+```
+
+### 3. Configuração de Variáveis de Ambiente
+Descriptografe as variáveis de ambiente:
 ```bash
 npm run decrypt
 ```
 
-- Em src/constants/Routes.ts, altere o valor da constante 'IP' para o ipv4 da sua máquina.
+### 4. Configuração de Endereço IP
+Abra o arquivo `src/constants/Routes.ts` e altere a constante `IP` para o endereço IPv4 da sua máquina:
+```typescript
+const IP = 'SEU_ENDERECO_IPV4_AQUI';
+```
 
-- Instale o [executável da API](https://github.com/fmacedosantos/yourself-API/blob/main/yourself-api.exe) e abra-o em segundo plano.
-- Agora basta iniciar a aplicação:
+### 5. Configurar API
+- Baixe o [executável da API](https://github.com/fmacedosantos/yourself-API/blob/main/yourself-api.exe)
+- Execute o executável em segundo plano
+
+## 🏃‍♂️ Iniciando a Aplicação
+Após seguir todos os passos acima, inicie a aplicação:
 ```bash
 npm start
 ```
+
+## 🛠️ Solução de Problemas
+- Certifique-se de que todas as etapas foram seguidas corretamente
+- Verifique se o endereço IP está correto
+- Confirme que a API está em execução antes de iniciar a aplicação
+
+## 🤝 Contribuição
+Contribuições são bem-vindas! Por favor, leia as diretrizes de contribuição antes de fazer um pull request.
+
+## 🆘 Suporte
+Em caso de dúvidas, abra uma issue no repositório do GitHub ou entre em contato com o mantenedor do projeto.
