@@ -8,16 +8,4 @@ export const styles = StyleSheet.create({
       alignItems: 'center',
       backgroundColor: COLORS.GRAY
     },
-    containerInputs: {
-      width: '100%', 
-      marginLeft: '20%', 
-      marginTop: '20%'
-    },
-    editPomodoro: {
-      color: COLORS.BLUE, 
-      fontFamily: 'Itim-Regular', 
-      fontSize: 18, 
-      textDecorationLine: 'underline', 
-      marginTop: 5
-    }
   })

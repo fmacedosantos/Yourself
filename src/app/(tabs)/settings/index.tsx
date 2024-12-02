@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 import { styles } from './styles';
 import LoadingScreen from '@/src/components/loadindScreen';
 import { SummaryStats } from '@/src/components/summaryStats';
@@ -10,6 +10,7 @@ import { atualizarUsuario, carregarResumoEstatisticas, carregarUsuario, logout }
 import { passwordsMatch, validatePasswordStrength } from '@/src/utils/validators';
 import { BackButton } from '@/src/components/backButton/indes';
 import { Title } from '@/src/components/title';
+import { router } from 'expo-router';
 
 export default function Settings() {
     const [resumoEstatisticas, setResumoEstatisticas] = useState({ ofensiva: 0, pontos: 0 });
@@ -21,7 +22,7 @@ export default function Settings() {
     const [informacoes, setInformacoes] = useState({ nome: '', apelido: '' });
     const [message, setMessage] = useState('');
     const [visible, setVisible] = useState(false);
-    const [logoutAlertVisible, setLogoutAlertVisible] = useState(false); // Novo estado para o alerta de logout
+    const [logoutAlertVisible, setLogoutAlertVisible] = useState(false); 
 
     useEffect(() => {
         const carregarDados = async () => {
@@ -96,6 +97,10 @@ export default function Settings() {
         await logout();
     };
 
+    function handleGoToEditTimer() {
+        router.navigate('/(tabs)/editTimer');
+    }
+
     if (loading) return <LoadingScreen />;
 
     return (
@@ -103,13 +108,14 @@ export default function Settings() {
             <BackButton />
             <SummaryStats ofensiva={resumoEstatisticas.ofensiva} pontos={resumoEstatisticas.pontos} />
             <Title title="Configurações" containerStyle={{ position: 'absolute', top: 0 }} />
-            <View style={{width: '100%', marginLeft: '20%', marginTop: '20%'}}>
+            <View style={styles.containerInputs}>
                 <FormInput value={nome} onChangeText={setNome} placeholder={informacoes.nome} label="Nome"/>
                 <FormInput value={apelido} onChangeText={setApelido} placeholder={informacoes.apelido} label="Apelido" />
                 <FormInput value={senha} onChangeText={setSenha} label="Nova senha" isPassword />
                 <FormInput value={confirmarSenha} onChangeText={setConfirmarSenha} label="Confirmar senha" isPassword />
                 <SolidButton title="Atualizar" action={handleUpdate} />
             </View>
+            <Text onPress={handleGoToEditTimer} style={styles.editPomodoro}>Editar temporizador pomodoro</Text>
             <MessageAlert
                 type={1}
                 message={message}
