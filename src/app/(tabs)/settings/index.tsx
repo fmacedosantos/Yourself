@@ -9,6 +9,7 @@ import { MessageAlert } from '@/src/components/messageAlert';
 import { atualizarUsuario, carregarResumoEstatisticas, carregarUsuario, logout } from '@/src/services/api/user';
 import { passwordsMatch, validatePasswordStrength } from '@/src/utils/validators';
 import { BackButton } from '@/src/components/backButton/indes';
+import { Title } from '@/src/components/title';
 
 export default function Settings() {
     const [resumoEstatisticas, setResumoEstatisticas] = useState({ ofensiva: 0, pontos: 0 });
@@ -101,8 +102,14 @@ export default function Settings() {
         <View style={styles.container}>
             <BackButton />
             <SummaryStats ofensiva={resumoEstatisticas.ofensiva} pontos={resumoEstatisticas.pontos} />
-            <FormInput value={nome} onChangeText={setNome} placeholder={informacoes.nome} label="Nome" />
-            <FormInput value={apelido} onChangeText={setApelido} placeholder={informacoes.apelido} label="Apelido" />
+            <Title title="Configurações" containerStyle={{ position: 'absolute', top: 0 }} />
+            <View style={{width: '100%', marginLeft: '20%', marginTop: '20%'}}>
+                <FormInput value={nome} onChangeText={setNome} placeholder={informacoes.nome} label="Nome"/>
+                <FormInput value={apelido} onChangeText={setApelido} placeholder={informacoes.apelido} label="Apelido" />
+                <FormInput value={senha} onChangeText={setSenha} label="Nova senha" isPassword />
+                <FormInput value={confirmarSenha} onChangeText={setConfirmarSenha} label="Confirmar senha" isPassword />
+                <SolidButton title="Atualizar" action={handleUpdate} />
+            </View>
             <MessageAlert
                 type={1}
                 message={message}
@@ -115,9 +122,6 @@ export default function Settings() {
                 visible={logoutAlertVisible}
                 onCancel={handleLogout}
             />
-            <FormInput value={senha} onChangeText={setSenha} label="Nova senha" isPassword />
-            <FormInput value={confirmarSenha} onChangeText={setConfirmarSenha} label="Confirmar senha" isPassword />
-            <SolidButton title="Atualizar" action={handleUpdate} />
         </View>
     );
 }

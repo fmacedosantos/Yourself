@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { SummaryStats } from "@/src/components/summaryStats";
 import LoadingScreen from "@/src/components/loadindScreen";
 import { carregarResumoEstatisticas } from "@/src/services/api/user";
+import { Title } from "@/src/components/title";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -36,7 +37,7 @@ export default function Shop() {
         ofensiva={resumoEstatisticas.ofensiva} 
         pontos={resumoEstatisticas.pontos}
       />
-      <Text>Shop</Text>
+      <Title title="Loja de itens" containerStyle={{ position: 'absolute', top: 0 }} />
     </View>
   );
 }

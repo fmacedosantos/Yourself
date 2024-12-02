@@ -10,6 +10,7 @@ import { router } from 'expo-router';
 import { MessageAlert } from '@/src/components/messageAlert';
 import { validateFields } from '@/src/utils/validators';
 import { BackButton } from '@/src/components/backButton/indes';
+import { Title } from '@/src/components/title';
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -66,6 +67,7 @@ export default function ConfirmPassword() {
       ofensiva={resumoEstatisticas.ofensiva} 
       pontos={resumoEstatisticas.pontos}
     />
+    <Title title="Confirme sua senha" containerStyle={{ position: 'absolute', top: 0 }} />
     <BackButton/>
     <MessageAlert
         type={1}

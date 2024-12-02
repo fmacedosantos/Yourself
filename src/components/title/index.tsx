@@ -5,12 +5,13 @@ import { styles } from './styles';
 interface TitleProps {
   title: string;
   style?: StyleProp<TextStyle>;
+  containerStyle?: StyleProp<TextStyle>;
 }
 
-export function Title ({ title, style }: TitleProps) {
+export function Title ({ title, style, containerStyle }: TitleProps) {
   
   return (
-    <View style={styles.titleContainer}>
+    <View style={[styles.titleContainer, containerStyle]}>
       <Text style={[styles.titleText, style]}>{title}</Text>
     </View>
   );
