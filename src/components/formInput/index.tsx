@@ -1,4 +1,4 @@
-import { Text, TextInput, View } from 'react-native';
+import { KeyboardTypeOptions, Text, TextInput, View } from 'react-native';
 import { useState } from 'react';
 import { styles } from './styles';
 
@@ -8,9 +8,10 @@ interface FormInputProps {
   isPassword?: boolean;
   value: string;
   onChangeText: (text: string) => void;
+  type?: KeyboardTypeOptions 
 }
 
-export function FormInput({ label, placeholder, isPassword, value, onChangeText }: FormInputProps) {
+export function FormInput({ label, placeholder, isPassword, value, onChangeText, type = 'default' }: FormInputProps) {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
@@ -23,6 +24,7 @@ export function FormInput({ label, placeholder, isPassword, value, onChangeText 
         )}
 
         <TextInput
+          keyboardType={type}
           placeholder=""
           secureTextEntry={isPassword}
           style={styles.input}
