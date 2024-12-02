@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 import { styles } from './styles';
 import LoadingScreen from '@/src/components/loadindScreen';
 import { SummaryStats } from '@/src/components/summaryStats';
@@ -105,29 +105,31 @@ export default function Settings() {
 
     return (
         <View style={styles.container}>
-            <BackButton />
-            <SummaryStats ofensiva={resumoEstatisticas.ofensiva} pontos={resumoEstatisticas.pontos} />
-            <Title title="Configurações" containerStyle={{ position: 'absolute', top: 0 }} />
-            <View style={styles.containerInputs}>
-                <FormInput value={nome} onChangeText={setNome} placeholder={informacoes.nome} label="Nome"/>
-                <FormInput value={apelido} onChangeText={setApelido} placeholder={informacoes.apelido} label="Apelido" />
-                <FormInput value={senha} onChangeText={setSenha} label="Nova senha" isPassword />
-                <FormInput value={confirmarSenha} onChangeText={setConfirmarSenha} label="Confirmar senha" isPassword />
-                <SolidButton title="Atualizar" action={handleUpdate} />
-            </View>
-            <Text onPress={handleGoToEditTimer} style={styles.editPomodoro}>Editar temporizador pomodoro</Text>
-            <MessageAlert
-                type={1}
-                message={message}
-                visible={visible}
-                onCancel={() => setVisible(false)}
-            />
-            <MessageAlert
-                type={1}
-                message="Você precisará se logar novamente."
-                visible={logoutAlertVisible}
-                onCancel={handleLogout}
-            />
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
+                <BackButton />
+                <SummaryStats ofensiva={resumoEstatisticas.ofensiva} pontos={resumoEstatisticas.pontos} />
+                <Title title="Configurações" containerStyle={{ position: 'absolute', top: 0 }} />
+                <View style={styles.containerInputs}>
+                    <FormInput value={nome} onChangeText={setNome} placeholder={informacoes.nome} label="Nome"/>
+                    <FormInput value={apelido} onChangeText={setApelido} placeholder={informacoes.apelido} label="Apelido" />
+                    <FormInput value={senha} onChangeText={setSenha} label="Nova senha" isPassword />
+                    <FormInput value={confirmarSenha} onChangeText={setConfirmarSenha} label="Confirmar senha" isPassword />
+                    <SolidButton title="Atualizar" action={handleUpdate} />
+                </View>
+                <Text onPress={handleGoToEditTimer} style={styles.editPomodoro}>Editar temporizador pomodoro</Text>
+                <MessageAlert
+                    type={1}
+                    message={message}
+                    visible={visible}
+                    onCancel={() => setVisible(false)}
+                />
+                <MessageAlert
+                    type={1}
+                    message="Você precisará se logar novamente."
+                    visible={logoutAlertVisible}
+                    onCancel={handleLogout}
+                />
+            </ScrollView>
         </View>
     );
 }
