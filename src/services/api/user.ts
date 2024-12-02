@@ -4,7 +4,7 @@ import firebase from '../../../firebase-init.js';
 import { router } from 'expo-router';
 import { PATHS, ROUTES } from '@/src/constants/Routes';
 import { fetchWithAuth } from '@/src/utils/fetchWithAuth';
-import { decryptAES, encryptAES } from '../../utils/crypto.ts';
+import { decryptAES, encryptAES } from '../../utils/crypto';
 
 interface Atividade {
   id: string;
@@ -39,6 +39,11 @@ interface UpdateUserData {
   nome?: string;
   apelido?: string;
   novaSenha?: string;
+}
+
+interface UpdatePreferences {
+  preferenciaConcentracao?: number;
+  preferenciaDescanso?: number;
 }
 
 const erroServidor = 'Encontramos problemas ao conectar com o servidor.';
@@ -140,7 +145,14 @@ export async function register(email: string, nome: string, apelido: string, sen
     }
   }
 
-  export async function reauthenticateUser(senha: string) {
+  export async function reauthenticateUser(senha: string) { //ok
+    const { success, message } = await checkToken();
+  
+    if (!success) {
+      await logout();
+      return { success: false, message: message };
+    }
+    
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.REAUTHENTICATE), {
         method: 'POST',
@@ -179,7 +191,7 @@ export async function register(email: string, nome: string, apelido: string, sen
     }
   }
 
-  export async function checkToken() {
+  export async function checkToken() { //ok
     const jwt = await AsyncStorage.getItem('jwt');
     const loginDate = await AsyncStorage.getItem('loginDate');
 
@@ -208,10 +220,14 @@ export async function register(email: string, nome: string, apelido: string, sen
                     
                     return { success: true, message: 'Token renovado com sucesso!' };
                 } catch {
+                  console.log("Mensagem: " + data.message);
+                  console.log("Usuário: " + user);
                     await logout();
                     return { success: false, message: 'Não foi possível renovar a sessão.' };
                 }
             } else {
+              console.log("Mensagem: " + data.message);
+              console.log("Usuário: " + user);
                 await logout();
                 return { success: false, message: 'Sessão expirada. Faça login novamente.' };
             }
@@ -224,7 +240,7 @@ export async function register(email: string, nome: string, apelido: string, sen
     }
   }
 
-  export async function deleteActivity(id: string) {
+  export async function deleteActivity(id: string) { //ok
     const { success, message } = await checkToken();
   
     if (!success) {
@@ -253,7 +269,7 @@ export async function register(email: string, nome: string, apelido: string, sen
     }
   }  
 
-  export async function atualizarUsuario(userData: UpdateUserData) {
+  export async function atualizarUsuario(userData: UpdateUserData) { //ok
     const {success, message} = await checkToken();
   
     if (!success) {
@@ -281,6 +297,40 @@ export async function register(email: string, nome: string, apelido: string, sen
         return { success: true, message: 'Dados atualizados com sucesso!' };
       } else {
         return { success: false, message: data.message || 'Erro ao atualizar dados.' };
+      }
+    } catch {
+      return { success: false, message: erroServidor };
+    }
+  }
+
+  export async function updatePreferences(preferences: UpdatePreferences) {
+    const {success, message} = await checkToken();
+  
+    if (!success) {
+      await logout();
+      return { success: false, message: message };
+    }
+
+    try {
+      const filteredData = Object.fromEntries(
+        Object.entries(preferences).filter(([_, value]) => value !== undefined && value !== '')
+      );
+
+      if (Object.keys(filteredData).length === 0) {
+        return { success: false, message: 'Nenhum dado fornecido para atualização.' };
+      }
+
+      const response = await fetchWithAuth(ROUTES(PATHS.UPDATE_PREFERENCES), {
+        method: 'PATCH',
+        body: JSON.stringify(filteredData),
+      });
+      
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        return { success: true, message: 'Temporizador pomodoro atualizado com sucesso!' };
+      } else {
+        return { success: false, message: data.message || 'Erro ao atualizar o temporizador.' };
       }
     } catch {
       return { success: false, message: erroServidor };
