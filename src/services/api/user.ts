@@ -4,6 +4,7 @@ import firebase from '../../../firebase-init.js';
 import { router } from 'expo-router';
 import { PATHS, ROUTES } from '@/src/constants/Routes';
 import { fetchWithAuth } from '@/src/utils/fetchWithAuth';
+import { decryptAES, encryptAES } from '../../utils/crypto.ts';
 
 interface Atividade {
   id: string;
@@ -41,8 +42,6 @@ interface UpdateUserData {
 }
 
 const erroServidor = 'Encontramos problemas ao conectar com o servidor.';
-
-firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
 
 export async function register(email: string, nome: string, apelido: string, senha: string) { // ok
     try {
@@ -88,6 +87,9 @@ export async function register(email: string, nome: string, apelido: string, sen
             await AsyncStorage.setItem('jwt', token);
             await AsyncStorage.setItem('loginDate', new Date().toISOString());
             
+            const encryptedEmail = encryptAES(email);
+            await AsyncStorage.setItem('userEmail', encryptedEmail);
+            
             return { success: success, message: message };
           } else {
             return { success: false, message: message || 'Erro ao autenticar usuário.' };
@@ -125,6 +127,11 @@ export async function register(email: string, nome: string, apelido: string, sen
       if (loginDate) {
         await AsyncStorage.removeItem('loginDate');
       }
+
+      const userEmail = await AsyncStorage.getItem('userEmail');
+      if (userEmail) {
+        await AsyncStorage.removeItem('userEmail');
+      }
   
       await firebase.auth().signOut(); 
       router.replace('/');
@@ -133,36 +140,42 @@ export async function register(email: string, nome: string, apelido: string, sen
     }
   }
 
-  export async function reauthenticateUser(senha: string) { // ok
+  export async function reauthenticateUser(senha: string) {
     try {
       const response = await fetchWithAuth(ROUTES(PATHS.REAUTHENTICATE), {
         method: 'POST',
         body: JSON.stringify({ senha }),
       });
-
       const data = await response.json();
-      const success = data.success;
-      const message = data.message;
-
-      if (response.ok) {
-        if (success) {
-          const user = firebase.auth().currentUser;
-      
-          if (!user || !user.email) {
-            return { success: false, message: 'Usuário não encontrado.' };
-          }
   
-          await firebase.auth().signInWithEmailAndPassword(user.email, senha);
-      
-          return { success: true, message: 'Reautenticação realizada com sucesso!' };
-        } else {
-          return { success: false, message: message || 'Erro ao autenticar usuário.' };
-        }
-      } else {
-        return { success: false, message: message || 'Erro ao reautenticar usuário.' };
+      if (!response.ok || !data.success) {
+        return { success: false, message: data.message || 'Erro ao autenticar usuário.' };
       }
-    } catch {
-        return { success: false, message: erroServidor };
+  
+      let user = firebase.auth().currentUser;
+  
+      if (!user || !user.email) {
+        const encryptedEmail = await AsyncStorage.getItem('userEmail');
+  
+        if (encryptedEmail) {
+          const email = decryptAES(encryptedEmail);
+  
+          const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
+          user = userCredential.user;
+        }
+  
+        if (!user) {
+          return { success: false, message: 'Sessão inválida. Faça login novamente.' };
+        }
+      }
+  
+      const credential = firebase.auth.EmailAuthProvider.credential(String(user.email), senha);
+      await user.reauthenticateWithCredential(credential);
+  
+      return { success: true, message: 'Reautenticação realizada com sucesso!' };
+    } catch (error) {
+      console.error('Erro na reautenticação:', error); 
+      return { success: false, message: erroServidor };
     }
   }
 
