@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
-import { styles } from './styles';
 import AddCategory from '../../assets/images/add-category-icon.svg';
+import { styles } from './styles';
 
 export function ListCategories({ setCategoria, style }: any) {
     const [titleList, setTitleList] = useState('');
