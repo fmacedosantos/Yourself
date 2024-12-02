@@ -1,13 +1,18 @@
 import React from 'react';
 import { Modal, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './styles';
+import { COLORS } from '@/src/constants/Colors';
 
 type MessageAlertProps = {
-  type: 1 | 2; 
+  type: 1 | 2;
   message: string;
   visible: boolean;
-  onConfirm?: () => void; 
-  onCancel?: () => void; 
+  onConfirm?: () => void;
+  onCancel?: () => void;
+  confirmText?: string;
+  cancelText?: string;
+  okText?: string;
+  title?: string
 };
 
 export function MessageAlert({
@@ -16,7 +21,14 @@ export function MessageAlert({
   visible,
   onConfirm,
   onCancel,
+  confirmText = 'Excluir',
+  cancelText = 'Cancelar',
+  okText = 'OK',
+  title = 'Comunicado:'
 }: MessageAlertProps) {
+  const confirmButtonStyle =
+    confirmText === 'Excluir' ? styles.dualButton : [styles.dualButton, { backgroundColor: COLORS.DARK_ORANGE }];
+
   return (
     <Modal
       transparent
@@ -25,26 +37,26 @@ export function MessageAlert({
     >
       <View style={styles.overlay}>
         <View style={styles.alertBox}>
-          <Text style={styles.title}>Comunicado:</Text>
+          <Text style={styles.title}>{title }</Text>
           <Text style={styles.message}>{message}</Text>
 
           <View
             style={[
               styles.buttonContainer,
-              type === 1 && styles.singleButtonContainer, 
+              type === 1 && styles.singleButtonContainer,
             ]}
           >
             {type === 1 ? (
               <TouchableOpacity style={styles.singleButton} onPress={onCancel}>
-                <Text style={styles.buttonText}>OK</Text>
+                <Text style={styles.buttonText}>{okText}</Text>
               </TouchableOpacity>
             ) : (
               <>
-                <TouchableOpacity style={styles.dualButton} onPress={onConfirm}>
-                  <Text style={styles.buttonText}>Excluir</Text>
+                <TouchableOpacity style={confirmButtonStyle} onPress={onConfirm}>
+                  <Text style={styles.buttonText}>{confirmText}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.dualButton, styles.cancelButton]} onPress={onCancel}>
-                  <Text style={styles.buttonText}>Cancelar</Text>
+                  <Text style={styles.buttonText}>{cancelText}</Text>
                 </TouchableOpacity>
               </>
             )}
