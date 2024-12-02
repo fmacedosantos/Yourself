@@ -48,7 +48,7 @@ export default function AddNewActivity() {
       setVisible(true);
       setMessage('Os seguintes campos são obrigatórios:\nTítulo, categoria e nível de dificuldade.');
     } else {
-      router.replace({
+      router.navigate({
         pathname: '/(tabs)/pomodoro',
         params: {
           titulo,
