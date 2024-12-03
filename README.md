@@ -23,19 +23,22 @@ Instale todas as dependências do projeto com:
 npm install
 ```
 
-### 3. Configuração de Variáveis de Ambiente
+### 3. Instale Gpg4win
+Acesse o [site](https://www.gpg4win.org/get-gpg4win.html) da ferramenta de descriptografia e baixe.
+
+### 4. Configuração de Variáveis de Ambiente
 Descriptografe as variáveis de ambiente:
 ```bash
 npm run decrypt
 ```
 
-### 4. Configuração de Endereço IP
+### 5. Configuração de Endereço IP
 Abra o arquivo `src/constants/Routes.ts` e altere a constante `IP` para o endereço IPv4 da sua máquina:
 ```typescript
 const IP = 'SEU_ENDERECO_IPV4_AQUI';
 ```
 
-### 5. Configurar API
+### 6. Configurar API
 - Baixe o [executável da API](https://github.com/fmacedosantos/yourself-API/blob/main/yourself-api.exe)
 - Execute o executável em segundo plano, seguindo as instruções no [repositório](https://github.com/fmacedosantos/yourself-API.git).
 
