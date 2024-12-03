@@ -1,4 +1,4 @@
-const IP = '192.168.1.13';
+const IP = '192.168.56.1';
 
 export enum PATHS {
     SHOW_ACTIVITIES = 'atividade/mostrar', // feito
@@ -6,7 +6,7 @@ export enum PATHS {
     SHOW_PREFERENCES = 'usuario/mostrar-preferencias', // feito
     REGISTER_USER = 'usuario/cadastrar', // feito
     REGISTER_ACTIVITY = 'atividade/cadastrar', // feito
-    SHOW_ITEMS = 'item/mostrar-todos',
+    SHOW_ITEMS = 'item/mostrar-todos', //feito
     SHOW_ITEMS_USER = 'item/mostrar',
     SHOW_USER = 'usuario/mostrar', // feito
     UPDATE_USER = 'usuario/atualizar', // feito
