@@ -37,7 +37,7 @@ const IP = 'SEU_ENDERECO_IPV4_AQUI';
 
 ### 5. Configurar API
 - Baixe o [executável da API](https://github.com/fmacedosantos/yourself-API/blob/main/yourself-api.exe)
-- Execute o executável em segundo plano
+- Execute o executável em segundo plano, seguindo as instruções no [repositório](https://github.com/fmacedosantos/yourself-API.git).
 
 ## 🏃‍♂️ Iniciando a Aplicação
 Após seguir todos os passos acima, inicie a aplicação:
