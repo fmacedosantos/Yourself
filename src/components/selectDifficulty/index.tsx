@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Text, Pressable, View } from 'react-native';
 
 import { styles } from './styles';
 
@@ -13,7 +13,7 @@ export function SelectDifficulty({ style, onDifficultySelect, selectedDifficulty
         <Text style={styles.text}>Nível de Dificuldade</Text>
   
         <View style={[styles.containerButtons, style]}>
-          <TouchableOpacity
+          <Pressable
             style={[
               styles.buttonDifficulty,
               styles.buttonDifficultyEasy,
@@ -22,9 +22,9 @@ export function SelectDifficulty({ style, onDifficultySelect, selectedDifficulty
             onPress={() => handleDifficultySelect(1)}
           >
             <Text style={styles.textDifficulty}>I</Text>
-          </TouchableOpacity>
+          </Pressable>
   
-          <TouchableOpacity
+          <Pressable
             style={[
               styles.buttonDifficulty,
               styles.buttonDifficultyAvarege,
@@ -33,9 +33,9 @@ export function SelectDifficulty({ style, onDifficultySelect, selectedDifficulty
             onPress={() => handleDifficultySelect(2)}
           >
             <Text style={styles.textDifficulty}>II</Text>
-          </TouchableOpacity>
+          </Pressable>
   
-          <TouchableOpacity
+          <Pressable
             style={[
               styles.buttonDifficulty,
               styles.buttonDifficultyHard,
@@ -44,7 +44,7 @@ export function SelectDifficulty({ style, onDifficultySelect, selectedDifficulty
             onPress={() => handleDifficultySelect(3)}
           >
             <Text style={styles.textDifficulty}>III</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
     );
