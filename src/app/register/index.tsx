@@ -52,7 +52,7 @@ export default function Cadastro() {
       style={styles.container}
     >
       <YourselfTitle width={200} height={100} />
-      <FormInput label="Email" placeholder="seu@email.com" value={email} onChangeText={setEmail}/>
+      <FormInput label="Email" placeholder="seu@email.com" value={email} onChangeText={setEmail} type="email"/>
       <FormInput label="Nome" placeholder="Nome completo" value={nome} onChangeText={setNome}/>
       <FormInput label="Nome de usuário" placeholder="Nome de usuário" value={apelido} onChangeText={setApelido}/>
       <FormInput label="Senha" placeholder="Senha" value={senha} onChangeText={setSenha} isPassword={true}/>

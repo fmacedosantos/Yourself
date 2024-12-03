@@ -111,6 +111,7 @@ export default function Index() {
         placeholder="seu@email.com"
         value={email}
         onChangeText={setEmail}
+        type='email'
       />
       <FormInput
         label="Senha"

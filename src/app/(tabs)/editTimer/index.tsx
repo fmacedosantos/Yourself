@@ -93,8 +93,8 @@ export default function EditTimer() {
             <BackButton />
             <SummaryStats ofensiva={resumoEstatisticas.ofensiva} pontos={resumoEstatisticas.pontos} />
             <Title title="Editar temporizador" containerStyle={{ position: 'absolute', top: 0 }} />
-            <FormInput label='Tempo de concentração' placeholder={`${String(preferencias.preferenciaConcentracao)} minutos.`} value={concentração} onChangeText={setConcentracao}/>
-            <FormInput label='Tempo de descanso' placeholder={`${String(preferencias.preferenciaDescanso)} minutos.`} value={descanso} onChangeText={setDescanso}/>
+            <FormInput label='Tempo de concentração' placeholder={`${String(preferencias.preferenciaConcentracao)} minutos.`} value={concentração} onChangeText={setConcentracao} type='numeric'/>
+            <FormInput label='Tempo de descanso' placeholder={`${String(preferencias.preferenciaDescanso)} minutos.`} value={descanso} onChangeText={setDescanso} type='numeric'/>
             <SolidButton title='Salvar' action={handleUpdate}/>
             <MessageAlert
                 type={1}
