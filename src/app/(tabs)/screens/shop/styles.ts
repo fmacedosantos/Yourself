@@ -23,4 +23,11 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 10, 
   },
+  noItemsText: {
+    color: COLORS.WHITE, 
+    textAlign: 'center',
+    fontSize: 16,
+    marginTop: '35%', 
+    fontFamily: 'Itim-Regular'
+  }, 
 });
