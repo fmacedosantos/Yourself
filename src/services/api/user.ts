@@ -458,7 +458,29 @@ export async function register(email: string, nome: string, apelido: string, sen
         setItems(data.data as Item[]);
         return { success: true, message: 'Itens da loja carregados com sucesso!' };
       } else {
-        return { success: false, message: 'Erro ao buscar itens da loja.' };
+        return { success: false, message: data.message || 'Erro ao buscar itens da loja.' };
+      }
+    } catch {
+      return { success: false, message: erroServidor };
+    }
+  }
+
+  export async function getItems(setItems: (items: Item[]) => void) {
+    const {success, message} = await checkToken();
+  
+    if (!success) {
+      await logout();
+      return { success: false, message: message };
+    }
+    try {
+      const response = await fetchWithAuth(ROUTES(PATHS.SHOW_ITEMS_USER));
+      const data = await response.json();
+  
+      if (response.ok && data.data) {
+        setItems(data.data as Item[]);
+        return { success: true, message: data.message };
+      } else {
+        return { success: false, message: data.message || 'Erro ao buscar itens ddo usuário.' };
       }
     } catch {
       return { success: false, message: erroServidor };

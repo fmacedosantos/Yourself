@@ -1,10 +1,14 @@
-// src/screens/shop/index.tsx
 import { ScrollView, View, Text } from "react-native";
 import { styles } from "./styles";
 import { useEffect, useState } from "react";
 import { SummaryStats } from "@/src/components/summaryStats";
 import LoadingScreen from "@/src/components/loadindScreen";
-import { buyItem, carregarResumoEstatisticas, getAllItems } from "@/src/services/api/user";
+import { 
+  buyItem, 
+  carregarResumoEstatisticas, 
+  getAllItems, 
+  getItems
+} from "@/src/services/api/user";
 import { Title } from "@/src/components/title";
 import { Item } from "@/src/components/item";
 import { MessageAlert } from "@/src/components/messageAlert";
@@ -39,8 +43,23 @@ export default function Shop() {
   useEffect(() => {
     async function carregarDados() {
       await carregarResumoEstatisticas(setResumoEstatisticas);
-      await getAllItems(setItens); // Carrega os itens da loja
-      setLoading(false);
+      
+      try {
+        const allItemsResponse = await getAllItems((allItems) => {
+          getItems((userItems) => {
+            const userItemIds = userItems.map(item => item.id);
+            const availableItems = allItems.filter(
+              (item) => !userItemIds.includes(item.id)
+            );
+            setItens(availableItems);
+          });
+        });
+        
+        setLoading(false);
+      } catch (error) {
+        console.error("Error loading shop items:", error);
+        setLoading(false);
+      }
     }
     carregarDados();
   }, []);
@@ -61,7 +80,18 @@ export default function Shop() {
     if (itemIdToBuy && itemPriceToBuy) {
       const response = await buyItem(itemIdToBuy, itemPriceToBuy);
       if (response.success) {
-        setItens(itens.filter((item) => item.id !== itemIdToBuy)); // não funciona ainda
+        await carregarResumoEstatisticas(setResumoEstatisticas);
+        
+        const allItemsResponse = await getAllItems((allItems) => {
+          getItems((userItems) => {
+            const userItemIds = userItems.map(item => item.id);
+            const availableItems = allItems.filter(
+              (item) => !userItemIds.includes(item.id)
+            );
+            setItens(availableItems);
+          });
+        });
+  
         setVisible(false);
       } else {
         setType(1);
