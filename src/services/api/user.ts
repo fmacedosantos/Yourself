@@ -101,7 +101,10 @@ export async function register(email: string, nome: string, apelido: string, sen
             
             const encryptedEmail = encryptAES(email);
             await AsyncStorage.setItem('userEmail', encryptedEmail);
-            
+
+            const encryptedPassword = encryptAES(senha);
+            await AsyncStorage.setItem('userPassword', encryptedPassword);
+
             return { success: success, message: message };
           } else {
             return { success: false, message: message || 'Erro ao autenticar usuário.' };
@@ -144,6 +147,11 @@ export async function register(email: string, nome: string, apelido: string, sen
       if (userEmail) {
         await AsyncStorage.removeItem('userEmail');
       }
+
+      const userPassword = await AsyncStorage.getItem('userPassword');
+      if (userPassword) {
+        await AsyncStorage.removeItem('userPassword');
+      }
   
       await firebase.auth().signOut(); 
       router.replace('/');
@@ -171,26 +179,6 @@ export async function register(email: string, nome: string, apelido: string, sen
         return { success: false, message: data.message || 'Erro ao autenticar usuário.' };
       }
   
-      let user = firebase.auth().currentUser;
-  
-      if (!user || !user.email) {
-        const encryptedEmail = await AsyncStorage.getItem('userEmail');
-  
-        if (encryptedEmail) {
-          const email = decryptAES(encryptedEmail);
-  
-          const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
-          user = userCredential.user;
-        }
-  
-        if (!user) {
-          return { success: false, message: 'Sessão inválida. Faça login novamente.' };
-        }
-      }
-  
-      const credential = firebase.auth.EmailAuthProvider.credential(String(user.email), senha);
-      await user.reauthenticateWithCredential(credential);
-  
       return { success: true, message: 'Reautenticação realizada com sucesso!' };
     } catch (error) {
       console.error('Erro na reautenticação:', error); 
@@ -201,10 +189,14 @@ export async function register(email: string, nome: string, apelido: string, sen
   export async function checkToken() { //ok
     const jwt = await AsyncStorage.getItem('jwt');
     const loginDate = await AsyncStorage.getItem('loginDate');
+    const encryptedEmail = await AsyncStorage.getItem('userEmail');
+    const encryptedPassword = await AsyncStorage.getItem('userPassword');
 
-    if (!jwt || !loginDate) {
+    if (!jwt || !loginDate || !encryptedEmail || !encryptedPassword) {
       return { success: false, message: 'Usuário não autenticado!' };
+      
     }
+
     try {
         const response = await fetchWithAuth(ROUTES(PATHS.AUTHENTICATE_JWT), {
             method: 'POST',
@@ -212,32 +204,35 @@ export async function register(email: string, nome: string, apelido: string, sen
 
         const data = await response.json();
 
-        
         if (response.ok && data.success) {
             return { success: true, message: 'Usuário autenticado com sucesso!' };
         }
 
         if (data.message === 'Sessão expirada. Faça login novamente.') {
-            const user = firebase.auth().currentUser;
-            
-            if (user) {
-                try {
-                    const newToken = await user.getIdToken(true);
-                    await AsyncStorage.setItem('jwt', newToken);
-                    
-                    return { success: true, message: 'Token renovado com sucesso!' };
-                } catch {
-                  console.log("Mensagem: " + data.message);
-                  console.log("Usuário: " + user);
-                    await logout();
-                    return { success: false, message: 'Não foi possível renovar a sessão.' };
-                }
-            } else {
-              console.log("Mensagem: " + data.message);
-              console.log("Usuário: " + user);
-                await logout();
-                return { success: false, message: 'Sessão expirada. Faça login novamente.' };
+          let user = firebase.auth().currentUser;
+
+          if (user) {
+            try {
+                const newToken = await user.getIdToken(true);
+                await AsyncStorage.setItem('jwt', newToken);
+                
+                return { success: true, message: 'Token renovado com sucesso!' };
+            } catch {
+              await logout();
+              return { success: false, message: 'Não foi possível renovar a sessão.' };
             }
+          }
+          const email = decryptAES(encryptedEmail);
+          const password = decryptAES(encryptedPassword);
+  
+          const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+          user = userCredential.user;
+          
+          if (!user) {
+            await logout();
+            return { success: false, message: 'Sessão inválida. Faça login novamente.' };
+          }
+          return { success: true, message: 'Token renovado com sucesso!' };
         }
 
         return { success: false, message: 'Usuário não autenticado!' };
