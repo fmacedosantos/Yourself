@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
-import AddCategory from '../../assets/images/add-category-icon.svg';
+import AddCategory from '../../assets/images/add-category.svg';
 import { styles } from './styles';
 
 export default function ListCategories({ setCategoria, style }: any) {

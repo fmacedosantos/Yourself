@@ -4,9 +4,11 @@ import AddActivityIcon from "../../../assets/icons/add_activity-icon.svg";
 import ShopIcon from '../../../assets/icons/shop-icon.svg';
 import ProfileIcon from '../../../assets/icons/profile-icon.svg';
 import { COLORS } from "@/src/constants/Colors";
+import { StatusBar } from "react-native";
 
 export default function TabsLayout() {
-  return (
+  return <>
+  <StatusBar barStyle="light-content" backgroundColor={COLORS.GRAY} />
     <Tabs screenOptions={{ 
         headerShown: false,
         tabBarShowLabel: false,
@@ -65,5 +67,5 @@ export default function TabsLayout() {
         }}
       />
     </Tabs>
-  );
+  </>
 }

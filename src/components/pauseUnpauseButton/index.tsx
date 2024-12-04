@@ -1,7 +1,7 @@
 import { Pressable, StyleProp, TextStyle } from 'react-native';
 import { styles } from './styles';
-import PlayIcon from '../../assets/images/play-icon.svg';
-import PauseIcon from '../../assets/images/pause-icon.svg';
+import PlayIcon from '../../assets/images/play.svg';
+import PauseIcon from '../../assets/images/pause.svg';
 
 interface ButtonProps {
     isPaused: boolean;

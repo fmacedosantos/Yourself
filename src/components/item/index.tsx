@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Image, Text, Pressable } from 'react-native';
-import XpIcon from '../../assets/images/xp-icon.svg';
+import XpIcon from '../../assets/images/xp.svg';
 import { styles } from './styles';
 
 interface ItemProps {

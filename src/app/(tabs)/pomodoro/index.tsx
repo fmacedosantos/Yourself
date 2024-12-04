@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Alert, Platform, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { SummaryStats } from '@/src/components/summaryStats';
 import { Title } from '@/src/components/title';
 import { PauseUnpauseButton } from '@/src/components/pauseUnpauseButton';
 import { FinishActivityButton } from '@/src/components/finishActivityButton';
 import { COLORS } from '@/src/constants/Colors';
-import Tomato from '../../../assets/images/tomato-icon.svg';
+import Tomato from '../../../assets/images/tomato.svg';
 import { styles } from './styles';
 import { cadastrarAtividade, carregarPreferencias, carregarResumoEstatisticas } from '@/src/services/api/user';
 import LoadingScreen from '@/src/components/loadindScreen';

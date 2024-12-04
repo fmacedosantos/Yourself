@@ -4,7 +4,7 @@
     "slug": "yourself",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/app-icon.png",
+    "icon": "./src/assets/images/app-icon.png",
     "scheme": "yourself",
     "userInterfaceStyle": "automatic",
     "splash": {
@@ -15,14 +15,14 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./src/assets/images/app-icon.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/app-icon.png"
+      "favicon": "./src/assets/images/app-icon.png"
     },
     "plugins": [
       "expo-router"

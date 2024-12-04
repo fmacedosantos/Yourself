@@ -1,5 +1,5 @@
 import { useFonts } from "expo-font";
-import Itim from '../../assets/fonts/Itim-Regular.ttf';
+import Itim from '../assets/fonts/Itim-Regular.ttf';
 
 export function LoadFont(): boolean {
   const [fontsLoaded] = useFonts({
