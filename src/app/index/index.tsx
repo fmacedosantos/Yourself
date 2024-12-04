@@ -11,6 +11,7 @@ import { LoadFont } from '@/src/utils/loadFont';
 import LoadingScreen from '@/src/components/loadindScreen';
 import { checkToken, forgotPassword, login } from '@/src/services/api/user';
 import { MessageAlert } from '@/src/components/messageAlert';
+import { EmailInputAlert } from '@/src/components/inputMessageAlert';
 
 export default function Index() {
   const [email, setEmail] = useState('');
@@ -19,6 +20,7 @@ export default function Index() {
 
   // Alerta
   const [visible, setVisible] = useState(false);
+  const [visibleForgotPassword, setVisibleForgotPassword] = useState(false);
   const [message, setMessage] = useState('');
 
   const fontsLoaded = LoadFont();
@@ -76,27 +78,26 @@ export default function Index() {
     }
   }
 
-  async function handleForgotPassword() {
-    const fieldsValidate = validateFields({email});
+  async function handleForgotPassword(email: string) {
+    const fieldsValidate = validateFields({ email });
     const emailValidate = validateEmail(email);
-
+  
     if (!fieldsValidate.success) {
+      setVisibleForgotPassword(false);
       setVisible(true);
       setMessage(fieldsValidate.message);
     } else if (!emailValidate.success) {
+      setVisibleForgotPassword(false);
       setVisible(true);
       setMessage(emailValidate.message);
     } else {
-      const {success, message} = await forgotPassword(email);
-      if (success) {
-        setMessage(message);
-        setVisible(true);
-      } else {
-        setMessage(message);
-        setVisible(true);
-      }
+      const { success, message } = await forgotPassword(email);
+      setMessage(message);
+      setVisibleForgotPassword(false);
+      setVisible(true);
     }
   }
+  
 
   function handleGoToRegister() {
     router.navigate('/register');
@@ -132,10 +133,20 @@ export default function Index() {
 
       <Text
         style={styles.forget}
-        onPress={handleForgotPassword}
+        onPress={() => {
+          setEmail('');
+          setVisibleForgotPassword(true);
+        }}
       >
         Esqueceu a senha?
       </Text>
+      <EmailInputAlert 
+        onCancel={() => setVisibleForgotPassword(false)}
+        title='Insira seu email para redefinição:'
+        visible={visibleForgotPassword}
+        onSend={(email) => handleForgotPassword(email)} 
+      />
+
     </View>
   );
 }

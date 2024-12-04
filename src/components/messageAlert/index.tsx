@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, Pressable, Text, View } from 'react-native';
 import { styles } from './styles';
 import { COLORS } from '@/src/constants/Colors';
 
@@ -47,17 +47,17 @@ export function MessageAlert({
             ]}
           >
             {type === 1 ? (
-              <TouchableOpacity style={styles.singleButton} onPress={onCancel}>
+              <Pressable style={styles.singleButton} onPress={onCancel}>
                 <Text style={styles.buttonText}>{okText}</Text>
-              </TouchableOpacity>
+              </Pressable>
             ) : (
               <>
-                <TouchableOpacity style={confirmButtonStyle} onPress={onConfirm}>
+                <Pressable style={confirmButtonStyle} onPress={onConfirm}>
                   <Text style={styles.buttonText}>{confirmText}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.dualButton, styles.cancelButton]} onPress={onCancel}>
+                </Pressable>
+                <Pressable style={[styles.dualButton, styles.cancelButton]} onPress={onCancel}>
                   <Text style={styles.buttonText}>{cancelText}</Text>
-                </TouchableOpacity>
+                </Pressable>
               </>
             )}
           </View>
