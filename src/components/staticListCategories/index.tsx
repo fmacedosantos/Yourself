@@ -3,7 +3,7 @@ import { View, Text, Pressable } from 'react-native';
 import AddCategory from '../../assets/images/add-category-icon.svg';
 import { styles } from './styles';
 
-export function ListCategories({ setCategoria, style }: any) {
+export default function ListCategories({ setCategoria, style }: any) {
     const [titleList, setTitleList] = useState('');
     const [expanded, setExpanded] = useState(false);
 

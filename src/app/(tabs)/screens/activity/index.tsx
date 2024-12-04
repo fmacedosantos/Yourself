@@ -11,7 +11,7 @@ import { validateFields } from "@/src/utils/validators";
 import LoadingScreen from "@/src/components/loadindScreen";
 import { carregarResumoEstatisticas } from "@/src/services/api/user";
 import { MessageAlert } from "@/src/components/messageAlert";
-import { ListCategories } from "@/src/components/staticListCategories";
+import ListCategories from "@/src/components/staticListCategories";
 
 interface ResumoEstatisticas {
   ofensiva: number;
