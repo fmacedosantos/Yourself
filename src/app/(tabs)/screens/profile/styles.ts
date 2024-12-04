@@ -59,7 +59,7 @@ export const styles = StyleSheet.create({
     scrollContainer: {
       flexDirection: "row",
       flexWrap: "wrap",
-      gap: 10,
+      gap: 20,
       justifyContent: "center", 
       paddingHorizontal: 20,
       paddingTop: 10, 
