@@ -1,16 +1,20 @@
-import { TouchableOpacity } from 'react-native';
+import { Pressable, StyleProp, ViewStyle } from 'react-native';
 import { styles } from './styles';
-import BackIcon from '../../assets/images/back-icon.svg';
+import BackIcon from '../../assets/images/back.svg';
 import { router } from 'expo-router';
 
-function handleBack() {
-    router.back();
+interface BackButtonProps {
+  style?: StyleProp<ViewStyle>;
 }
 
-export function BackButton() {
+function handleBack() {
+  router.back();
+}
+
+export function BackButton({ style }: BackButtonProps) {
   return (
-    <TouchableOpacity style={styles.container} onPress={() => handleBack()}>
+    <Pressable style={[styles.container, style]} onPress={handleBack}>
       <BackIcon width={20} height={20} />
-    </TouchableOpacity>
+    </Pressable>
   );
 }

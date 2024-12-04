@@ -3,10 +3,11 @@ import { View } from "react-native";
 import YourselfTitle from '../../assets/images/yourself-title.svg';
 import { FormInput } from "../../components/formInput";
 import { BorderButton } from "../../components/borderButton";
-import { styles } from "../index/styles";
 import { passwordsMatch, validateEmail, validateFields, validatePasswordStrength } from "@/src/utils/validators";
 import { register } from "@/src/services/api/user";
 import { MessageAlert } from "@/src/components/messageAlert";
+import { BackButton } from "@/src/components/backButton/indes";
+import { styles } from "./styles";
 
 export default function Cadastro() {
   const [email, setEmail] = useState('');
@@ -52,6 +53,7 @@ export default function Cadastro() {
       style={styles.container}
     >
       <YourselfTitle width={200} height={100} />
+      <BackButton style={styles.backButton}/>
       <FormInput label="Email" placeholder="seu@email.com" value={email} onChangeText={setEmail} type="email"/>
       <FormInput label="Nome" placeholder="Nome completo" value={nome} onChangeText={setNome}/>
       <FormInput label="Nome de usuário" placeholder="Nome de usuário" value={apelido} onChangeText={setApelido}/>

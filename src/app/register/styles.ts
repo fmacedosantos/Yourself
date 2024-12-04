@@ -1,7 +1,7 @@
 import { COLORS } from "@/src/constants/Colors";
 import { StyleSheet } from "react-native";
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     login: {
         position: 'absolute',
         bottom: '5%',
@@ -12,5 +12,9 @@ const styles = StyleSheet.create({
       backgroundColor: COLORS.GRAY,
       justifyContent: 'center',
       alignItems: 'center'
+    },
+    backButton: {
+      top: 30,
+      left: 20
     }
   })
