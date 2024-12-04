@@ -14,7 +14,6 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.GRAY, 
   },
   scrollContainer: {
-    flexGrow: 1,
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 10,

@@ -7,7 +7,7 @@ interface ItemProps {
   icon: string;
   name: string;
   price: number;
-  action: () => void;
+  action?: () => void;
 }
 
 export function Item({ icon, name, price, action }: ItemProps) {

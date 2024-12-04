@@ -13,6 +13,15 @@ export const styles = StyleSheet.create({
       alignSelf: 'flex-start',
       marginLeft: '5%'
     },
+    text: {
+      alignSelf: 'flex-start',
+      fontSize: 22,  
+      marginBottom: 12,
+      color: COLORS.WHITE,
+      fontFamily: 'Itim-Regular', 
+      marginLeft: '5%',
+      marginTop: '5%',
+    },
     nome: {
       fontSize: 30,
       color: COLORS.ORANGE,
@@ -47,5 +56,20 @@ export const styles = StyleSheet.create({
       marginLeft: '3%',
       backgroundColor: COLORS.RED
     },
+    scrollContainer: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      gap: 10,
+      justifyContent: "center", 
+      paddingHorizontal: 20,
+      paddingTop: 10, 
+    },
+    noItemsText: {
+      color: COLORS.WHITE, 
+      textAlign: 'center',
+      fontSize: 16,
+      marginTop: '35%', 
+      fontFamily: 'Itim-Regular'
+    }, 
   })
   

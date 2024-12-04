@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { styles } from "./styles";
 import { Link, router } from "expo-router";
 import { useEffect, useState, useCallback } from "react";
@@ -7,7 +7,8 @@ import { SummaryStats } from "@/src/components/summaryStats";
 import { SolidButton } from "@/src/components/solidButton";
 import { BestStats } from "@/src/components/bestStats";
 import LoadingScreen from "@/src/components/loadindScreen";
-import { carregarMelhoresEstatisticas, carregarResumoEstatisticas, carregarUsuario, logout } from "@/src/services/api/user";
+import { carregarMelhoresEstatisticas, carregarResumoEstatisticas, carregarUsuario, getItems, logout } from "@/src/services/api/user";
+import { Item } from "@/src/components/item";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -25,6 +26,13 @@ interface MelhoresEstatisticas {
   totalPontos: number;
 }
 
+interface ItemLoja {
+  id: string;
+  icone: string;
+  nome: string;
+  preco: number;
+}
+
 export default function Profile() {
   const [resumoEstatisticas, setResumoEstatisticas] = useState<ResumoEstatisticas>({
     ofensiva: 0,
@@ -40,12 +48,19 @@ export default function Profile() {
     totalPontos: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [itens, setItens] = useState<ItemLoja[]>([]); 
 
   const carregarDados = useCallback(async () => {
     setLoading(true);
     await carregarResumoEstatisticas(setResumoEstatisticas);
     await carregarUsuario(setInformacoes);
     await carregarMelhoresEstatisticas(setMelhoresEstatisticas);
+    
+    // Directly load the user's purchased items
+    await getItems((userItems) => {
+      setItens(userItems);
+    });
+  
     setLoading(false);
   }, []);
 
@@ -89,6 +104,21 @@ export default function Profile() {
       </View>
 
       <BestStats melhorOfensiva={melhoresEstatisticas.maiorOfensiva} totalXp={melhoresEstatisticas.totalPontos} />
+      <Text style={styles.text}>Itens Adquiridos</Text>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {itens.length === 0 ? (
+          <Text style={styles.noItemsText}>Nenhum item adquirido...</Text>
+        ) : (
+          itens.map((item) => (
+            <Item
+              key={item.id}
+              icon={item.icone + ".png"}
+              name={item.nome}
+              price={item.preco}
+            />
+          ))
+        )}
+      </ScrollView>
     </View>
   );
 }
