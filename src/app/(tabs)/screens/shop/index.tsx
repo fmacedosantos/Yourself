@@ -4,9 +4,10 @@ import { styles } from "./styles";
 import { useEffect, useState } from "react";
 import { SummaryStats } from "@/src/components/summaryStats";
 import LoadingScreen from "@/src/components/loadindScreen";
-import { carregarResumoEstatisticas, getAllItems } from "@/src/services/api/user";
+import { buyItem, carregarResumoEstatisticas, getAllItems } from "@/src/services/api/user";
 import { Title } from "@/src/components/title";
 import { Item } from "@/src/components/item";
+import { MessageAlert } from "@/src/components/messageAlert";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -26,8 +27,14 @@ export default function Shop() {
     pontos: 0,
   });
 
-  const [itens, setItens] = useState<ItemLoja[]>([]); // Estado para armazenar os itens da loja
+  const [itens, setItens] = useState<ItemLoja[]>([]); 
   const [loading, setLoading] = useState(true);
+  
+  const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState('');
+  const [type, setType] = useState<1 | 2>(2);
+  const [itemIdToBuy, setItemIdToBuy] = useState<string | null>(null);
+  const [itemPriceToBuy, setitemPriceToBuy] = useState<number | null>(null);
 
   useEffect(() => {
     async function carregarDados() {
@@ -40,6 +47,29 @@ export default function Shop() {
 
   if (loading) {
     return <LoadingScreen />;
+  }
+
+  async function handleTouchItem(name: string, id:string, price: number) {
+    setType(2);
+    setItemIdToBuy(id);
+    setitemPriceToBuy(price);
+    setVisible(true);
+    setMessage(`Deseja comprar \"${name}\" por ${price} pontos?`); 
+  }
+
+  async function handleBuyItem() {
+    if (itemIdToBuy && itemPriceToBuy) {
+      const response = await buyItem(itemIdToBuy, itemPriceToBuy);
+      if (response.success) {
+        setItens(itens.filter((item) => item.id !== itemIdToBuy)); // não funciona ainda
+        setVisible(false);
+      } else {
+        setType(1);
+        setMessage(response.message || "Erro ao comprar o item.");
+      }
+      setItemIdToBuy(null); 
+      setitemPriceToBuy(null); 
+    }
   }
 
   return (
@@ -64,10 +94,19 @@ export default function Shop() {
               icon={item.icone + ".png"}
               name={item.nome}
               price={item.preco}
+              action={() => handleTouchItem(item.nome, item.id, item.preco)}
             />
           ))
         )}
       </ScrollView>
+      <MessageAlert
+        type={type}
+        message={message}
+        visible={visible}
+        onConfirm={() => handleBuyItem()}
+        onCancel={() => setVisible(false)}
+        confirmText="Comprar"
+      />
     </View>
   );
 }

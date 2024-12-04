@@ -53,7 +53,7 @@ interface UpdatePreferences {
   preferenciaDescanso?: number;
 }
 
-const erroServidor = 'Encontramos problemas ao conectar com o servidor.';
+const erroServidor = 'Encontramos dificuldades ao conectar com a API.';
 
 export async function register(email: string, nome: string, apelido: string, senha: string) { // ok
     try {
@@ -239,6 +239,35 @@ export async function register(email: string, nome: string, apelido: string, sen
     } catch {
         await logout();
         return { success: false, message: 'Erro na verificação da sessão.' };
+    }
+  }
+
+  export async function buyItem(id: string, pontos: number) {
+    const { success, message } = await checkToken();
+  
+    if (!success) {
+      await logout();
+      return { success: false, message: message };
+    }
+
+    try {
+      const response = await fetchWithAuth(ROUTES(PATHS.BUY_ITEM), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify({ id, pontos }), 
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        return { success: true, message: data.message };
+      } else {
+        return { success: false, message: data.message };
+      }
+    } catch {
+      return { success: false, message: erroServidor };
     }
   }
 

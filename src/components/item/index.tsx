@@ -7,11 +7,12 @@ interface ItemProps {
   icon: string;
   name: string;
   price: number;
+  action: () => void;
 }
 
-export function Item({ icon, name, price }: ItemProps) {
+export function Item({ icon, name, price, action }: ItemProps) {
   return (
-    <Pressable style={styles.container}>
+    <Pressable style={styles.container} onPress={action}>
       <Image source={{ uri: icon }} style={styles.icon} />
       <Text style={styles.name}>{name}</Text>
       <View style={styles.priceContainer}>
