@@ -4,7 +4,6 @@ import firebase from '../../../firebase-init.js';
 import { router } from 'expo-router';
 import { PATHS, ROUTES } from '@/src/constants/Routes';
 import { fetchWithAuth } from '@/src/utils/fetchWithAuth';
-import { decryptAES, encryptAES } from '../../utils/crypto';
 
 interface Atividade {
   id: string;
@@ -98,12 +97,6 @@ export async function register(email: string, nome: string, apelido: string, sen
             const token = await userCredential.user.getIdToken(true);
             await AsyncStorage.setItem('jwt', token);
             await AsyncStorage.setItem('loginDate', new Date().toISOString());
-            
-            const encryptedEmail = encryptAES(email);
-            await AsyncStorage.setItem('userEmail', encryptedEmail);
-
-            const encryptedPassword = encryptAES(senha);
-            await AsyncStorage.setItem('userPassword', encryptedPassword);
 
             return { success: success, message: message };
           } else {
@@ -117,7 +110,8 @@ export async function register(email: string, nome: string, apelido: string, sen
         return { success: false, message: message || 'Erro ao autenticar usuário.' };
       }
       
-    } catch {
+    } catch (error) {
+      console.log(error)
       return { success: false, message: erroServidor };
     }
   }
@@ -141,16 +135,6 @@ export async function register(email: string, nome: string, apelido: string, sen
       const loginDate = await AsyncStorage.getItem('loginDate');
       if (loginDate) {
         await AsyncStorage.removeItem('loginDate');
-      }
-
-      const userEmail = await AsyncStorage.getItem('userEmail');
-      if (userEmail) {
-        await AsyncStorage.removeItem('userEmail');
-      }
-
-      const userPassword = await AsyncStorage.getItem('userPassword');
-      if (userPassword) {
-        await AsyncStorage.removeItem('userPassword');
       }
   
       await firebase.auth().signOut(); 
@@ -189,10 +173,8 @@ export async function register(email: string, nome: string, apelido: string, sen
   export async function checkToken() { //ok
     const jwt = await AsyncStorage.getItem('jwt');
     const loginDate = await AsyncStorage.getItem('loginDate');
-    const encryptedEmail = await AsyncStorage.getItem('userEmail');
-    const encryptedPassword = await AsyncStorage.getItem('userPassword');
 
-    if (!jwt || !loginDate || !encryptedEmail || !encryptedPassword) {
+    if (!jwt || !loginDate) {
       return { success: false, message: 'Usuário não autenticado!' };
       
     }
@@ -222,17 +204,7 @@ export async function register(email: string, nome: string, apelido: string, sen
               return { success: false, message: 'Não foi possível renovar a sessão.' };
             }
           }
-          const email = decryptAES(encryptedEmail);
-          const password = decryptAES(encryptedPassword);
-  
-          const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
-          user = userCredential.user;
-          
-          if (!user) {
-            await logout();
-            return { success: false, message: 'Sessão inválida. Faça login novamente.' };
-          }
-          return { success: true, message: 'Token renovado com sucesso!' };
+          return { success: false, message: 'Sessão inválida. Faça login novamente.' };
         }
 
         return { success: false, message: 'Usuário não autenticado!' };
