@@ -9,6 +9,7 @@ import { BestStats } from "@/src/components/bestStats";
 import LoadingScreen from "@/src/components/loadindScreen";
 import { carregarMelhoresEstatisticas, carregarResumoEstatisticas, carregarUsuario, getItems, logout } from "@/src/services/api/user";
 import { Item } from "@/src/components/item";
+import { MessageAlert } from "@/src/components/messageAlert";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -49,19 +50,25 @@ export default function Profile() {
   });
   const [loading, setLoading] = useState(true);
   const [itens, setItens] = useState<ItemLoja[]>([]); 
+  const [message, setMessage] = useState('');
+  const [visible, setVisible] = useState(false);
 
   const carregarDados = useCallback(async () => {
-    setLoading(true);
-    await carregarResumoEstatisticas(setResumoEstatisticas);
-    await carregarUsuario(setInformacoes);
-    await carregarMelhoresEstatisticas(setMelhoresEstatisticas);
-    
-    // Directly load the user's purchased items
-    await getItems((userItems) => {
-      setItens(userItems);
-    });
+    try {
+      await carregarResumoEstatisticas(setResumoEstatisticas);
+      await carregarUsuario(setInformacoes);
+      await carregarMelhoresEstatisticas(setMelhoresEstatisticas);
+
+      await getItems((userItems) => {
+        setItens(userItems);
+      });
+    } catch {
+        setMessage('Erro ao carregar informações.');
+        setVisible(true);
+    } finally {
+        setLoading(false);
+    }
   
-    setLoading(false);
   }, []);
 
   useFocusEffect(
@@ -102,6 +109,12 @@ export default function Profile() {
           style={styles.leaveAccountButton}
         />
       </View>
+      <MessageAlert
+        type={1}
+        message={message}
+        visible={visible}
+        onCancel={() => setVisible(false)}
+      />
 
       <BestStats melhorOfensiva={melhoresEstatisticas.maiorOfensiva} totalXp={melhoresEstatisticas.totalPontos} />
       <Text style={styles.text}>Itens Adquiridos</Text>

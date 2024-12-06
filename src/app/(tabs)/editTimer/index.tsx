@@ -7,7 +7,7 @@ import { FormInput } from '@/src/components/formInput';
 import { SolidButton } from '@/src/components/solidButton';
 import { MessageAlert } from '@/src/components/messageAlert';
 import { carregarPreferencias, carregarResumoEstatisticas, updatePreferences } from '@/src/services/api/user';
-import { BackButton } from '@/src/components/backButton/indes';
+import { BackButton } from '@/src/components/backButton';
 import { Title } from '@/src/components/title';
 
 export default function EditTimer() {

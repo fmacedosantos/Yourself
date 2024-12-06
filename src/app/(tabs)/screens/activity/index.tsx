@@ -34,9 +34,15 @@ export default function AddNewActivity() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    async function carregarDados() {
-      await carregarResumoEstatisticas(setResumoEstatisticas);
-      setLoading(false)
+    const carregarDados = async () => {
+      try {
+        await carregarResumoEstatisticas(setResumoEstatisticas);
+    } catch {
+        setMessage('Erro ao carregar informações.');
+        setVisible(true);
+    } finally {
+        setLoading(false);
+    }
     }
     carregarDados();
   }, []);

@@ -8,7 +8,7 @@ import { SolidButton } from '@/src/components/solidButton';
 import { MessageAlert } from '@/src/components/messageAlert';
 import { atualizarUsuario, carregarResumoEstatisticas, carregarUsuario, logout } from '@/src/services/api/user';
 import { passwordsMatch, validatePasswordStrength } from '@/src/utils/validators';
-import { BackButton } from '@/src/components/backButton/indes';
+import { BackButton } from '@/src/components/backButton';
 import { Title } from '@/src/components/title';
 import { router } from 'expo-router';
 

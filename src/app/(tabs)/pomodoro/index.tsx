@@ -11,7 +11,7 @@ import { styles } from './styles';
 import { cadastrarAtividade, carregarPreferencias, carregarResumoEstatisticas } from '@/src/services/api/user';
 import LoadingScreen from '@/src/components/loadindScreen';
 import { MessageAlert } from '@/src/components/messageAlert';
-import { BackButton } from '@/src/components/backButton/indes';
+import { BackButton } from '@/src/components/backButton';
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -38,12 +38,13 @@ export default function Pomodoro() {
   const difficultyLevel = Number(selectedDifficulty);
 
   useEffect(() => {
-    async function carregarDados() {
+    const carregarDados = async () => {
       try {
         await carregarResumoEstatisticas(setResumoEstatisticas);
         await carregarPreferencias(setPreferencias);
-      } catch (error) {
-        console.error('Erro ao carregar dados:', error);
+      } catch {
+        setMessage('Erro ao carregar informações.');
+        setVisible(true);
       } finally {
         setLoading(false);
       }

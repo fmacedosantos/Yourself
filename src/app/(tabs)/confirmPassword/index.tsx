@@ -9,7 +9,7 @@ import { carregarResumoEstatisticas, reauthenticateUser } from '@/src/services/a
 import { router } from 'expo-router';
 import { MessageAlert } from '@/src/components/messageAlert';
 import { validateFields } from '@/src/utils/validators';
-import { BackButton } from '@/src/components/backButton/indes';
+import { BackButton } from '@/src/components/backButton';
 import { Title } from '@/src/components/title';
 
 interface ResumoEstatisticas {
@@ -29,9 +29,15 @@ export default function ConfirmPassword() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    async function carregarDados() {
-      await carregarResumoEstatisticas(setResumoEstatisticas);
-      setLoading(false);
+    const carregarDados = async () => {
+      try {
+        await carregarResumoEstatisticas(setResumoEstatisticas);
+    } catch {
+        setMessage('Erro ao carregar informações.');
+        setVisible(true);
+    } finally {
+        setLoading(false);
+    }
     }
     carregarDados();
   }, []);  

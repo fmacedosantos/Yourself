@@ -41,10 +41,9 @@ export default function Shop() {
   const [itemPriceToBuy, setitemPriceToBuy] = useState<number | null>(null);
 
   useEffect(() => {
-    async function carregarDados() {
-      await carregarResumoEstatisticas(setResumoEstatisticas);
-      
+    const carregarDados = async () => {
       try {
+        await carregarResumoEstatisticas(setResumoEstatisticas);
         const allItemsResponse = await getAllItems((allItems) => {
           getItems((userItems) => {
             const userItemIds = userItems.map(item => item.id);
@@ -54,11 +53,11 @@ export default function Shop() {
             setItens(availableItems);
           });
         });
-        
-        setLoading(false);
-      } catch (error) {
-        console.error("Error loading shop items:", error);
-        setLoading(false);
+      } catch {
+          setMessage('Erro ao carregar informações.');
+          setVisible(true);
+      } finally {
+          setLoading(false);
       }
     }
     carregarDados();

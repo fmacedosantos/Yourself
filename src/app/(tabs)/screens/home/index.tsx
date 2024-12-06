@@ -39,9 +39,16 @@ export default function Home() {
   const [activityIdToDelete, setActivityIdToDelete] = useState<string | null>(null);
 
   useEffect(() => {
-    async function carregarDados() {
-      await carregarAtividades(setAtividades);
-      await carregarResumoEstatisticas(setResumoEstatisticas);
+    const carregarDados = async () => {
+      try {
+        await carregarAtividades(setAtividades);
+        await carregarResumoEstatisticas(setResumoEstatisticas);
+      } catch {
+        setMessage('Erro ao carregar informações.');
+        setVisible(true);
+      } finally {
+        setLoading(false);
+      } 
       setLoading(false); 
     }
 
