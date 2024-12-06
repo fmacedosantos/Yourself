@@ -28,7 +28,7 @@ export default function Index() {
   useEffect(() => {
     const initializeApp = async () => {
       try {
-        const {success, message} = await checkToken();
+        const {success} = await checkToken();
         
         if (success) {
           router.replace('/(tabs)/screens/home');
@@ -36,7 +36,6 @@ export default function Index() {
           setLoading(false);
         }
       } catch (error) {
-        console.error('Erro na inicialização:', error);
         setLoading(false);
       }
     };

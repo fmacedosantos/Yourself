@@ -6,7 +6,7 @@ import { BorderButton } from "../../components/borderButton";
 import { passwordsMatch, validateEmail, validateFields, validatePasswordStrength } from "@/src/utils/validators";
 import { register } from "@/src/services/api/user";
 import { MessageAlert } from "@/src/components/messageAlert";
-import { BackButton } from "@/src/components/backButton/indes";
+import { BackButton } from "@/src/components/backButton";
 import { styles } from "./styles";
 
 export default function Cadastro() {
@@ -16,7 +16,6 @@ export default function Cadastro() {
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
 
-  // Alerta
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
 
