@@ -31,7 +31,9 @@ export function MessageAlert({
   
   const finalType = isUnauthenticatedMessage ? 2 : type;
   const finalConfirmText = isUnauthenticatedMessage ? 'Sair' : confirmText;
-  const finalMessage = isUnauthenticatedMessage ? 'Sessão inexistente ou expirada! Faça login novamente.' : confirmText;
+  const finalMessage = isUnauthenticatedMessage 
+    ? 'Sessão inexistente ou expirada! Faça login novamente.' 
+    : message;
   const finalOnConfirm = isUnauthenticatedMessage 
     ? async () => {
         await logout();
