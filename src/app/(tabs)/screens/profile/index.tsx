@@ -55,7 +55,12 @@ export default function Profile() {
 
   const carregarDados = useCallback(async () => {
     try {
-      await carregarResumoEstatisticas(setResumoEstatisticas);
+      const {success, message} = await carregarResumoEstatisticas(setResumoEstatisticas);
+        if (!success) {
+          setMessage(message);
+          setVisible(true);
+          return;
+        }
       await carregarUsuario(setInformacoes);
       await carregarMelhoresEstatisticas(setMelhoresEstatisticas);
 

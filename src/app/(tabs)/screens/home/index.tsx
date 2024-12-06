@@ -41,8 +41,13 @@ export default function Home() {
   useEffect(() => {
     const carregarDados = async () => {
       try {
+        const {success, message} = await carregarResumoEstatisticas(setResumoEstatisticas);
+        if (!success) {
+          setMessage(message);
+          setVisible(true);
+          return;
+        }
         await carregarAtividades(setAtividades);
-        await carregarResumoEstatisticas(setResumoEstatisticas);
       } catch {
         setMessage('Erro ao carregar informações.');
         setVisible(true);

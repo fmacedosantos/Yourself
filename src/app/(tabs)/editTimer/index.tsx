@@ -22,7 +22,12 @@ export default function EditTimer() {
     useEffect(() => {
         const carregarDados = async () => {
             try {
-                await carregarResumoEstatisticas(setResumoEstatisticas);
+                const {success, message} = await carregarResumoEstatisticas(setResumoEstatisticas);
+                if (!success) {
+                setMessage(message);
+                setVisible(true);
+                return;
+                }
                 await carregarPreferencias(setPreferencias)
             } catch {
                 setMessage('Erro ao carregar informações.');

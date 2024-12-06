@@ -97,6 +97,10 @@ export async function register(email: string, nome: string, apelido: string, sen
             const token = await userCredential.user.getIdToken(true);
             await AsyncStorage.setItem('jwt', token);
             await AsyncStorage.setItem('loginDate', new Date().toISOString());
+            
+            await AsyncStorage.setItem('userEmail', email);
+
+            await AsyncStorage.setItem('userPassword', senha);
 
             return { success: success, message: message };
           } else {
@@ -136,6 +140,16 @@ export async function register(email: string, nome: string, apelido: string, sen
       if (loginDate) {
         await AsyncStorage.removeItem('loginDate');
       }
+
+      const userEmail = await AsyncStorage.getItem('userEmail');
+      if (userEmail) {
+        await AsyncStorage.removeItem('userEmail');
+      }
+
+      const userPassword = await AsyncStorage.getItem('userPassword');
+      if (userPassword) {
+        await AsyncStorage.removeItem('userPassword');
+      }
   
       await firebase.auth().signOut(); 
       router.replace('/');
@@ -148,7 +162,6 @@ export async function register(email: string, nome: string, apelido: string, sen
     const { success, message } = await checkToken();
   
     if (!success) {
-      await logout();
       return { success: false, message: message };
     }
     
@@ -173,8 +186,10 @@ export async function register(email: string, nome: string, apelido: string, sen
   export async function checkToken() { //ok
     const jwt = await AsyncStorage.getItem('jwt');
     const loginDate = await AsyncStorage.getItem('loginDate');
+    const email = await AsyncStorage.getItem('userEmail');
+    const senha = await AsyncStorage.getItem('userPassword');
 
-    if (!jwt || !loginDate) {
+    if (!jwt || !loginDate || !email || !senha) {
       return { success: false, message: 'Usuário não autenticado!' };
       
     }
@@ -200,17 +215,22 @@ export async function register(email: string, nome: string, apelido: string, sen
                 
                 return { success: true, message: 'Token renovado com sucesso!' };
             } catch {
-              await logout();
-              return { success: false, message: 'Não foi possível renovar a sessão.' };
+              return { success: false, message: 'Usuário não autenticado!' };
             }
           }
-          return { success: false, message: 'Sessão inválida. Faça login novamente.' };
+  
+          const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
+          user = userCredential.user;
+          
+          if (!user) {
+            return { success: false, message: 'Usuário não autenticado!' };
+          }
+          return { success: true, message: 'Token renovado com sucesso!' };
         }
 
         return { success: false, message: 'Usuário não autenticado!' };
     } catch {
-        await logout();
-        return { success: false, message: 'Erro na verificação da sessão.' };
+        return { success: false, message: 'Usuário não autenticado!' };
     }
   }
 
@@ -218,7 +238,6 @@ export async function register(email: string, nome: string, apelido: string, sen
     const { success, message } = await checkToken();
   
     if (!success) {
-      await logout();
       return { success: false, message: message };
     }
 
@@ -247,7 +266,6 @@ export async function register(email: string, nome: string, apelido: string, sen
     const { success, message } = await checkToken();
   
     if (!success) {
-      await logout();
       return { success: false, message: message };
     }
   
@@ -276,7 +294,6 @@ export async function register(email: string, nome: string, apelido: string, sen
     const {success, message} = await checkToken();
   
     if (!success) {
-      await logout();
       return { success: false, message: message };
     }
 
@@ -310,7 +327,6 @@ export async function register(email: string, nome: string, apelido: string, sen
     const {success, message} = await checkToken();
   
     if (!success) {
-      await logout();
       return { success: false, message: message };
     }
 
@@ -344,7 +360,6 @@ export async function register(email: string, nome: string, apelido: string, sen
     const {success, message} = await checkToken();
   
     if (!success) {
-      await logout();
       return { success: false, message: message };
     }
 
@@ -371,7 +386,6 @@ export async function register(email: string, nome: string, apelido: string, sen
     const {success, message} = await checkToken();
   
     if (!success) {
-      await logout();
       return { success: false, message: message };
     }
 
@@ -396,7 +410,6 @@ export async function register(email: string, nome: string, apelido: string, sen
     const {success, message} = await checkToken();
   
     if (!success) {
-      await logout();
       return { success: false, message: message };
     }
 
@@ -419,7 +432,6 @@ export async function register(email: string, nome: string, apelido: string, sen
     const {success, message} = await checkToken();
   
     if (!success) {
-      await logout();
       return { success: false, message: message };
     }
     try {
@@ -441,7 +453,6 @@ export async function register(email: string, nome: string, apelido: string, sen
     const {success, message} = await checkToken();
   
     if (!success) {
-      await logout();
       return { success: false, message: message };
     }
     try {
@@ -463,7 +474,6 @@ export async function register(email: string, nome: string, apelido: string, sen
     const {success, message} = await checkToken();
   
     if (!success) {
-      await logout();
       return { success: false, message: message };
     }
 
@@ -489,7 +499,6 @@ export async function register(email: string, nome: string, apelido: string, sen
     const {success, message} = await checkToken();
   
     if (!success) {
-      await logout();
       return { success: false, message: message };
     }
 
@@ -515,7 +524,6 @@ export async function register(email: string, nome: string, apelido: string, sen
     const {success, message} = await checkToken();
   
     if (!success) {
-      await logout();
       return { success: false, message: message };
     }
 

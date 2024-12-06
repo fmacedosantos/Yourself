@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Pressable, Text, View } from 'react-native';
 import { styles } from './styles';
 import { COLORS } from '@/src/constants/Colors';
+import { logout } from '@/src/services/api/user';
 
 type MessageAlertProps = {
   type: 1 | 2;
@@ -26,8 +27,19 @@ export function MessageAlert({
   okText = 'OK',
   title = 'Comunicado:'
 }: MessageAlertProps) {
+  const isUnauthenticatedMessage = message === 'Usuário não autenticado!';
+  
+  const finalType = isUnauthenticatedMessage ? 2 : type;
+  const finalConfirmText = isUnauthenticatedMessage ? 'Sair' : confirmText;
+  const finalMessage = isUnauthenticatedMessage ? 'Sessão inexistente ou expirada! Faça login novamente.' : confirmText;
+  const finalOnConfirm = isUnauthenticatedMessage 
+    ? async () => {
+        await logout();
+      } 
+    : onConfirm;
+
   const confirmButtonStyle =
-    confirmText === 'Excluir' ? styles.dualButton : [styles.dualButton, { backgroundColor: COLORS.DARK_ORANGE }];
+    finalConfirmText === 'Excluir' ? styles.dualButton : [styles.dualButton, { backgroundColor: COLORS.DARK_ORANGE }];
 
   return (
     <Modal
@@ -37,23 +49,23 @@ export function MessageAlert({
     >
       <View style={styles.overlay}>
         <View style={styles.alertBox}>
-          <Text style={styles.title}>{title }</Text>
-          <Text style={styles.message}>{message}</Text>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.message}>{finalMessage}</Text>
 
           <View
             style={[
               styles.buttonContainer,
-              type === 1 && styles.singleButtonContainer,
+              finalType === 1 && styles.singleButtonContainer,
             ]}
           >
-            {type === 1 ? (
+            {finalType === 1 ? (
               <Pressable style={styles.singleButton} onPress={onCancel}>
                 <Text style={styles.buttonText}>{okText}</Text>
               </Pressable>
             ) : (
               <>
-                <Pressable style={confirmButtonStyle} onPress={onConfirm}>
-                  <Text style={styles.buttonText}>{confirmText}</Text>
+                <Pressable style={confirmButtonStyle} onPress={finalOnConfirm}>
+                  <Text style={styles.buttonText}>{finalConfirmText}</Text>
                 </Pressable>
                 <Pressable style={[styles.dualButton, styles.cancelButton]} onPress={onCancel}>
                   <Text style={styles.buttonText}>{cancelText}</Text>
