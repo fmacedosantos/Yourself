@@ -1,12 +1,12 @@
 import { Alert, View } from 'react-native';
 import { styles } from './styles';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import LoadingScreen from '@/src/components/loadindScreen';
 import { SummaryStats } from '@/src/components/summaryStats';
 import { FormInput } from '@/src/components/formInput';
 import { SolidButton } from '@/src/components/solidButton';
 import { carregarResumoEstatisticas, reauthenticateUser } from '@/src/services/api/user';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { MessageAlert } from '@/src/components/messageAlert';
 import { validateFields } from '@/src/utils/validators';
 import { BackButton } from '@/src/components/backButton';
@@ -28,9 +28,9 @@ export default function ConfirmPassword() {
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    const carregarDados = async () => {
+  const carregarDados = useCallback(async () => {
       try {
+        setLoading(true);
         const {success, message} = await carregarResumoEstatisticas(setResumoEstatisticas);
         if (!success) {
           setMessage(message);
@@ -43,9 +43,14 @@ export default function ConfirmPassword() {
     } finally {
         setLoading(false);
     }
-    }
-    carregarDados();
+    
   }, []);  
+
+  useFocusEffect(
+    useCallback(() => {
+      carregarDados();
+    }, [carregarDados])
+  );
 
   if (loading) {
     return <LoadingScreen />; 

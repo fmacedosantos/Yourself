@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
 import { Title } from '../../../../components/title';
 import { SummaryStats } from '../../../../components/summaryStats';
@@ -7,6 +7,7 @@ import { styles } from './styles';
 import LoadingScreen from '@/src/components/loadindScreen';
 import { carregarAtividades, carregarResumoEstatisticas, deleteActivity } from '@/src/services/api/user';
 import { MessageAlert } from '@/src/components/messageAlert';
+import { useFocusEffect } from 'expo-router';
 
 interface Atividade {
   id: string;
@@ -38,9 +39,9 @@ export default function Home() {
   
   const [activityIdToDelete, setActivityIdToDelete] = useState<string | null>(null);
 
-  useEffect(() => {
-    const carregarDados = async () => {
+  const carregarDados = useCallback(async () => {
       try {
+        setLoading(true);
         const {success, message} = await carregarResumoEstatisticas(setResumoEstatisticas);
         if (!success) {
           setMessage(message);
@@ -55,10 +56,14 @@ export default function Home() {
         setLoading(false);
       } 
       setLoading(false); 
-    }
-
-    carregarDados();
+    
   }, []);  
+
+  useFocusEffect(
+    useCallback(() => {
+      carregarDados();
+    }, [carregarDados])
+  );
 
   function handleShowMore() {
     setShowMore(!showMore);

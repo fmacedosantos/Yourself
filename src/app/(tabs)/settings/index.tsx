@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Text, View, ScrollView } from 'react-native';
 import { styles } from './styles';
 import LoadingScreen from '@/src/components/loadindScreen';
@@ -10,7 +10,7 @@ import { atualizarUsuario, carregarResumoEstatisticas, carregarUsuario, logout }
 import { passwordsMatch, validatePasswordStrength } from '@/src/utils/validators';
 import { BackButton } from '@/src/components/backButton';
 import { Title } from '@/src/components/title';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 
 export default function Settings() {
     const [resumoEstatisticas, setResumoEstatisticas] = useState({ ofensiva: 0, pontos: 0 });
@@ -24,9 +24,9 @@ export default function Settings() {
     const [visible, setVisible] = useState(false);
     const [logoutAlertVisible, setLogoutAlertVisible] = useState(false); 
 
-    useEffect(() => {
-        const carregarDados = async () => {
+    const carregarDados = useCallback(async () => {
             try {
+                setLoading(true);
                 const {success, message} = await carregarResumoEstatisticas(setResumoEstatisticas);
                 if (!success) {
                 setMessage(message);
@@ -40,9 +40,14 @@ export default function Settings() {
             } finally {
                 setLoading(false);
             }
-        };
-        carregarDados();
+        
     }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+          carregarDados();
+        }, [carregarDados])
+      );
 
     const validarDados = () => {
         if (senha || confirmarSenha) {

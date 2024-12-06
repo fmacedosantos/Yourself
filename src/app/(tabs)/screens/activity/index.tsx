@@ -1,11 +1,11 @@
 import { ScrollView, View } from "react-native";
 import { styles } from "./styles";
 import { FormInput } from "@/src/components/formInput";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Title } from "@/src/components/title";
 import { SummaryStats } from "@/src/components/summaryStats";
 import { SolidButton } from "@/src/components/solidButton";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { SelectDifficulty } from "../../../../components/selectDifficulty";
 import { validateFields } from "@/src/utils/validators";
 import LoadingScreen from "@/src/components/loadindScreen";
@@ -33,9 +33,9 @@ export default function AddNewActivity() {
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    const carregarDados = async () => {
+  const carregarDados = useCallback(async () => {
       try {
+        setLoading(true);
         const {success, message} = await carregarResumoEstatisticas(setResumoEstatisticas);
         if (!success) {
           setMessage(message);
@@ -48,9 +48,13 @@ export default function AddNewActivity() {
     } finally {
         setLoading(false);
     }
-    }
-    carregarDados();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      carregarDados();
+    }, [carregarDados])
+  );
 
   function handleStartActivity() {
     const fieldsValidate = validateFields({titulo, categoria, dificuldade: selectedDifficulty});

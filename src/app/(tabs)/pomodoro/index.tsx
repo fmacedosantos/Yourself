@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { SummaryStats } from '@/src/components/summaryStats';
 import { Title } from '@/src/components/title';
 import { PauseUnpauseButton } from '@/src/components/pauseUnpauseButton';
@@ -37,9 +37,9 @@ export default function Pomodoro() {
 
   const difficultyLevel = Number(selectedDifficulty);
 
-  useEffect(() => {
-    const carregarDados = async () => {
+  const carregarDados = useCallback(async () => {
       try {
+        setLoading(true);
         const {success, message} = await carregarResumoEstatisticas(setResumoEstatisticas);
         if (!success) {
           setMessage(message);
@@ -53,9 +53,14 @@ export default function Pomodoro() {
       } finally {
         setLoading(false);
       }
-    }
-    carregarDados();
+    
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      carregarDados();
+    }, [carregarDados])
+  );
 
   useEffect(() => {
     if (!loading) {

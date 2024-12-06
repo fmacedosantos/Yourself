@@ -1,6 +1,6 @@
 import { ScrollView, View, Text } from "react-native";
 import { styles } from "./styles";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { SummaryStats } from "@/src/components/summaryStats";
 import LoadingScreen from "@/src/components/loadindScreen";
 import { 
@@ -12,6 +12,7 @@ import {
 import { Title } from "@/src/components/title";
 import { Item } from "@/src/components/item";
 import { MessageAlert } from "@/src/components/messageAlert";
+import { useFocusEffect } from "expo-router";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -40,9 +41,9 @@ export default function Shop() {
   const [itemIdToBuy, setItemIdToBuy] = useState<string | null>(null);
   const [itemPriceToBuy, setitemPriceToBuy] = useState<number | null>(null);
 
-  useEffect(() => {
-    const carregarDados = async () => {
+    const carregarDados = useCallback(async () => {
       try {
+        setLoading(true);
         const {success, message} = await carregarResumoEstatisticas(setResumoEstatisticas);
         if (!success) {
           setMessage(message);
@@ -64,9 +65,14 @@ export default function Shop() {
       } finally {
           setLoading(false);
       }
-    }
-    carregarDados();
+    
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      carregarDados();
+    }, [carregarDados])
+  );
 
   if (loading) {
     return <LoadingScreen />;
