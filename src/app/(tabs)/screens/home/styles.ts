@@ -4,13 +4,15 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: COLORS.GRAY,
     },
     scrollContainer: {
       alignItems: 'center',
       paddingVertical: 10,
-      paddingHorizontal: 20,
       flexGrow: 1,
+    },
+    scrool: {
+      flex: 1, 
+      backgroundColor: COLORS.GRAY
     },
     noActivitiesText: {
       color: COLORS.WHITE, 

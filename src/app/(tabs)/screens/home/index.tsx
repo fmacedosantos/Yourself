@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { View, ScrollView, Text, TouchableOpacity, RefreshControl } from 'react-native';
 import { Title } from '../../../../components/title';
 import { SummaryStats } from '../../../../components/summaryStats';
 import { Activity } from '../../../../components/activity';
@@ -7,7 +7,6 @@ import { styles } from './styles';
 import LoadingScreen from '@/src/components/loadindScreen';
 import { carregarAtividades, carregarResumoEstatisticas, deleteActivity } from '@/src/services/api/user';
 import { MessageAlert } from '@/src/components/messageAlert';
-import { useFocusEffect } from 'expo-router';
 import { LoadFont } from '@/src/utils/loadFont';
 
 interface Atividade {
@@ -33,6 +32,7 @@ export default function Home() {
     pontos: 0
   });
   const [loading, setLoading] = useState(true); 
+  const [refreshing, setRefreshing] = useState(false);
 
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
@@ -40,31 +40,33 @@ export default function Home() {
   
   const [activityIdToDelete, setActivityIdToDelete] = useState<string | null>(null);
 
-  const carregarDados = useCallback(async () => {
-      try {
-        setLoading(true);
-        const {success, message} = await carregarResumoEstatisticas(setResumoEstatisticas);
-        if (!success) {
-          setMessage(message);
-          setVisible(true);
-          return;
-        }
-        await carregarAtividades(setAtividades);
-      } catch {
-        setMessage('Erro ao carregar informações.');
+  const carregarDados = useCallback(async (isRefresh: boolean = false) => {
+    try {
+      if (isRefresh) setRefreshing(true);
+      setLoading(true);
+      const { success, message } = await carregarResumoEstatisticas(setResumoEstatisticas);
+      if (!success) {
+        setMessage(message);
         setVisible(true);
-      } finally {
-        setLoading(false);
-      } 
-      setLoading(false); 
-    
-  }, []);  
+        return;
+      }
+      await carregarAtividades(setAtividades);
+    } catch {
+      setMessage('Erro ao carregar informações.');
+      setVisible(true);
+    } finally {
+      setLoading(false);
+      if (isRefresh) setRefreshing(false);
+    }
+  }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      carregarDados();
-    }, [carregarDados])
-  );
+  useEffect(() => {
+    carregarDados(); 
+  }, []); 
+
+  const handleRefresh = () => {
+    carregarDados(true); 
+  };
 
   function handleShowMore() {
     setShowMore(!showMore);
@@ -77,32 +79,36 @@ export default function Home() {
     setVisible(true);
     setMessage(`Deseja excluir a atividade \"${titulo}\"?`); 
   }
-  
 
-
-async function handleDeleteActivity() {
-  if (activityIdToDelete) {
-    const response = await deleteActivity(activityIdToDelete);
-    if (response.success) {
-      setAtividades(atividades.filter((atividade) => atividade.id !== activityIdToDelete)); 
-      setVisible(false);
-    } else {
-      setType(1);
-      setMessage(response.message || "Erro ao deletar a atividade.");
+  async function handleDeleteActivity() {
+    if (activityIdToDelete) {
+      const response = await deleteActivity(activityIdToDelete);
+      if (response.success) {
+        setAtividades(atividades.filter((atividade) => atividade.id !== activityIdToDelete)); 
+        setVisible(false);
+      } else {
+        setType(1);
+        setMessage(response.message || "Erro ao deletar a atividade.");
+      }
+      setActivityIdToDelete(null); 
     }
-    setActivityIdToDelete(null); 
   }
-}
 
+  const fontsLoaded = LoadFont();
 
-const fontsLoaded = LoadFont();
-
-if (!fontsLoaded || loading) {
-  return <LoadingScreen />;
-}
+  if (!fontsLoaded || loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <View style={styles.container}>
+      <ScrollView
+      style={styles.scrool}
+        contentContainerStyle={styles.scrollContainer}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+      >
       <SummaryStats 
         ofensiva={resumoEstatisticas.ofensiva} 
         pontos={resumoEstatisticas.pontos}
@@ -110,7 +116,7 @@ if (!fontsLoaded || loading) {
 
       <Title title={title ? 'Histórico' : 'Últimas atividades'} />
 
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      
         {atividades.length === 0 ? (
           <Text style={styles.noActivitiesText}>Nenhuma atividade...</Text>
         ) : (

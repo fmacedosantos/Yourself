@@ -1,4 +1,4 @@
-import { ScrollView, View, Text } from "react-native";
+import { ScrollView, View, Text, RefreshControl } from "react-native";
 import { styles } from "./styles";
 import { useCallback, useEffect, useState } from "react";
 import { SummaryStats } from "@/src/components/summaryStats";
@@ -35,6 +35,8 @@ export default function Shop() {
 
   const [itens, setItens] = useState<ItemLoja[]>([]); 
   const [loading, setLoading] = useState(true);
+
+  const [refreshing, setRefreshing] = useState(false);
   
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
@@ -42,8 +44,9 @@ export default function Shop() {
   const [itemIdToBuy, setItemIdToBuy] = useState<string | null>(null);
   const [itemPriceToBuy, setitemPriceToBuy] = useState<number | null>(null);
 
-    const carregarDados = useCallback(async () => {
+    const carregarDados = useCallback(async (isRefresh: boolean = false) => {
       try {
+        if (isRefresh) setRefreshing(true);
         setLoading(true);
         const {success, message} = await carregarResumoEstatisticas(setResumoEstatisticas);
         if (!success) {
@@ -65,15 +68,14 @@ export default function Shop() {
           setVisible(true);
       } finally {
           setLoading(false);
+          if (isRefresh) setRefreshing(false);
       }
     
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      carregarDados();
-    }, [carregarDados])
-  );
+  useEffect(() => {
+    carregarDados(); 
+  }, []); 
 
   const fontsLoaded = LoadFont();
 
@@ -91,6 +93,7 @@ export default function Shop() {
 
   async function handleBuyItem() {
     if (itemIdToBuy && itemPriceToBuy) {
+      setLoading(true);
       const response = await buyItem(itemIdToBuy, itemPriceToBuy);
       if (response.success) {
         await carregarResumoEstatisticas(setResumoEstatisticas);
@@ -102,11 +105,13 @@ export default function Shop() {
               (item) => !userItemIds.includes(item.id)
             );
             setItens(availableItems);
+            setLoading(false);
           });
         });
   
         setVisible(false);
       } else {
+        setLoading(false);
         setType(1);
         setMessage(response.message || "Erro ao comprar o item.");
       }
@@ -115,9 +120,17 @@ export default function Shop() {
     }
   }
 
+  const handleRefresh = () => {
+    carregarDados(true); 
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}
+      style={styles.scrool}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+      }>
         <SummaryStats
           ofensiva={resumoEstatisticas.ofensiva}
           pontos={resumoEstatisticas.pontos}
@@ -125,10 +138,10 @@ export default function Shop() {
         <Title
           title="Loja de itens"
         />
-      </View>
+        
 
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {itens.length === 0 ? (
+      <View style={styles.items}>
+      {itens.length === 0 ? (
           <Text style={styles.noItemsText}>Nenhum item disponível...</Text>
         ) : (
           itens.map((item) => (
@@ -141,6 +154,8 @@ export default function Shop() {
             />
           ))
         )}
+      </View>
+        
       </ScrollView>
       <MessageAlert
         type={type}

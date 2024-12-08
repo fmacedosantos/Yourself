@@ -1,11 +1,11 @@
-import { ScrollView, View } from "react-native";
+import { RefreshControl, ScrollView, View } from "react-native";
 import { styles } from "./styles";
 import { FormInput } from "@/src/components/formInput";
 import { useCallback, useEffect, useState } from "react";
 import { Title } from "@/src/components/title";
 import { SummaryStats } from "@/src/components/summaryStats";
 import { SolidButton } from "@/src/components/solidButton";
-import { router, useFocusEffect } from "expo-router";
+import { router } from "expo-router";
 import { SelectDifficulty } from "../../../../components/selectDifficulty";
 import { validateFields } from "@/src/utils/validators";
 import LoadingScreen from "@/src/components/loadindScreen";
@@ -25,40 +25,42 @@ export default function AddNewActivity() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<number | null>(null);
   const [categoria, setCategoria] = useState('');
 
+  const [refreshing, setRefreshing] = useState(false);
+
   const [resumoEstatisticas, setResumoEstatisticas] = useState<ResumoEstatisticas>({
     ofensiva: 0,
     pontos: 0
   });
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
 
-  const carregarDados = useCallback(async () => {
-      try {
-        setLoading(true);
-        const {success, message} = await carregarResumoEstatisticas(setResumoEstatisticas);
-        if (!success) {
-          setMessage(message);
-          setVisible(true);
-          return;
-        }
-    } catch {
-        setMessage('Erro ao carregar informações.');
+  const carregarDados = useCallback(async (isRefresh: boolean = false) => {
+    try {
+      if (isRefresh) setRefreshing(true);
+      setLoading(true);
+      const { success, message } = await carregarResumoEstatisticas(setResumoEstatisticas);
+      if (!success) {
+        setMessage(message);
         setVisible(true);
+        return;
+      }
+    } catch {
+      setMessage('Erro ao carregar informações.');
+      setVisible(true);
     } finally {
-        setLoading(false);
+      setLoading(false);
+      if (isRefresh) setRefreshing(false);
     }
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      carregarDados();
-    }, [carregarDados])
-  );
+  useEffect(() => {
+    carregarDados(); 
+  }, []); 
 
   function handleStartActivity() {
-    const fieldsValidate = validateFields({titulo, categoria, dificuldade: selectedDifficulty});
+    const fieldsValidate = validateFields({ titulo, categoria, dificuldade: selectedDifficulty });
 
     if (!fieldsValidate.success) {
       setVisible(true);
@@ -69,7 +71,7 @@ export default function AddNewActivity() {
         params: {
           titulo,
           descricao,
-          selectedDifficulty, 
+          selectedDifficulty,
           categoria
         },
       });
@@ -86,12 +88,18 @@ export default function AddNewActivity() {
     setSelectedDifficulty(difficulty);
   }
 
+  const handleRefresh = () => {
+    carregarDados(true); 
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
         style={styles.scrool}
         contentContainerStyle={styles.scrollContainer}
-        keyboardShouldPersistTaps="handled" 
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
       >
         <SummaryStats
           ofensiva={resumoEstatisticas.ofensiva}

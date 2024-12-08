@@ -1,4 +1,4 @@
-import { ScrollView, Text, View } from "react-native";
+import { RefreshControl, ScrollView, Text, View } from "react-native";
 import { styles } from "./styles";
 import { Link, router } from "expo-router";
 import { useEffect, useState, useCallback } from "react";
@@ -50,12 +50,16 @@ export default function Profile() {
     totalPontos: 0,
   });
   const [loading, setLoading] = useState(true);
+
+  const [refreshing, setRefreshing] = useState(false);
+
   const [itens, setItens] = useState<ItemLoja[]>([]); 
   const [message, setMessage] = useState('');
   const [visible, setVisible] = useState(false);
 
-  const carregarDados = useCallback(async () => {
+  const carregarDados = useCallback(async (isRefresh: boolean = false) => {
     try {
+      if (isRefresh) setRefreshing(true);
       setLoading(true);
       const {success, message} = await carregarResumoEstatisticas(setResumoEstatisticas);
         if (!success) {
@@ -74,15 +78,14 @@ export default function Profile() {
         setVisible(true);
     } finally {
         setLoading(false);
+        if (isRefresh) setRefreshing(false);
     }
   
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      carregarDados();
-    }, [carregarDados])
-  );
+  useEffect(() => {
+    carregarDados(); 
+  }, []); 
 
   function handleGoToSettings() {
     router.navigate("/(tabs)/confirmPassword");
@@ -98,11 +101,18 @@ export default function Profile() {
     return <LoadingScreen />;
   }
 
+  const handleRefresh = () => {
+    carregarDados(true); 
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView 
         style={styles.scrool}
         contentContainerStyle={styles.scrollContainer}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
       >
       <SummaryStats ofensiva={resumoEstatisticas.ofensiva} pontos={resumoEstatisticas.pontos} />
       <View style={styles.containerInformacoes}>
