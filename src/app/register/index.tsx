@@ -24,6 +24,7 @@ export default function Cadastro() {
   const [loading, setLoading] = useState(false); 
 
   async function handleCadastrar() {
+    setApelido(apelido.trim().replace(/\s+/g, ''));
     
     const fieldsValidate = validateFields({email, nome, apelido, senha, confirmarSenha});
     const emailValidate = validateEmail(email);
