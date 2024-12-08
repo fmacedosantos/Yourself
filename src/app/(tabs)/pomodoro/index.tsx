@@ -66,8 +66,9 @@ export default function Pomodoro() {
   useEffect(() => {
     if (!loading) {
       setTimeLeft(preferencias.preferenciaConcentracao * 60);
+      setIsConcentracao(true); 
     }
-  }, [loading, preferencias.preferenciaConcentracao]);
+  }, [loading, preferencias.preferenciaConcentracao]);  
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
