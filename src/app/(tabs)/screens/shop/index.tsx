@@ -147,7 +147,7 @@ export default function Shop() {
           itens.map((item) => (
             <Item
               key={item.id}
-              icon={item.icone + ".png"}
+              icon={item.icone}
               name={item.nome}
               price={item.preco}
               action={() => handleTouchItem(item.nome, item.id, item.preco)}
