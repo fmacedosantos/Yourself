@@ -66,7 +66,9 @@ export async function register(email: string, nome: string, apelido: string, sen
 
       if (response.ok && data.success) {
         const { success, message } = await login(email, senha);
-        router.replace('/(tabs)/screens/home');
+        if (success) {
+          router.replace('/(tabs)/screens/home');
+        } 
         return { success: success, message: message };
       } else {
         return { success: false, message: data.message || 'Erro ao realizar cadastro.' };
