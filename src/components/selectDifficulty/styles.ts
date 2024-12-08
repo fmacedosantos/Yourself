@@ -14,10 +14,9 @@ export const styles = StyleSheet.create({
         opacity: 0.5,
     },
     buttonDifficulty: {
-        borderWidth: 1,
         borderRadius: 10,
         paddingVertical: 15,
-        width: '23%',
+        width: '18%',
         alignItems: 'center'
     },
     text: {

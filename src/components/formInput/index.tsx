@@ -9,9 +9,10 @@ interface FormInputProps {
   value: string;
   onChangeText: (text: string) => void;
   type?: InputModeOptions  
+  isMultiline?: boolean;
 }
 
-export function FormInput({ label, placeholder, isPassword, value, onChangeText, type = 'text' }: FormInputProps) {
+export function FormInput({ label, placeholder, isPassword, value, onChangeText, type = 'text', isMultiline = false }: FormInputProps) {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
@@ -32,6 +33,7 @@ export function FormInput({ label, placeholder, isPassword, value, onChangeText,
           onChangeText={onChangeText}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+          multiline={isMultiline}
         />
       </View>
     </View>

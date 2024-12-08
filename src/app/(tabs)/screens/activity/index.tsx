@@ -105,7 +105,7 @@ export default function AddNewActivity() {
         />
         <Title title="Nova tarefa" />
         <FormInput label="Titulo" value={titulo} onChangeText={setTitulo} />
-        <FormInput label="Descrição" value={descricao} onChangeText={setDescricao} />
+        <FormInput label="Descrição" value={descricao} onChangeText={setDescricao} isMultiline={true} />
         <SelectDifficulty onDifficultySelect={handleDifficultySelect} selectedDifficulty={selectedDifficulty} />
         <ListCategories setCategoria={setCategoria} />
         <View style={styles.buttonContainer}>
