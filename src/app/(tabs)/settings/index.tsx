@@ -11,6 +11,7 @@ import { passwordsMatch, validatePasswordStrength } from '@/src/utils/validators
 import { BackButton } from '@/src/components/backButton';
 import { Title } from '@/src/components/title';
 import { router, useFocusEffect } from 'expo-router';
+import { LoadFont } from '@/src/utils/loadFont';
 
 export default function Settings() {
     const [resumoEstatisticas, setResumoEstatisticas] = useState({ ofensiva: 0, pontos: 0 });
@@ -111,7 +112,11 @@ export default function Settings() {
         router.navigate('/(tabs)/editTimer');
     }
 
-    if (loading) return <LoadingScreen />;
+    const fontsLoaded = LoadFont();
+
+  if (!fontsLoaded || loading) {
+    return <LoadingScreen />;
+  }
 
     return (
         <View style={styles.container}>

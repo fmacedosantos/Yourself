@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { FormInput } from "../../components/formInput";
 import YourselfTitle from '../../assets/images/yourself-title.svg';
 import { router } from "expo-router";
@@ -9,18 +9,15 @@ import { styles } from './styles';
 import { validateEmail, validateFields } from '@/src/utils/validators';
 import { LoadFont } from '@/src/utils/loadFont';
 import LoadingScreen from '@/src/components/loadindScreen';
-import { checkToken, forgotPassword, login } from '@/src/services/api/user';
+import { checkToken, login } from '@/src/services/api/user';
 import { MessageAlert } from '@/src/components/messageAlert';
-import { EmailInputAlert } from '@/src/components/inputMessageAlert';
 
 export default function Index() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // Alerta
   const [visible, setVisible] = useState(false);
-  const [visibleForgotPassword, setVisibleForgotPassword] = useState(false);
   const [message, setMessage] = useState('');
 
   const fontsLoaded = LoadFont();
@@ -60,36 +57,18 @@ export default function Index() {
       setVisible(true);
       setMessage(emailValidate.message);
     } else {
+      setLoading(true)
       const {success, message} = await login(email, senha);
       if (success) {
         router.replace('/(tabs)/screens/home');
       } else {
+        setLoading(false);
+        setSenha('');
         setMessage(message);
         setVisible(true);
       }
     }
   }
-
-  async function handleForgotPassword(email: string) {
-    const fieldsValidate = validateFields({ email });
-    const emailValidate = validateEmail(email);
-  
-    if (!fieldsValidate.success) {
-      setVisibleForgotPassword(false);
-      setVisible(true);
-      setMessage(fieldsValidate.message);
-    } else if (!emailValidate.success) {
-      setVisibleForgotPassword(false);
-      setVisible(true);
-      setMessage(emailValidate.message);
-    } else {
-      const { success, message } = await forgotPassword(email);
-      setMessage(message);
-      setVisibleForgotPassword(false);
-      setVisible(true);
-    }
-  }
-  
 
   function handleGoToRegister() {
     router.navigate('/register');
@@ -100,15 +79,15 @@ export default function Index() {
       <YourselfTitle width={200} height={100} />
 
       <FormInput
-        label="Email"
-        placeholder="seu@email.com"
+        label="E-mail"
+        placeholder="email@exemplo.com"
         value={email}
         onChangeText={setEmail}
         type='email'
       />
       <FormInput
         label="Senha"
-        placeholder="senha"
+        placeholder="@Senha1234"
         isPassword={true}
         value={senha}
         onChangeText={setSenha}
@@ -122,22 +101,6 @@ export default function Index() {
 
       <SolidButton title='Entrar' action={handleEnter} />
       <BorderButton title='Cadastrar' color={1} action={handleGoToRegister} />
-
-      <Text
-        style={styles.forget}
-        onPress={() => {
-          setEmail('');
-          setVisibleForgotPassword(true);
-        }}
-      >
-        Esqueceu a senha?
-      </Text>
-      <EmailInputAlert 
-        onCancel={() => setVisibleForgotPassword(false)}
-        title='Insira seu email para redefinição:'
-        visible={visibleForgotPassword}
-        onSend={(email) => handleForgotPassword(email)} 
-      />
 
     </View>
   );

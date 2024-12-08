@@ -11,6 +11,7 @@ import { MessageAlert } from '@/src/components/messageAlert';
 import { validateFields } from '@/src/utils/validators';
 import { BackButton } from '@/src/components/backButton';
 import { Title } from '@/src/components/title';
+import { LoadFont } from '@/src/utils/loadFont';
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -52,8 +53,10 @@ export default function ConfirmPassword() {
     }, [carregarDados])
   );
 
-  if (loading) {
-    return <LoadingScreen />; 
+  const fontsLoaded = LoadFont();
+
+  if (!fontsLoaded || loading) {
+    return <LoadingScreen />;
   }
 
   async function handleNext() {

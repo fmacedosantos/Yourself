@@ -12,6 +12,7 @@ import { cadastrarAtividade, carregarPreferencias, carregarResumoEstatisticas } 
 import LoadingScreen from '@/src/components/loadindScreen';
 import { MessageAlert } from '@/src/components/messageAlert';
 import { BackButton } from '@/src/components/backButton';
+import { LoadFont } from '@/src/utils/loadFont';
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -126,8 +127,10 @@ export default function Pomodoro() {
     return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   };
 
-  if (loading) {
-    return <LoadingScreen />; 
+  const fontsLoaded = LoadFont();
+
+  if (!fontsLoaded || loading) {
+    return <LoadingScreen />;
   }
 
   return (

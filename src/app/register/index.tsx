@@ -8,6 +8,8 @@ import { register } from "@/src/services/api/user";
 import { MessageAlert } from "@/src/components/messageAlert";
 import { BackButton } from "@/src/components/backButton";
 import { styles } from "./styles";
+import LoadingScreen from "@/src/components/loadindScreen";
+import { LoadFont } from "@/src/utils/loadFont";
 
 export default function Cadastro() {
   const [email, setEmail] = useState('');
@@ -18,6 +20,8 @@ export default function Cadastro() {
 
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
+
+  const [loading, setLoading] = useState(false); 
 
   async function handleCadastrar() {
     
@@ -39,12 +43,20 @@ export default function Cadastro() {
       setVisible(true);
       setMessage(passwordMatchValidate.message);
     } else {
+      setLoading(true);
       const {success, message} = await register(email, nome, apelido, senha);
       if (!success) {
+        setLoading(false);
         setVisible(true);
         setMessage(message);
       }
     }
+  }
+
+  const fontsLoaded = LoadFont();
+
+  if (!fontsLoaded || loading) {
+    return <LoadingScreen />;
   }
 
   return (
@@ -53,11 +65,11 @@ export default function Cadastro() {
     >
       <YourselfTitle width={200} height={100} />
       <BackButton style={styles.backButton}/>
-      <FormInput label="Email" placeholder="seu@email.com" value={email} onChangeText={setEmail} type="email"/>
-      <FormInput label="Nome" placeholder="Nome completo" value={nome} onChangeText={setNome}/>
-      <FormInput label="Nome de usuário" placeholder="Nome de usuário" value={apelido} onChangeText={setApelido}/>
-      <FormInput label="Senha" placeholder="Senha" value={senha} onChangeText={setSenha} isPassword={true}/>
-      <FormInput label="Confirme a senha" placeholder="Confirme a senha" value={confirmarSenha} onChangeText={setConfirmarSenha} isPassword={true}/>
+      <FormInput label="E-mail" placeholder="email@exemplo.com" value={email} onChangeText={setEmail} type="email"/>
+      <FormInput label="Nome" placeholder="Nome Completo" value={nome} onChangeText={setNome}/>
+      <FormInput label="Apelido" placeholder="seuapelido" value={apelido} onChangeText={setApelido}/>
+      <FormInput label="Senha" placeholder="@Senha1234" value={senha} onChangeText={setSenha} isPassword={true}/>
+      <FormInput label="Confirme a senha" placeholder="@Senha1234" value={confirmarSenha} onChangeText={setConfirmarSenha} isPassword={true}/>
       <BorderButton title='Cadastrar' color={2} action={handleCadastrar}/>
       <MessageAlert
         type={1}

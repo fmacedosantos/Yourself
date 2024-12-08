@@ -10,6 +10,7 @@ import { carregarPreferencias, carregarResumoEstatisticas, updatePreferences } f
 import { BackButton } from '@/src/components/backButton';
 import { Title } from '@/src/components/title';
 import { useFocusEffect } from 'expo-router';
+import { LoadFont } from '@/src/utils/loadFont';
 
 export default function EditTimer() {
     const [resumoEstatisticas, setResumoEstatisticas] = useState({ ofensiva: 0, pontos: 0 });
@@ -97,7 +98,11 @@ export default function EditTimer() {
         }
     }
 
-    if (loading) return <LoadingScreen />;
+    const fontsLoaded = LoadFont();
+
+  if (!fontsLoaded || loading) {
+    return <LoadingScreen />;
+  }
 
     return (
         <View style={styles.container}>

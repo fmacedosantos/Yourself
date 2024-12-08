@@ -120,15 +120,6 @@ export async function register(email: string, nome: string, apelido: string, sen
     }
   }
 
-  export async function forgotPassword(email: string) { // ok
-    try {
-      await firebase.auth().sendPasswordResetEmail(email);
-      return { success: true, message: 'E-mail de redefinição de senha enviado.' };
-    } catch {
-      return { success: false, message: 'Erro ao enviar e-mail de redefinição de senha.' };
-    }
-  }
-
   export async function logout() {
     try {
       const jwt = await AsyncStorage.getItem('jwt');

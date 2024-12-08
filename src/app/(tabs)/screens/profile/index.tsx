@@ -10,6 +10,7 @@ import LoadingScreen from "@/src/components/loadindScreen";
 import { carregarMelhoresEstatisticas, carregarResumoEstatisticas, carregarUsuario, getItems, logout } from "@/src/services/api/user";
 import { Item } from "@/src/components/item";
 import { MessageAlert } from "@/src/components/messageAlert";
+import { LoadFont } from "@/src/utils/loadFont";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -91,7 +92,9 @@ export default function Profile() {
     await logout();
   }
 
-  if (loading) {
+  const fontsLoaded = LoadFont();
+
+  if (!fontsLoaded || loading) {
     return <LoadingScreen />;
   }
 

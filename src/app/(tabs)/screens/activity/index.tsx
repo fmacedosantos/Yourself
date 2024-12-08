@@ -12,6 +12,7 @@ import LoadingScreen from "@/src/components/loadindScreen";
 import { carregarResumoEstatisticas } from "@/src/services/api/user";
 import { MessageAlert } from "@/src/components/messageAlert";
 import ListCategories from "@/src/components/staticListCategories";
+import { LoadFont } from "@/src/utils/loadFont";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -75,8 +76,10 @@ export default function AddNewActivity() {
     }
   }
 
-  if (loading) {
-    return <LoadingScreen />; 
+  const fontsLoaded = LoadFont();
+
+  if (!fontsLoaded || loading) {
+    return <LoadingScreen />;
   }
 
   function handleDifficultySelect(difficulty: number) {

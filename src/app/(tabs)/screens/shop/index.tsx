@@ -13,6 +13,7 @@ import { Title } from "@/src/components/title";
 import { Item } from "@/src/components/item";
 import { MessageAlert } from "@/src/components/messageAlert";
 import { useFocusEffect } from "expo-router";
+import { LoadFont } from "@/src/utils/loadFont";
 
 interface ResumoEstatisticas {
   ofensiva: number;
@@ -74,7 +75,9 @@ export default function Shop() {
     }, [carregarDados])
   );
 
-  if (loading) {
+  const fontsLoaded = LoadFont();
+
+  if (!fontsLoaded || loading) {
     return <LoadingScreen />;
   }
 

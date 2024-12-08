@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
 import { Title } from '../../../../components/title';
 import { SummaryStats } from '../../../../components/summaryStats';
@@ -8,6 +8,7 @@ import LoadingScreen from '@/src/components/loadindScreen';
 import { carregarAtividades, carregarResumoEstatisticas, deleteActivity } from '@/src/services/api/user';
 import { MessageAlert } from '@/src/components/messageAlert';
 import { useFocusEffect } from 'expo-router';
+import { LoadFont } from '@/src/utils/loadFont';
 
 interface Atividade {
   id: string;
@@ -94,9 +95,11 @@ async function handleDeleteActivity() {
 }
 
 
-  if (loading) {
-    return <LoadingScreen />; 
-  }
+const fontsLoaded = LoadFont();
+
+if (!fontsLoaded || loading) {
+  return <LoadingScreen />;
+}
 
   return (
     <View style={styles.container}>
