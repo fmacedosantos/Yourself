@@ -4,12 +4,18 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: COLORS.GRAY,
-      justifyContent: 'flex-start',
+    },
+    scrool: {
+      flex: 1, 
+      backgroundColor: COLORS.GRAY
+    },
+    scrollContainer: {
       alignItems: 'center',
-      paddingTop: '25%'
+      paddingVertical: 10,
+      flexGrow: 1,
     },
     containerInformacoes: {
+      marginTop: '25%',
       alignSelf: 'flex-start',
       marginLeft: '5%'
     },
@@ -56,7 +62,7 @@ export const styles = StyleSheet.create({
       marginLeft: '3%',
       backgroundColor: COLORS.RED
     },
-    scrollContainer: {
+    items: {
       flexDirection: "row",
       flexWrap: "wrap",
       gap: 20,

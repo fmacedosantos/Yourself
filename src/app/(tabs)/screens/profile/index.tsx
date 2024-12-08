@@ -100,6 +100,10 @@ export default function Profile() {
 
   return (
     <View style={styles.container}>
+      <ScrollView 
+        style={styles.scrool}
+        contentContainerStyle={styles.scrollContainer}
+      >
       <SummaryStats ofensiva={resumoEstatisticas.ofensiva} pontos={resumoEstatisticas.pontos} />
       <View style={styles.containerInformacoes}>
         <Text style={styles.nome}>{informacoes.nome}</Text>
@@ -127,7 +131,7 @@ export default function Profile() {
 
       <BestStats melhorOfensiva={melhoresEstatisticas.maiorOfensiva} totalXp={melhoresEstatisticas.totalPontos} />
       <Text style={styles.text}>Itens Adquiridos</Text>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.items}>
         {itens.length === 0 ? (
           <Text style={styles.noItemsText}>Nenhum item adquirido...</Text>
         ) : (
@@ -140,6 +144,7 @@ export default function Profile() {
             />
           ))
         )}
+      </View>
       </ScrollView>
     </View>
   );
