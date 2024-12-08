@@ -6,14 +6,20 @@ export const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: COLORS.GRAY, // Cor do fundo da tela
+      backgroundColor: COLORS.GRAY, 
     },
     loaderBackground: {
       width: 100,
       height: 100,
-      backgroundColor: COLORS.GRAY, // Cor do fundo personalizado para o loader
+      backgroundColor: COLORS.GRAY, 
       borderRadius: 10,
       justifyContent: 'center',
       alignItems: 'center',
     },
+    textLoad: {
+      color: COLORS.ORANGE,
+      marginBottom: 10,
+      fontFamily: 'Itim-Regular',
+      fontSize: 18
+    }
   });
