@@ -82,11 +82,14 @@ export default function Home() {
 
   async function handleDeleteActivity() {
     if (activityIdToDelete) {
+      setLoading(true);
       const response = await deleteActivity(activityIdToDelete);
       if (response.success) {
         setAtividades(atividades.filter((atividade) => atividade.id !== activityIdToDelete)); 
         setVisible(false);
+        setLoading(false);
       } else {
+        setLoading(false);
         setType(1);
         setMessage(response.message || "Erro ao deletar a atividade.");
       }
