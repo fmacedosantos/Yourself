@@ -32,16 +32,6 @@ Descriptografe as variáveis de ambiente:
 npm run decrypt
 ```
 
-### 5. Configuração de Endereço IP
-Abra o arquivo `src/constants/Routes.ts` e altere a constante `IP` para o endereço IPv4 da sua máquina:
-```typescript
-const IP = 'SEU_ENDERECO_IPV4_AQUI';
-```
-
-### 6. Configurar API
-- Baixe o [executável da API](https://github.com/fmacedosantos/yourself-API/blob/main/yourself-api.exe)
-- Execute o executável em segundo plano, seguindo as instruções no [repositório](https://github.com/fmacedosantos/yourself-API.git).
-
 ## 🏃‍♂️ Iniciando a Aplicação
 Após seguir todos os passos acima, inicie a aplicação:
 ```bash
