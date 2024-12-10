@@ -12,10 +12,6 @@ export const styles = StyleSheet.create({
       color: COLORS.WHITE,
       fontFamily: 'Itim-Regular', 
     },
-    inputContainer: {
-      position: 'relative',
-      width: '100%',
-    },
     placeholderText: {
       position: 'absolute',
       left: 15,
@@ -35,4 +31,16 @@ export const styles = StyleSheet.create({
       marginBottom: 10,
       fontFamily: 'Itim-Regular', 
     },
+    inputContainer: {
+      position: 'relative',
+      width: '100%',
+    },
+    eyeIcon: {
+      position: 'absolute',
+      right: 15,
+      top: 15,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    
   });

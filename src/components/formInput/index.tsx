@@ -1,6 +1,9 @@
-import { InputModeOptions, Text, TextInput, View } from 'react-native';
+import { InputModeOptions, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useState } from 'react';
 import { styles } from './styles';
+import Eye from '../../assets/images/eye.svg';
+import EyeOff from '../../assets/images/eye-off.svg';
+import { COLORS } from '@/src/constants/Colors';
 
 interface FormInputProps {
   label: string;
@@ -8,26 +11,33 @@ interface FormInputProps {
   isPassword?: boolean;
   value: string;
   onChangeText: (text: string) => void;
-  type?: InputModeOptions  
+  type?: InputModeOptions;
   isMultiline?: boolean;
 }
 
-export function FormInput({ label, placeholder, isPassword, value, onChangeText, type = 'text', isMultiline = false }: FormInputProps) {
+export function FormInput({
+  label,
+  placeholder,
+  isPassword = false,
+  value,
+  onChangeText,
+  type = 'text',
+  isMultiline = false,
+}: FormInputProps) {
   const [isFocused, setIsFocused] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{label}</Text>
 
       <View style={styles.inputContainer}>
-        {!isFocused && !value && (
-          <Text style={styles.placeholderText}>{placeholder}</Text>
-        )}
+        {!isFocused && !value && <Text style={styles.placeholderText}>{placeholder}</Text>}
 
         <TextInput
           inputMode={type}
           placeholder=""
-          secureTextEntry={isPassword}
+          secureTextEntry={isPassword && !isPasswordVisible} 
           style={styles.input}
           value={value}
           onChangeText={onChangeText}
@@ -35,9 +45,20 @@ export function FormInput({ label, placeholder, isPassword, value, onChangeText,
           onBlur={() => setIsFocused(false)}
           multiline={isMultiline}
         />
+
+        {isPassword && (
+          <TouchableOpacity
+            style={styles.eyeIcon}
+            onPress={() => setIsPasswordVisible((prev) => !prev)} 
+          >
+            {isPasswordVisible ? (
+              <EyeOff width={26} height={26} fill={COLORS.ORANGE} />
+            ) : (
+              <Eye width={26} height={26} fill={COLORS.ORANGE} />
+            )}
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
 }
-
-
