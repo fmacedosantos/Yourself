@@ -37,7 +37,7 @@ export function FormInput({
         <TextInput
           inputMode={type}
           placeholder=""
-          secureTextEntry={isPassword && !isPasswordVisible} 
+          secureTextEntry={isPassword && !isPasswordVisible}
           style={styles.input}
           value={value}
           onChangeText={onChangeText}
@@ -46,10 +46,10 @@ export function FormInput({
           multiline={isMultiline}
         />
 
-        {isPassword && (
+        {isPassword && isFocused && (
           <TouchableOpacity
             style={styles.eyeIcon}
-            onPress={() => setIsPasswordVisible((prev) => !prev)} 
+            onPress={() => setIsPasswordVisible((prev) => !prev)}
           >
             {isPasswordVisible ? (
               <EyeOff width={26} height={26} fill={COLORS.ORANGE} />
