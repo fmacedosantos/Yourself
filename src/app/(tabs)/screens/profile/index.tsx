@@ -91,6 +91,10 @@ export default function Profile() {
     router.navigate("/(tabs)/confirmPassword");
   }
 
+  function handleGoToTutorial() {
+    router.navigate('/(tabs)/userTutorial')
+  }
+
   async function handleLeaveAccount() {
     await logout();
   }
@@ -132,6 +136,11 @@ export default function Profile() {
           style={styles.leaveAccountButton}
         />
       </View>
+      <SolidButton
+        title="Manual do usuário"
+        action={handleGoToTutorial}
+        style={styles.goToTutorialButton}
+      />
       <MessageAlert
         type={1}
         message={message}

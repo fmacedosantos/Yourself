@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
     scrollContainer: {
       alignItems: 'center',
       paddingVertical: 10,
+      paddingBottom: 50,
       flexGrow: 1,
     },
     containerInformacoes: {
@@ -61,6 +62,11 @@ export const styles = StyleSheet.create({
       padding: 10,
       marginLeft: '3%',
       backgroundColor: COLORS.RED
+    },
+    goToTutorialButton: {
+      width: '92%',
+      marginRight: '1%',
+      padding: 10,
     },
     items: {
       flexDirection: "row",
