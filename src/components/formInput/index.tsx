@@ -52,9 +52,9 @@ export function FormInput({
             onPress={() => setIsPasswordVisible((prev) => !prev)}
           >
             {isPasswordVisible ? (
-              <EyeOff width={26} height={26} fill={COLORS.ORANGE} />
+              <EyeOff width={26} height={26} />
             ) : (
-              <Eye width={26} height={26} fill={COLORS.ORANGE} />
+              <Eye width={26} height={26} />
             )}
           </TouchableOpacity>
         )}
