@@ -77,8 +77,10 @@ export default function Settings() {
         const userData = { nome: nome || undefined, apelido: apelido || undefined, novaSenha: senha || undefined };
 
         try {
+            setLoading(true);
             const { success, message } = await atualizarUsuario(userData);
             if (success) {
+                setLoading(false);
                 setSenha('');
                 setConfirmarSenha('');
                 setNome('');
@@ -94,10 +96,12 @@ export default function Settings() {
                     }, 2000); 
                 }
             } else {
+                setLoading(false);
                 setMessage(message);
                 setVisible(true);
             }
         } catch {
+            setLoading(false);
             setMessage('Erro ao atualizar informações.');
             setVisible(true);
         }

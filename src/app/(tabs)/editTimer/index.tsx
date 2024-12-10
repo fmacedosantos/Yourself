@@ -80,8 +80,10 @@ export default function EditTimer() {
         };
     
         try {
+            setLoading(true);
             const { success, message } = await updatePreferences(preferences);
             if (success) {
+                setLoading(false);
                 setConcentracao('');
                 setDescanso('');
                 setMessage(message);
@@ -89,10 +91,12 @@ export default function EditTimer() {
                 await carregarPreferencias(setPreferencias);
     
             } else {
+                setLoading(false);
                 setMessage(message);
                 setVisible(true);
             }
         } catch {
+            setLoading(false);
             setMessage('Erro ao atualizar as preferências.');
             setVisible(true);
         }

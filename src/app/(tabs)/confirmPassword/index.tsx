@@ -67,11 +67,13 @@ export default function ConfirmPassword() {
       setVisible(true);
       setMessage('Insira a senha para prosseguir!');
     } else {
+      setLoading(true);
       const { success, message } = await reauthenticateUser(senha);
 
       if (success) {
         router.navigate('/(tabs)/settings');
       } else {
+        setLoading(false);
         setVisible(true);
         setMessage(message);
       }
