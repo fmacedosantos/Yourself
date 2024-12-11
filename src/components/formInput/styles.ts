@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
     eyeIcon: {
       position: 'absolute',
       right: 15,
-      top: 13,
+      top: 15,
       justifyContent: 'center',
       alignItems: 'center',
     },

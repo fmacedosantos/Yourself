@@ -112,10 +112,12 @@ export default function Pomodoro() {
       setVisible(true);
       return;
     }
+    setLoading(true);
     const {success, message} = await cadastrarAtividade(String(titulo), String(descricao), difficultyLevel, String(categoria), tempoTotal);
     if (success) {
       router.replace('/(tabs)/screens/home');
     } else {
+      setLoading(false);
       setIsPaused(true);
       setMessage(message);
       setVisible(true);

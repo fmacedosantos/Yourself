@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { styles } from './styles';
 import Eye from '../../assets/images/eye.svg';
 import EyeOff from '../../assets/images/eye-off.svg';
+import { COLORS } from '@/src/constants/Colors';
 
 interface FormInputProps {
   label: string;
@@ -31,12 +32,11 @@ export function FormInput({
       <Text style={styles.text}>{label}</Text>
 
       <View style={styles.inputContainer}>
-        {!isFocused && !value && <Text style={styles.placeholderText}>{placeholder}</Text>}
-
         <TextInput
           inputMode={type}
-          placeholder=""
-          secureTextEntry={isPassword && !isPasswordVisible} 
+          placeholder={placeholder} 
+          placeholderTextColor={COLORS.GRAY}
+          secureTextEntry={isPassword && !isPasswordVisible}
           style={styles.input}
           value={value}
           onChangeText={onChangeText}
