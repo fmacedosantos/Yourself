@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { styles } from './styles';
 import Eye from '../../assets/images/eye.svg';
 import EyeOff from '../../assets/images/eye-off.svg';
-import { COLORS } from '@/src/constants/Colors';
 
 interface FormInputProps {
   label: string;
@@ -37,7 +36,7 @@ export function FormInput({
         <TextInput
           inputMode={type}
           placeholder=""
-          secureTextEntry={isPassword && !isPasswordVisible}
+          secureTextEntry={isPassword && !isPasswordVisible} 
           style={styles.input}
           value={value}
           onChangeText={onChangeText}
@@ -46,7 +45,7 @@ export function FormInput({
           multiline={isMultiline}
         />
 
-        {isPassword && isFocused && (
+        {isPassword && (
           <TouchableOpacity
             style={styles.eyeIcon}
             onPress={() => setIsPasswordVisible((prev) => !prev)}
