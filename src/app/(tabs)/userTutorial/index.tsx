@@ -14,7 +14,7 @@ interface ResumoEstatisticas {
   pontos: number;
 }
 
-export default function Profile() {
+export default function UserTutorial() {
   const [resumoEstatisticas, setResumoEstatisticas] = useState<ResumoEstatisticas>({
     ofensiva: 0,
     pontos: 0,

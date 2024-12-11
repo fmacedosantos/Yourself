@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { LogBox, View } from 'react-native';
 import { FormInput } from "../../components/formInput";
 import YourselfTitle from '../../assets/images/yourself-title.svg';
 import { router } from "expo-router";
@@ -7,10 +7,10 @@ import { SolidButton } from '../../components/solidButton';
 import { BorderButton } from '../../components/borderButton';
 import { styles } from './styles';
 import { validateEmail, validateFields } from '@/src/utils/validators';
-import { LoadFont } from '@/src/utils/loadFont';
 import LoadingScreen from '@/src/components/loadindScreen';
 import { checkToken, login } from '@/src/services/api/user';
 import { MessageAlert } from '@/src/components/messageAlert';
+import { useFonts } from '@expo-google-fonts/itim';
 
 export default function Index() {
   const [email, setEmail] = useState('');
@@ -20,7 +20,13 @@ export default function Index() {
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
 
-  const fontsLoaded = LoadFont();
+  const [fontsLoaded] = useFonts({
+    'Itim-Regular': require('../../assets/fonts/Itim-Regular.ttf'),
+  });
+
+  LogBox.ignoreLogs([
+    'fontFamily "Itim-Regular" is not a system font and has not been loaded through expo-font',
+  ]);
 
   useEffect(() => {
     const initializeApp = async () => {
