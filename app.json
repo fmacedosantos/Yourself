@@ -14,10 +14,12 @@
       "supportsTablet": true
     },
     "android": {
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/app-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.fmacedosantos.yourself"
     },
     "web": {
       "bundler": "metro",
@@ -30,6 +32,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "158758c5-d0b4-482b-8f48-5a48fc6cefe5"
+      }
     }
   }
 }
